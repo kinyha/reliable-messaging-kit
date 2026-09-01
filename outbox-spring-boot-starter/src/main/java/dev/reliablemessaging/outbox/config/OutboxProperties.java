@@ -32,5 +32,12 @@ public record OutboxProperties(
             // No unsafe default: this must be at least as long as the replay/redelivery window.
             Duration retention
     ) {
+        public Inbox {
+            if (retention == null) {
+                throw new IllegalArgumentException(
+                        "outbox.inbox.retention must be configured explicitly"
+                );
+            }
+        }
     }
 }

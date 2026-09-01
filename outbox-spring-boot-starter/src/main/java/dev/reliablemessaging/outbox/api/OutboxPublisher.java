@@ -1,6 +1,5 @@
 package dev.reliablemessaging.outbox.api;
 
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -10,14 +9,5 @@ import java.util.UUID;
  */
 @FunctionalInterface
 public interface OutboxPublisher {
-    UUID publish(
-            String topic,
-            Aggregate aggregate,
-            Object payload,
-            Map<String, String> headers
-    );
-
-    default UUID publish(String topic, Aggregate aggregate, Object payload) {
-        return publish(topic, aggregate, payload, Map.of());
-    }
+    UUID publish(OutboxMessage message);
 }

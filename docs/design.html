@@ -1001,7 +1001,7 @@
     }
 }</code></pre>
 
-      <p>Никакого <code>KafkaTemplate</code>, никаких колбэков на коммит транзакции, никаких <code>TransactionSynchronization</code>. Вызов <code>publish</code> — это обычный INSERT, он либо откатится вместе с заказом, либо переживёт его.</p>
+      <p><code>OutboxMessage.partitionKey()</code> всегда возвращает <code>aggregate.id</code>: обязательный ключ партиции вычисляется самим стартером и не может разойтись с идентификатором агрегата. Никакого <code>KafkaTemplate</code>, никаких колбэков на коммит транзакции, никаких <code>TransactionSynchronization</code>. Вызов <code>publish</code> — это обычный INSERT, он либо откатится вместе с заказом, либо переживёт его.</p>
 
 <pre><code><span class="c">// сторона получателя — идемпотентность через аннотацию</span>
 @Component

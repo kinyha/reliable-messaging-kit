@@ -12,7 +12,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class OutboxPropertiesTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(ReliableMessagingAutoConfiguration.class));
+            .withConfiguration(AutoConfigurations.of(ReliableMessagingAutoConfiguration.class))
+            .withPropertyValues("outbox.inbox.retention=30d");
 
     @Test
     void defaultsAreExplicitAndConservative() {
@@ -21,8 +22,21 @@ class OutboxPropertiesTest {
 
             assertThat(properties.relay().batchSize()).isEqualTo(128);
             assertThat(properties.relay().leaseDuration()).isEqualTo(Duration.ofSeconds(30));
-            assertThat(properties.inbox().retention()).isNull();
+            assertThat(properties.inbox().retention()).isEqualTo(Duration.ofDays(30));
         });
+    }
+
+    @Test
+    void refusesToStartWithoutInboxRetention() {
+        new ApplicationContextRunner()
+                .withConfiguration(AutoConfigurations.of(ReliableMessagingAutoConfiguration.class))
+                .run(context -> {
+                    assertThat(context).hasFailed();
+                    assertThat(context.getStartupFailure())
+                            .hasRootCauseMessage(
+                                    "outbox.inbox.retention must be configured explicitly"
+                            );
+                });
     }
 
     @Test

@@ -14,6 +14,8 @@ server:
 outbox:
   relay:
     enabled: false # Relay implementation lands after the protocol is fixed in design v1.1.
+  inbox:
+    retention: 30d
 
 management:
   endpoints:
