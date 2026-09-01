@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: ${ORDER_DB_URL:jdbc:postgresql://localhost:5433/orders}
+    username: ${ORDER_DB_USER:orders}
+    password: ${ORDER_DB_PASSWORD:orders}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
+server:
+  port: ${ORDER_SERVICE_PORT:8081}
+
+outbox:
+  relay:
+    enabled: false # Relay implementation lands after the protocol is fixed in design v1.1.
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  tracing:
+    sampling:
+      probability: 1.0
+  otlp:
+    tracing:
+      endpoint: ${OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:http://localhost:4318/v1/traces}

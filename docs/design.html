@@ -1,0 +1,1272 @@
+<meta charset="utf-8">
+<title>Reliable Messaging Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap">
+
+<style>
+  :root {
+    --ground:      #F1F4F3;
+    --surface:     #FBFCFC;
+    --surface-alt: #E7ECEA;
+    --ink:         #141A19;
+    --ink-soft:    #3D4A47;
+    --muted:       #5F6E6B;
+    --line:        #CFD8D5;
+    --line-soft:   #DFE6E4;
+    --accent:      #1B5F5A;
+    --accent-soft: #D6E7E4;
+    --warn:        #A8511C;
+    --warn-soft:   #F2E2D5;
+
+    --f-display: "IBM Plex Sans Condensed", "Helvetica Neue", Arial, sans-serif;
+    --f-body:    "IBM Plex Serif", Georgia, "Times New Roman", serif;
+    --f-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #0F1413;
+      --surface:     #161D1C;
+      --surface-alt: #1E2726;
+      --ink:         #E4EBE9;
+      --ink-soft:    #C2CFCC;
+      --muted:       #8A9A96;
+      --line:        #2B3634;
+      --line-soft:   #222C2B;
+      --accent:      #57B3AA;
+      --accent-soft: #16302E;
+      --warn:        #DB8B4F;
+      --warn-soft:   #2E2118;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #0F1413;
+    --surface:     #161D1C;
+    --surface-alt: #1E2726;
+    --ink:         #E4EBE9;
+    --ink-soft:    #C2CFCC;
+    --muted:       #8A9A96;
+    --line:        #2B3634;
+    --line-soft:   #222C2B;
+    --accent:      #57B3AA;
+    --accent-soft: #16302E;
+    --warn:        #DB8B4F;
+    --warn-soft:   #2E2118;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 16px;
+    line-height: 1.62;
+    margin: 0;
+    padding: 0 1.5rem 6rem;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .doc {
+    max-width: 78rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0;
+  }
+
+  @media (min-width: 1040px) {
+    .doc {
+      grid-template-columns: 9rem minmax(0, 44rem) minmax(0, 15rem);
+      column-gap: 2.75rem;
+      grid-auto-flow: row dense;
+    }
+    .rail { grid-column: 1; }
+    .main { grid-column: 2; }
+    .note { grid-column: 3; }
+    .wide { grid-column: 2 / 4; }
+    .full { grid-column: 1 / 4; }
+  }
+
+  /* ---------- masthead ---------- */
+
+  .masthead {
+    border-bottom: 2px solid var(--ink);
+    padding: 4.5rem 0 1.5rem;
+    margin-bottom: 2.75rem;
+  }
+  .eyebrow {
+    font-family: var(--f-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 1rem;
+  }
+  .masthead h1 {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: clamp(2.6rem, 6vw, 4.1rem);
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    margin: 0 0 0.6rem;
+  }
+  .masthead .lede {
+    font-size: 1.16rem;
+    color: var(--ink-soft);
+    max-width: 46rem;
+    margin: 0 0 2rem;
+    text-wrap: pretty;
+  }
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 1.1rem 2rem;
+    border-top: 1px solid var(--line);
+    padding-top: 1.25rem;
+    max-width: 62rem;
+  }
+  .meta div { display: flex; flex-direction: column; gap: 0.2rem; }
+  .meta dt, .meta .k {
+    font-family: var(--f-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .meta .v {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 0.98rem;
+    color: var(--ink);
+  }
+
+  /* ---------- sections ---------- */
+
+  section { display: contents; }
+
+  .rail {
+    padding-top: 2.9rem;
+  }
+  .rail .num {
+    font-family: var(--f-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+  }
+  .rail .tag {
+    display: block;
+    font-family: var(--f-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.3rem;
+    line-height: 1.4;
+  }
+  @media (max-width: 1039px) {
+    .rail { padding-top: 2.6rem; padding-bottom: 0.2rem; display: flex; gap: 0.9rem; align-items: baseline; }
+    .rail .tag { margin-top: 0; }
+  }
+
+  h2 {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 1.72rem;
+    line-height: 1.14;
+    letter-spacing: -0.008em;
+    text-wrap: balance;
+    margin: 2.6rem 0 0.9rem;
+    padding-top: 0.15rem;
+  }
+  @media (min-width: 1040px) { h2 { margin-top: 2.6rem; } }
+
+  h3 {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 1.12rem;
+    letter-spacing: 0.005em;
+    margin: 2rem 0 0.55rem;
+    text-wrap: balance;
+  }
+  h4 {
+    font-family: var(--f-mono);
+    font-weight: 600;
+    font-size: 0.74rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 1.4rem 0 0.4rem;
+  }
+
+  p { margin: 0 0 1rem; text-wrap: pretty; }
+  .main > :first-child { margin-top: 0; }
+
+  a { color: var(--accent); text-underline-offset: 0.15em; }
+  a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  strong { font-weight: 600; color: var(--ink); }
+  em { font-style: italic; }
+
+  ul, ol { margin: 0 0 1.1rem; padding-left: 1.15rem; }
+  li { margin-bottom: 0.42rem; }
+  li::marker { color: var(--accent); }
+
+  code {
+    font-family: var(--f-mono);
+    font-size: 0.855em;
+    background: var(--surface-alt);
+    padding: 0.1em 0.34em;
+    border-radius: 3px;
+    color: var(--ink);
+  }
+
+  pre {
+    font-family: var(--f-mono);
+    font-size: 0.79rem;
+    line-height: 1.62;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.15rem;
+    overflow-x: auto;
+    margin: 0 0 1.3rem;
+    color: var(--ink-soft);
+  }
+  pre code { background: none; padding: 0; font-size: 1em; }
+  pre .c { color: var(--muted); font-style: italic; }
+  pre .k { color: var(--accent); font-weight: 500; }
+  pre .s { color: var(--warn); }
+
+  /* ---------- margin notes ---------- */
+
+  .note {
+    padding-top: 3.2rem;
+    font-size: 0.83rem;
+    line-height: 1.55;
+    color: var(--muted);
+    font-family: var(--f-display);
+    font-weight: 500;
+  }
+  .note p { margin-bottom: 0.8rem; }
+  .note .nlabel {
+    display: block;
+    font-family: var(--f-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.35rem;
+  }
+  @media (max-width: 1039px) {
+    .note {
+      padding: 0.85rem 0 0.85rem 1rem;
+      border-left: 2px solid var(--accent-soft);
+      margin: 0 0 1.4rem;
+      max-width: 44rem;
+    }
+  }
+
+  /* ---------- blocks ---------- */
+
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 1.1rem 1.3rem;
+    margin: 0 0 1.4rem;
+  }
+  .callout.accent { border-left: 3px solid var(--accent); }
+  .callout.warn   { border-left: 3px solid var(--warn); background: var(--warn-soft); }
+  .callout > :last-child { margin-bottom: 0; }
+  .callout h4 { margin-top: 0; }
+
+  .adr {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    margin: 0 0 1.5rem;
+  }
+  .adr-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.6rem 0.9rem;
+    padding: 0.85rem 1.25rem;
+    border-bottom: 1px solid var(--line-soft);
+    background: var(--surface-alt);
+  }
+  .adr-id {
+    font-family: var(--f-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+  .adr-title {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 1.02rem;
+    margin: 0;
+    flex: 1 1 14rem;
+  }
+  .pill {
+    font-family: var(--f-mono);
+    font-size: 0.63rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .adr-body { padding: 1.05rem 1.25rem 0.6rem; }
+  .adr-body p { font-size: 0.95rem; }
+  .adr-body dl { margin: 0; }
+  .adr-body dt {
+    font-family: var(--f-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.85rem;
+  }
+  .adr-body dd { margin: 0.2rem 0 0; font-size: 0.95rem; }
+
+  /* ---------- tables ---------- */
+
+  .tw { overflow-x: auto; margin: 0 0 1.5rem; border: 1px solid var(--line); background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.88rem; min-width: 32rem; }
+  th, td { text-align: left; padding: 0.62rem 0.9rem; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  th {
+    font-family: var(--f-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    background: var(--surface-alt);
+    border-bottom: 1px solid var(--line);
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.n { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.s { font-family: var(--f-display); font-weight: 600; }
+
+  /* ---------- figures ---------- */
+
+  figure {
+    margin: 0 0 1.7rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 1.3rem 1.3rem 1rem;
+  }
+  .figscroll { overflow-x: auto; }
+  figure svg { display: block; width: 100%; height: auto; min-width: 30rem; color: var(--ink-soft); }
+  figcaption {
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: 0.83rem;
+    color: var(--muted);
+    margin-top: 0.9rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--line-soft);
+    text-wrap: pretty;
+  }
+  .svg-box { fill: var(--surface); stroke: var(--line); stroke-width: 1.25; }
+  .svg-box-alt { fill: var(--surface-alt); stroke: var(--line); stroke-width: 1.25; }
+  .svg-zone { fill: none; stroke: var(--line); stroke-width: 1.25; stroke-dasharray: 5 4; }
+  .svg-t { font-family: var(--f-display); font-size: 13px; font-weight: 600; fill: var(--ink); }
+  .svg-s { font-family: var(--f-mono); font-size: 10.5px; fill: var(--muted); letter-spacing: 0.02em; }
+  .svg-l { font-family: var(--f-mono); font-size: 10.5px; fill: var(--ink-soft); }
+  .svg-line { stroke: var(--ink-soft); stroke-width: 1.5; fill: none; }
+  .svg-acc { stroke: var(--accent); stroke-width: 2; fill: none; }
+  .svg-warn { stroke: var(--warn); stroke-width: 2; fill: none; stroke-dasharray: 6 4; }
+  .svg-warn-t { font-family: var(--f-mono); font-size: 10.5px; fill: var(--warn); }
+  .svg-acc-t { font-family: var(--f-mono); font-size: 10.5px; fill: var(--accent); }
+
+  /* ---------- stage cards ---------- */
+
+  .stages { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); margin-bottom: 1.6rem; }
+  .stage { border: 1px solid var(--line); background: var(--surface); padding: 1.2rem 1.3rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .stage .sm {
+    font-family: var(--f-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .stage h3 { margin: 0; font-size: 1.14rem; }
+  .stage p { font-size: 0.93rem; margin: 0; color: var(--ink-soft); }
+  .stage ul { margin: 0.3rem 0 0; font-size: 0.9rem; }
+
+  .checklist { list-style: none; padding-left: 0; }
+  .checklist li {
+    padding-left: 1.6rem;
+    position: relative;
+    font-size: 0.95rem;
+  }
+  .checklist li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.48em;
+    width: 0.62rem; height: 0.62rem;
+    border: 1.5px solid var(--accent);
+  }
+
+  hr.rule { border: none; border-top: 1px solid var(--line); margin: 3.4rem 0 0; grid-column: 1 / -1; }
+
+  footer.colophon {
+    border-top: 2px solid var(--ink);
+    margin-top: 4rem;
+    padding-top: 1.2rem;
+    font-family: var(--f-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.6rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<div class="doc">
+
+  <header class="masthead full">
+    <p class="eyebrow">Internal Value Project · Дизайн-документ v1.1</p>
+    <h1>Reliable Messaging Kit</h1>
+    <p class="lede">Spring Boot стартер, который делает запись в базу и публикацию события в Kafka одним неделимым фактом — и стенд, на котором это видно, когда всё ломается.</p>
+    <div class="meta">
+      <div><span class="k">Формат</span><span class="v">2 этапа × 1 месяц</span></div>
+      <div><span class="k">Стек</span><span class="v">Java 21 · Spring Boot 3</span></div>
+      <div><span class="k">Хранилище</span><span class="v">PostgreSQL 16</span></div>
+      <div><span class="k">Транспорт</span><span class="v">Apache Kafka</span></div>
+      <div><span class="k">Гарантия</span><span class="v">At-least-once + dedup</span></div>
+      <div><span class="k">Демо</span><span class="v">2 × живой сбой</span></div>
+    </div>
+  </header>
+
+  <section>
+    <div class="rail"><span class="num">v1.1</span><span class="tag">Changelog</span></div>
+    <div class="main">
+      <h2>Что изменилось в версии 1.1</h2>
+      <p>Версия 1.0 прошла ревью, которое нашло семь дефектов спецификации. Все они закрыты здесь — до начала реализации, потому что четыре из них относятся к протоколу параллелизма и к формулировкам гарантий, а такие ошибки в коде обходятся дороже всего.</p>
+      <ul>
+        <li><strong>Протокол релэя расписан по тактам</strong> (§ 6). Блокировка <code>FOR UPDATE</code> не может защищать сетевой вызов, поэтому захват коммитится до публикации, а роль «занято» берёт статус <code>IN_FLIGHT</code> с арендой. Добавлен reaper и отдельный индекс под него.</li>
+        <li><strong>Обещание порядка отозвано</strong> (ADR‑3). Прежнее решение было неверным; теперь порядок не гарантируется, а требование коммутативности обработчиков объявлено явно.</li>
+        <li><strong>ADR‑5 про bloom-фильтр удалён</strong> и заменён на честный горячий путь дедупликации: один <code>INSERT … ON CONFLICT DO NOTHING</code> без предварительной проверки.</li>
+        <li><strong>Критерий готовности исправлен</strong> (§ 8): дубликаты воспроизводятся намеренно, однократен бизнес-эффект — прежняя формулировка противоречила выбранной at-least-once семантике.</li>
+        <li><strong>У <code>inbox.retention</code> убран небезопасный дефолт</strong> (§ 7): слишком короткий срок ломает дедупликацию при replay.</li>
+        <li><strong>Границы однократности вынесены к API потребителя</strong> (§ 7): внешние вызовы за пределами транзакции однократными не становятся.</li>
+        <li><strong>Формулировка <code>DEAD</code> исправлена</strong> (§ 6): durable intent и наблюдаемая недоставка вместо «гарантированной доставки».</li>
+      </ul>
+      <p>Кроме того, язык реализации зафиксирован как Java, а оценка часов приведена к фактическому бюджету проекта.</p>
+    </div>
+    <aside class="note">
+      <span class="nlabel">Зачем это здесь</span>
+      <p>Changelog в начале документа — не формальность. На защите он показывает, что спецификация проходила ревью и что ошибки нашли и исправили до кода, а не обнаружили в проде.</p>
+    </aside>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 1 -->
+  <section>
+    <div class="rail"><span class="num">§ 1</span><span class="tag">Результат</span></div>
+    <div class="main">
+      <h2>Что именно является результатом</h2>
+      <p>Результат — <strong>не сервис</strong>. Сервис нельзя переиспользовать, его можно только эксплуатировать. Результат — библиотека и стенд, на котором она доказывает свои свойства. Три артефакта, каждый со своей ролью на защите:</p>
+
+      <div class="tw">
+        <table>
+          <thead>
+            <tr><th>Артефакт</th><th>Что это технически</th><th>Роль</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="s">outbox-spring-boot-starter</td>
+              <td>Gradle-модуль, публикуется в внутренний Nexus. Автоконфигурация, Flyway-миграции таблиц, API публикации, фоновый релэй, метрики Micrometer.</td>
+              <td>Главный продукт. Это то, что «могут использовать другие без автора».</td>
+            </tr>
+            <tr>
+              <td class="s">demo-stand</td>
+              <td><code>order-service</code> → Kafka → <code>payment-service</code>, docker-compose с Postgres, Kafka, Jaeger, Grafana. Скрипты сценариев сбоя.</td>
+              <td>Полигон. Сам по себе ценности не несёт — существует, чтобы стартер было на чём ломать.</td>
+            </tr>
+            <tr>
+              <td class="s">perf-harness</td>
+              <td>k6-сценарии, JMH-бенчмарки, Toxiproxy-профили сбоев, GitHub Actions workflow с порогами по p99.</td>
+              <td>Этап 2. Превращает утверждения о надёжности и скорости в числа.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Граница проведена так: всё, что знает про <em>ваш</em> бизнес-домен, живёт в demo-stand; всё, что универсально, живёт в стартере. Если в стартер просачивается слово «order» — граница нарушена.</p>
+    </div>
+    <aside class="note">
+      <span class="nlabel">На защите спросят</span>
+      <p>«А почему не готовое решение?» Ответ: Debezium решает половину задачи (доставку из БД), но не решает идемпотентность на стороне потребителя и требует отдельной инфраструктуры. См. § 5, ADR‑1.</p>
+    </aside>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 2 -->
+  <section>
+    <div class="rail"><span class="num">§ 2</span><span class="tag">Проблема</span></div>
+    <div class="main">
+      <h2>Задача: dual-write не бывает атомарным</h2>
+      <p>Сервис делает две вещи, которые обязаны произойти вместе: меняет состояние в своей базе и сообщает об этом остальным через Kafka. Два разных хранилища, две разные транзакции, общей транзакции между ними не существует. Между коммитом и отправкой есть окно, в котором процесс может умереть.</p>
+    </div>
+
+    <figure class="wide">
+      <div class="figscroll">
+        <svg viewBox="0 0 900 250" role="img" aria-label="Наивная схема: сервис коммитит заказ в Postgres, затем отдельно отправляет событие в Kafka; между этими шагами есть окно, в котором падение процесса оставляет базу изменённой, а событие неотправленным.">
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"></path>
+            </marker>
+            <marker id="ahw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--warn)"></path>
+            </marker>
+          </defs>
+
+          <rect class="svg-box" x="24" y="92" width="176" height="64" rx="2"></rect>
+          <text class="svg-t" x="112" y="118" text-anchor="middle">order-service</text>
+          <text class="svg-s" x="112" y="136" text-anchor="middle">placeOrder()</text>
+
+          <rect class="svg-box-alt" x="620" y="24" width="176" height="64" rx="2"></rect>
+          <text class="svg-t" x="708" y="50" text-anchor="middle">PostgreSQL</text>
+          <text class="svg-s" x="708" y="68" text-anchor="middle">orders</text>
+
+          <rect class="svg-box-alt" x="620" y="160" width="176" height="64" rx="2"></rect>
+          <text class="svg-t" x="708" y="186" text-anchor="middle">Kafka</text>
+          <text class="svg-s" x="708" y="204" text-anchor="middle">orders.v1</text>
+
+          <path class="svg-line" d="M 200 114 L 400 114 L 400 56 L 612 56" marker-end="url(#ah)"></path>
+          <text class="svg-l" x="212" y="106">1 · INSERT orders + COMMIT</text>
+
+          <path class="svg-warn" d="M 200 134 L 400 134 L 400 192 L 612 192" marker-end="url(#ahw)"></path>
+          <text class="svg-warn-t" x="212" y="152">2 · producer.send(OrderPlaced)</text>
+
+          <line x1="400" y1="16" x2="400" y2="234" stroke="var(--warn)" stroke-width="1" stroke-dasharray="3 4"></line>
+          <circle cx="400" cy="134" r="7" fill="var(--warn)"></circle>
+          <line x1="396" y1="130" x2="404" y2="138" stroke="var(--ground)" stroke-width="1.6"></line>
+          <line x1="404" y1="130" x2="396" y2="138" stroke="var(--ground)" stroke-width="1.6"></line>
+
+          <text class="svg-warn-t" x="400" y="242" text-anchor="middle">крэш здесь: заказ создан, но мир об этом не узнает — навсегда</text>
+        </svg>
+      </div>
+      <figcaption>Окно несогласованности в наивной схеме. Оно узкое — доли миллисекунды — и именно поэтому баг доживает до прода: на тестах он не воспроизводится, а в проде даёт «потерянные» заказы раз в неделю.</figcaption>
+    </figure>
+
+    <div class="main">
+      <p>Симметричная беда — если поменять шаги местами: событие ушло, транзакция откатилась, потребители обработали заказ, которого нет. Обе перестановки неверны, потому что неверна сама идея двух независимых записей.</p>
+      <div class="callout accent">
+        <h4>Формулировка задачи</h4>
+        <p>Дать сервису способ атомарно зафиксировать изменение состояния вместе с намерением отправить событие, доставлять это намерение с повторами до подтверждения — и сделать так, чтобы повторная доставка не меняла результат. Обратите внимание на формулировку: система гарантирует не однократную доставку, а однократный <em>эффект</em>, и только для изменений в той же базе.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 3 -->
+  <section>
+    <div class="rail"><span class="num">§ 3</span><span class="tag">Архитектура</span></div>
+    <div class="main">
+      <h2>Решение: outbox на стороне отправителя, inbox на стороне получателя</h2>
+      <p>Ключевой ход — убрать вторую запись. Вместо «записать в БД и отправить в Kafka» сервис делает <em>одну</em> запись в БД: и бизнес-строку, и строку в таблицу <code>outbox_message</code>, в одной транзакции. Отправка становится отдельной, асинхронной, повторяемой операцией, которую выполняет релэй, читая уже закоммиченные строки.</p>
+    </div>
+
+    <figure class="wide">
+      <div class="figscroll">
+        <svg viewBox="0 0 960 400" role="img" aria-label="Схема Reliable Messaging Kit: бизнес-логика в одной транзакции пишет в таблицу orders и таблицу outbox; релэй внутри того же приложения выбирает строки через SELECT FOR UPDATE SKIP LOCKED, публикует в Kafka с ключом aggregateId и помечает строки отправленными; потребитель проверяет message_id по таблице inbox перед вызовом обработчика.">
+          <rect class="svg-zone" x="16" y="34" width="268" height="330" rx="3"></rect>
+          <text class="svg-s" x="28" y="52">order-service (JVM)</text>
+
+          <rect class="svg-box" x="40" y="72" width="220" height="58" rx="2"></rect>
+          <text class="svg-t" x="150" y="96" text-anchor="middle">Бизнес-логика</text>
+          <text class="svg-s" x="150" y="114" text-anchor="middle">@Transactional</text>
+
+          <rect class="svg-box" x="40" y="272" width="220" height="58" rx="2"></rect>
+          <text class="svg-t" x="150" y="296" text-anchor="middle">Outbox Relay</text>
+          <text class="svg-s" x="150" y="314" text-anchor="middle">пул воркеров, poll 200 мс</text>
+
+          <rect class="svg-zone" x="336" y="34" width="228" height="330" rx="3"></rect>
+          <text class="svg-s" x="348" y="52">PostgreSQL</text>
+
+          <rect class="svg-box-alt" x="360" y="72" width="180" height="52" rx="2"></rect>
+          <text class="svg-t" x="450" y="103" text-anchor="middle">orders</text>
+
+          <rect class="svg-box-alt" x="360" y="176" width="180" height="52" rx="2"></rect>
+          <text class="svg-t" x="450" y="207" text-anchor="middle">outbox_message</text>
+
+          <rect class="svg-box-alt" x="628" y="150" width="120" height="104" rx="2"></rect>
+          <text class="svg-t" x="688" y="196" text-anchor="middle">Kafka</text>
+          <text class="svg-s" x="688" y="214" text-anchor="middle">orders.v1</text>
+
+          <rect class="svg-zone" x="792" y="34" width="152" height="330" rx="3"></rect>
+          <text class="svg-s" x="804" y="52">payment-service</text>
+
+          <rect class="svg-box" x="812" y="72" width="112" height="58" rx="2"></rect>
+          <text class="svg-t" x="868" y="96" text-anchor="middle">Consumer</text>
+          <text class="svg-s" x="868" y="114" text-anchor="middle">inbox check</text>
+
+          <rect class="svg-box" x="812" y="272" width="112" height="58" rx="2"></rect>
+          <text class="svg-t" x="868" y="303" text-anchor="middle">Handler</text>
+
+          <path class="svg-acc" d="M 260 92 L 352 92" marker-end="url(#ah)" color="var(--accent)"></path>
+          <path class="svg-acc" d="M 260 108 L 306 108 L 306 196 L 352 196" marker-end="url(#ah)" color="var(--accent)"></path>
+          <text class="svg-acc-t" x="266" y="140">одна транзакция:</text>
+          <text class="svg-acc-t" x="266" y="156">INSERT orders</text>
+          <text class="svg-acc-t" x="266" y="172">+ INSERT outbox</text>
+
+          <path class="svg-line" d="M 260 288 L 300 288 L 300 232 L 352 232" marker-end="url(#ah)"></path>
+          <text class="svg-l" x="200" y="352" text-anchor="start">SELECT … FOR UPDATE SKIP LOCKED</text>
+
+          <path class="svg-line" d="M 552 212 L 590 212 L 590 202 L 620 202" marker-end="url(#ah)"></path>
+          <text class="svg-l" x="556" y="248">UPDATE status</text>
+
+          <path class="svg-acc" d="M 268 300 L 600 300 L 600 240 L 636 240 L 636 246" marker-end="url(#ah)" color="var(--accent)"></path>
+          <text class="svg-acc-t" x="330" y="292">publish, key = aggregateId</text>
+
+          <path class="svg-line" d="M 748 178 L 780 178 L 780 100 L 804 100" marker-end="url(#ah)"></path>
+          <text class="svg-l" x="700" y="120">consume</text>
+
+          <path class="svg-line" d="M 868 130 L 868 264" marker-end="url(#ah)"></path>
+          <text class="svg-l" x="876" y="200">message_id</text>
+          <text class="svg-l" x="876" y="216">не видели</text>
+          <text class="svg-l" x="876" y="232">раньше</text>
+        </svg>
+      </div>
+      <figcaption>Полный путь события. Зелёным выделены два инварианта, на которых держится корректность: атомарная запись бизнес-строки вместе с outbox-строкой и публикация с ключом партиции, равным идентификатору агрегата.</figcaption>
+    </figure>
+
+    <div class="main">
+      <p>Правая половина схемы так же важна, как левая. Релэй гарантирует <em>at-least-once</em>: если он упал между отправкой в Kafka и обновлением статуса, событие уйдёт повторно. Поэтому потребитель обязан быть идемпотентным — это не опциональная добавка, а вторая половина того же решения. Таблица <code>inbox_message</code> хранит идентификаторы уже обработанных сообщений.</p>
+    </div>
+    <aside class="note">
+      <span class="nlabel">Тонкость</span>
+      <p>Запись в <code>inbox_message</code> и бизнес-эффект обработчика должны быть в одной транзакции. Иначе дедупликация повторяет ровно тот баг, который мы чиним, только на стороне получателя.</p>
+    </aside>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 4 -->
+  <section>
+    <div class="rail"><span class="num">§ 4</span><span class="tag">Данные</span></div>
+    <div class="main">
+      <h2>Модель данных</h2>
+      <p>Схема создаётся Flyway-миграциями, которые едут внутри стартера. Пользователь библиотеки не пишет DDL руками — иначе тиражируемость страдает на первом же подключении.</p>
+
+<pre><code><span class="c">-- сторона отправителя</span>
+<span class="k">create table</span> outbox_message (
+    id                <span class="k">bigserial</span>    <span class="k">primary key</span>,
+    message_id        <span class="k">uuid</span>         <span class="k">not null unique</span>,
+    aggregate_type    <span class="k">text</span>         <span class="k">not null</span>,
+    aggregate_id      <span class="k">text</span>         <span class="k">not null</span>,
+    topic             <span class="k">text</span>         <span class="k">not null</span>,
+    partition_key     <span class="k">text</span>         <span class="k">not null</span>,
+    payload           <span class="k">jsonb</span>        <span class="k">not null</span>,
+    headers           <span class="k">jsonb</span>        <span class="k">not null default</span> '{}',
+    status            <span class="k">text</span>         <span class="k">not null default</span> 'NEW',
+    attempts          <span class="k">int</span>          <span class="k">not null default</span> 0,
+    created_at        <span class="k">timestamptz</span>  <span class="k">not null default</span> now(),
+    next_attempt_at   <span class="k">timestamptz</span>  <span class="k">not null default</span> now(),
+    locked_until      <span class="k">timestamptz</span>,
+    sent_at           <span class="k">timestamptz</span>,
+    last_error        <span class="k">text</span>,
+    <span class="k">constraint</span> outbox_message_status_check
+        <span class="k">check</span> (status <span class="k">in</span> ('NEW','IN_FLIGHT','FAILED','SENT','DEAD'))
+);
+
+<span class="c">-- частичный индекс: то, что ждёт отправки</span>
+<span class="k">create index</span> outbox_pending_idx
+    <span class="k">on</span> outbox_message (next_attempt_at, id)
+    <span class="k">where</span> status <span class="k">in</span> ('NEW', 'FAILED');
+
+<span class="c">-- reaper: строки, захваченные подом, который умер, не дойдя до ack</span>
+<span class="k">create index</span> outbox_expired_lease_idx
+    <span class="k">on</span> outbox_message (locked_until, id)
+    <span class="k">where</span> status = 'IN_FLIGHT';
+
+<span class="c">-- сторона получателя</span>
+<span class="k">create table</span> inbox_message (
+    message_id   <span class="k">uuid</span>        <span class="k">not null</span>,
+    consumer     <span class="k">text</span>        <span class="k">not null</span>,
+    processed_at <span class="k">timestamptz</span> <span class="k">not null default</span> now(),
+    <span class="k">primary key</span> (message_id, consumer)
+);</code></pre>
+
+      <p>Три решения в этой схеме стоит проговорить отдельно, потому что каждое из них — компромисс.</p>
+
+      <h3>Частичный индекс вместо полного</h3>
+      <p>Отправленные строки — это 99,9 % таблицы через неделю работы. Индекс с условием <code>where status in ('NEW','FAILED')</code> остаётся крошечным независимо от объёма истории, потому что B-tree физически не содержит строк, не подходящих под предикат. Планировщик использует его только если условие запроса логически влечёт предикат индекса — это надо проверить через <code>EXPLAIN</code>, а не предположить.</p>
+
+      <h3>Составной первичный ключ в inbox</h3>
+      <p>Одно и то же событие может обрабатываться несколькими независимыми потребителями в одном сервисе. Ключ <code>(message_id, consumer)</code> позволяет каждому вести свой учёт; ключ только по <code>message_id</code> заставил бы первого потребителя «съесть» сообщение у остальных.</p>
+
+      <h3>payload как jsonb, а не bytea</h3>
+      <p>jsonb даёт возможность посмотреть глазами, что застряло в очереди, и построить индекс по полю при разборе инцидента. Цена — потеря байтовой точности исходного представления и невозможность хранить Avro/Protobuf как есть. Для стартера, который прежде всего должен быть отлаживаемым, это правильный размен; в конфигурации оставим переключатель.</p>
+    </div>
+    <aside class="note">
+      <span class="nlabel">Что померить на этапе 2</span>
+      <p>Раздувание таблицы и autovacuum. Outbox — это таблица с высоким churn: строки живут минуты и умирают. Классическое место, где HOT-updates и настройки autovacuum решают всё. Отличный материал для второго демо.</p>
+    </aside>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 5 -->
+  <section>
+    <div class="rail"><span class="num">§ 5</span><span class="tag">Решения</span></div>
+    <div class="main">
+      <h2>Архитектурные решения</h2>
+      <p>Пять развилок, каждая с зафиксированным выбором и честной ценой. Это тот раздел, из которого берутся ответы на вопросы после демо.</p>
+    </div>
+
+    <div class="wide">
+      <div class="adr">
+        <div class="adr-head">
+          <span class="adr-id">ADR‑1</span>
+          <h3 class="adr-title">Релэй встроен в приложение, а не вынесен в отдельный сервис</h3>
+          <span class="pill">Принято</span>
+        </div>
+        <div class="adr-body">
+          <p>Outbox-таблица физически принадлежит базе конкретного сервиса. Вопрос — кто её читает.</p>
+          <dl>
+            <dt>Рассмотрены</dt>
+            <dd><strong>A. Встроенный релэй</strong> — библиотека поднимает фоновые воркеры в том же процессе. <strong>B. Отдельный релэй-сервис</strong> — один общий деплой обслуживает все outbox-таблицы компании. <strong>C. CDC через Debezium</strong> — читает WAL Postgres и льёт изменения в Kafka без участия приложения.</dd>
+            <dt>Выбрано</dt>
+            <dd><strong>A</strong>, с оговоркой. Вариант B требует, чтобы посторонний сервис знал схему и имел доступ к чужой БД — это shared database, разрушение границы владения данными и вечный источник несовместимых миграций. Вариант C архитектурно самый чистый и самый производительный, но добавляет Debezium и Kafka Connect в инфраструктуру, работает на уровне строк таблицы, а не доменных событий, и не решает половину задачи — идемпотентность потребителя.</dd>
+            <dt>Цена</dt>
+            <dd>Релэй конкурирует за ресурсы с обработкой запросов в том же JVM. Именно поэтому этап 2 начинается с вопроса «сколько процессорного времени и латентности релэй отъедает у бизнес-эндпоинтов» — это измеримо, и это будет измерено.</dd>
+            <dt>Оговорка</dt>
+            <dd>Публикация выносится за интерфейс <code>OutboxDispatcher</code>. Если на этапе 2 числа скажут, что встроенный релэй мешает, реализация меняется на CDC без изменения кода на стороне приложения.</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <figure class="wide">
+      <div class="figscroll">
+        <svg viewBox="0 0 900 350" role="img" aria-label="Сравнение трёх вариантов релэя: встроенный релэй читает outbox-таблицу внутри границы своего сервиса; отдельный релэй-сервис читает ту же таблицу, пересекая границу владения данными; Debezium читает журнал упреждающей записи Postgres, не касаясь таблицы.">
+          <rect class="svg-zone" x="20" y="22" width="330" height="82" rx="3"></rect>
+          <text class="svg-acc-t" x="34" y="42">A · встроенный релэй</text>
+          <rect class="svg-box" x="40" y="52" width="104" height="38" rx="2"></rect>
+          <text class="svg-t" x="92" y="76" text-anchor="middle">service</text>
+          <rect class="svg-box-alt" x="228" y="52" width="104" height="38" rx="2"></rect>
+          <text class="svg-t" x="280" y="76" text-anchor="middle">outbox</text>
+          <path class="svg-acc" d="M 148 71 L 220 71" marker-end="url(#ah)" color="var(--accent)"></path>
+          <rect class="svg-box-alt" x="430" y="52" width="90" height="38" rx="2"></rect>
+          <text class="svg-t" x="475" y="76" text-anchor="middle">Kafka</text>
+          <path class="svg-acc" d="M 352 71 L 422 71" marker-end="url(#ah)" color="var(--accent)"></path>
+          <text class="svg-acc-t" x="560" y="66">граница сервиса не пересекается</text>
+          <text class="svg-acc-t" x="560" y="82">ценой ресурсов в общем JVM</text>
+
+          <rect class="svg-zone" x="20" y="134" width="200" height="82" rx="3"></rect>
+          <text class="svg-warn-t" x="34" y="154">B · отдельный релэй-сервис</text>
+          <rect class="svg-box" x="40" y="164" width="104" height="38" rx="2"></rect>
+          <text class="svg-t" x="92" y="188" text-anchor="middle">service</text>
+          <rect class="svg-box-alt" x="228" y="164" width="104" height="38" rx="2"></rect>
+          <text class="svg-t" x="280" y="188" text-anchor="middle">outbox</text>
+          <path class="svg-line" d="M 148 183 L 220 183" marker-end="url(#ah)"></path>
+          <rect class="svg-box" x="228" y="256" width="104" height="38" rx="2"></rect>
+          <text class="svg-t" x="280" y="280" text-anchor="middle">relay-svc</text>
+          <path class="svg-warn" d="M 280 250 L 280 210" marker-end="url(#ahw)"></path>
+          <rect class="svg-box-alt" x="430" y="164" width="90" height="38" rx="2"></rect>
+          <text class="svg-t" x="475" y="188" text-anchor="middle">Kafka</text>
+          <path class="svg-line" d="M 336 275 L 475 275 L 475 210" marker-end="url(#ah)"></path>
+          <text class="svg-warn-t" x="560" y="178">чужой сервис читает чужую таблицу:</text>
+          <text class="svg-warn-t" x="560" y="194">shared database, связанность миграций</text>
+
+          <rect class="svg-zone" x="20" y="246" width="200" height="82" rx="3"></rect>
+          <text class="svg-s" x="34" y="266">C · CDC</text>
+          <rect class="svg-box" x="40" y="276" width="104" height="38" rx="2"></rect>
+          <text class="svg-t" x="92" y="300" text-anchor="middle">service</text>
+          <rect class="svg-box-alt" x="600" y="276" width="104" height="38" rx="2"></rect>
+          <text class="svg-t" x="652" y="300" text-anchor="middle">WAL</text>
+          <rect class="svg-box" x="740" y="276" width="104" height="38" rx="2"></rect>
+          <text class="svg-t" x="792" y="300" text-anchor="middle">Debezium</text>
+          <path class="svg-line" d="M 148 295 L 592 295" marker-end="url(#ah)"></path>
+          <path class="svg-line" d="M 712 295 L 732 295" marker-end="url(#ah)"></path>
+          <text class="svg-s" x="300" y="288">пишет, не зная про доставку</text>
+          <text class="svg-s" x="560" y="332">приложение не участвует вовсе — но появляется Kafka Connect</text>
+        </svg>
+      </div>
+      <figcaption>Разница между вариантами — в одной стрелке: кто именно тянет данные из outbox. У B эта стрелка пересекает границу владения базой, у C её нет вообще, потому что данные берутся из журнала упреждающей записи.</figcaption>
+    </figure>
+
+    <div class="wide">
+      <div class="adr">
+        <div class="adr-head">
+          <span class="adr-id">ADR‑2</span>
+          <h3 class="adr-title">Опрос через SKIP LOCKED вместо выбора лидера</h3>
+          <span class="pill">Принято</span>
+        </div>
+        <div class="adr-body">
+          <p>Сервис работает в нескольких подах. Все они видят одну outbox-таблицу — нужно, чтобы они не отправляли одно и то же дважды и не простаивали.</p>
+          <dl>
+            <dt>Выбрано</dt>
+            <dd><code>SELECT … FOR UPDATE SKIP LOCKED LIMIT :batch</code> внутри короткой транзакции захвата. Строки, заблокированные другим подом, не попадают в выборку — вместо ожидания транзакция их пропускает. Никакого leader election, никакого ZooKeeper, никакой пассивной реплики.</dd>
+            <dt>Важное уточнение (v1.1)</dt>
+            <dd>Блокировка <code>FOR UPDATE</code> живёт ровно до конца транзакции и потому <strong>не может</strong> защищать публикацию в Kafka — сетевой вызов происходит уже после коммита. Роль «эта строка занята» после коммита берёт на себя не блокировка, а статус <code>IN_FLIGHT</code> вместе с <code>locked_until</code>. Полный протокол — в § 6.</dd>
+            <dt>Альтернатива</dt>
+            <dd>Advisory lock на весь релэй: работает один под, остальные ждут. Проще рассуждать о порядке, но пропускная способность не масштабируется и переключение при падении лидера занимает время удержания блокировки.</dd>
+            <dt>Цена</dt>
+            <dd>Глобальный порядок отправки теряется. Строка 105 может уйти раньше строки 104, если их забрали разные поды — см. ADR‑3.</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="adr">
+        <div class="adr-head">
+          <span class="adr-id">ADR‑3</span>
+          <h3 class="adr-title">Порядок событий не гарантируется; обработчики обязаны быть коммутативными</h3>
+          <span class="pill">Пересмотрено в v1.1</span>
+        </div>
+        <div class="adr-body">
+          <p>Версия 1.0 обещала порядок внутри агрегата. Обещание было неверным и здесь отзывается.</p>
+          <dl>
+            <dt>Почему прежнее решение не работало</dt>
+            <dd>Один <code>partition_key</code> гарантирует, что события агрегата попадут в одну партицию Kafka — но не то, в каком порядке они туда попадут. Между созданием строки и публикацией стоит релэй, работающий в нескольких подах. Предложенная в v1.0 «группировка пачки по ключу» дыру не закрывает: повтор упавшего события уходит позже, чем уже захваченное следующее, и обгон происходит даже внутри одного пода.</dd>
+            <dt>Выбрано</dt>
+            <dd>Порядок доставки не гарантируется. Обработчики обязаны быть коммутативными: результат не зависит от порядка применения событий. Стартер помогает это соблюсти, передавая в обработчик <code>occurred_at</code> и порядковый номер события внутри агрегата, чтобы устаревшее событие можно было распознать и отбросить.</dd>
+            <dt>Отвергнуто</dt>
+            <dd>Строгий порядок через advisory lock по хешу <code>aggregate_id</code> плюс монотонный <code>sequence</code>: под захватывает агрегат целиком и держит его, пока не отправит все накопленные события. Работает, но вводит single-flight на агрегат — точку сериализации — и заметно усложняет reaper. Для этого проекта цена выше пользы; вариант описан здесь, чтобы предъявить его на защите как рассмотренный.</dd>
+            <dt>Цена</dt>
+            <dd>Потребитель, которому порядок действительно нужен, отбрасывает устаревшие события сам, сравнивая порядковый номер с уже применённым. Ограничение выносится в README отдельным абзацем, а не прячется в примечании.</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="adr">
+        <div class="adr-head">
+          <span class="adr-id">ADR‑4</span>
+          <h3 class="adr-title">At-least-once плюс идемпотентность вместо exactly-once</h3>
+          <span class="pill">Принято</span>
+        </div>
+        <div class="adr-body">
+          <p>У Kafka есть транзакции и <code>exactly_once</code> семантика. Она не решает нашу задачу, и это стоит понимать точно.</p>
+          <dl>
+            <dt>Что даёт Kafka EOS</dt>
+            <dd>Атомарность между <em>чтением из Kafka, обработкой и записью обратно в Kafka</em>. То есть внутри границ Kafka. Наша транзакция пересекает границу Postgres ↔ Kafka, и туда EOS не дотягивается.</dd>
+            <dt>Следствие</dt>
+            <dd>Дубликаты неизбежны, и попытки их избежать — потерянное время. Правильная цель — сделать дубликат безвредным. Отсюда inbox-таблица, отсюда требование к обработчику быть идемпотентным, отсюда <code>message_id</code> как сквозной идентификатор.</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="adr">
+        <div class="adr-head">
+          <span class="adr-id">ADR‑5</span>
+          <h3 class="adr-title">Дедупликация — один INSERT, без предварительной проверки</h3>
+          <span class="pill">Заменяет ADR‑5 из v1.0</span>
+        </div>
+        <div class="adr-body">
+          <p>В версии 1.0 здесь стоял bloom-фильтр перед обращением к inbox-таблице. Решение было технически неверным и удалено целиком.</p>
+          <dl>
+            <dt>Почему bloom не подходит</dt>
+            <dd>Даже когда фильтр отвечает «точно не видели», вставить <code>message_id</code> в inbox всё равно необходимо — и в той же транзакции, что и бизнес-эффект, иначе следующий дубликат пройдёт насквозь. Значит обращение к БД происходит при любом ответе фильтра, и экономить нечего. Вдобавок в нескольких подах фильтры расходятся, а периодическая пересборка создаёт окно, в котором фильтр пуст.</dd>
+            <dt>Выбрано</dt>
+            <dd>Горячий путь — ровно один <code>INSERT INTO inbox_message … ON CONFLICT DO NOTHING</code> в транзакции обработчика. Ноль затронутых строк означает «уже обрабатывали» и приводит к раннему выходу. Предварительного <code>SELECT</code> в коде нет вообще: проверка и захват — одна операция, гонки между ними не существует.</dd>
+            <dt>Что настраивать вместо этого</dt>
+            <dd>Реальный рычаг производительности здесь — не структура в памяти, а размер и обслуживание таблицы: retention, партиционирование по <code>processed_at</code> при больших объёмах, autovacuum. Это и проверяется замерами на этапе 2.</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 6 -->
+  <section>
+    <div class="rail"><span class="num">§ 6</span><span class="tag">Поведение</span></div>
+    <div class="main">
+      <h2>Жизненный цикл сообщения и обработка отказов</h2>
+      <p>Строка outbox проходит конечное число состояний. Явная модель состояний — не бюрократия: без неё невозможно ответить на вопрос «что происходит, если под умер, удерживая пачку».</p>
+    </div>
+
+    <figure class="wide">
+      <div class="figscroll">
+        <svg viewBox="0 0 880 260" role="img" aria-label="Состояния строки outbox: NEW переходит в IN_FLIGHT при захвате релэем, оттуда в SENT после подтверждения Kafka; ошибка возвращает строку в FAILED с увеличением счётчика попыток и экспоненциальной задержкой; истечение аренды также возвращает строку в NEW; превышение лимита попыток переводит строку в DEAD и копирует её в DLQ.">
+          <rect class="svg-box" x="24" y="92" width="128" height="52" rx="2"></rect>
+          <text class="svg-t" x="88" y="123" text-anchor="middle">NEW</text>
+
+          <rect class="svg-box" x="248" y="92" width="128" height="52" rx="2"></rect>
+          <text class="svg-t" x="312" y="123" text-anchor="middle">IN_FLIGHT</text>
+
+          <rect class="svg-box" x="484" y="24" width="128" height="52" rx="2"></rect>
+          <text class="svg-t" x="548" y="55" text-anchor="middle">SENT</text>
+
+          <rect class="svg-box" x="484" y="160" width="128" height="52" rx="2"></rect>
+          <text class="svg-t" x="548" y="191" text-anchor="middle">FAILED</text>
+
+          <rect class="svg-box-alt" x="716" y="160" width="140" height="52" rx="2"></rect>
+          <text class="svg-t" x="786" y="185" text-anchor="middle">DEAD → DLQ</text>
+          <text class="svg-s" x="786" y="202" text-anchor="middle">ручной разбор</text>
+
+          <path class="svg-acc" d="M 152 118 L 240 118" marker-end="url(#ah)" color="var(--accent)"></path>
+          <text class="svg-acc-t" x="156" y="110">claim, lease 30s</text>
+
+          <path class="svg-acc" d="M 376 108 L 430 108 L 430 50 L 476 50" marker-end="url(#ah)" color="var(--accent)"></path>
+          <text class="svg-acc-t" x="382" y="76">ack от Kafka</text>
+
+          <path class="svg-warn" d="M 376 130 L 430 130 L 430 186 L 476 186" marker-end="url(#ahw)"></path>
+          <text class="svg-warn-t" x="382" y="164">ошибка / timeout</text>
+
+          <path class="svg-line" d="M 548 212 L 548 238 L 88 238 L 88 152" marker-end="url(#ah)"></path>
+          <text class="svg-l" x="300" y="252" text-anchor="middle">attempts++, next_attempt_at = now + 2^attempts · base (с джиттером)</text>
+
+          <path class="svg-warn" d="M 620 186 L 708 186" marker-end="url(#ahw)"></path>
+          <text class="svg-warn-t" x="624" y="178">attempts &gt; 12</text>
+
+          <path class="svg-line" d="M 312 84 L 312 44 L 176 44 L 176 92" marker-end="url(#ah)"></path>
+          <text class="svg-l" x="244" y="36" text-anchor="middle">locked_until истёк: под умер, строку забирает другой</text>
+        </svg>
+      </div>
+      <figcaption>Состояния строки outbox. Возврат по истечении аренды — то, что делает систему устойчивой к внезапной смерти пода: захваченная, но неотправленная строка автоматически становится доступной другим воркерам через 30 секунд.</figcaption>
+    </figure>
+
+    <div class="main">
+      <h3>Протокол релэя: три такта</h3>
+      <p>Это место, где версия 1.0 была неполной. Наивное «взять строки под <code>FOR UPDATE</code> и отправить их» не работает, потому что блокировка живёт до конца транзакции: держать транзакцию открытой на время сетевого вызова в Kafka означало бы долгие транзакции, распухание снапшотов и остановку autovacuum. Поэтому такт захвата и такт публикации разделены.</p>
+      <ol>
+        <li><strong>Захват.</strong> Короткая транзакция: <code>SELECT … FOR UPDATE SKIP LOCKED LIMIT :batch</code>, затем <code>UPDATE</code> отобранных строк в <code>IN_FLIGHT</code> с <code>locked_until = now() + lease</code>, затем <strong>commit</strong>. Блокировка снимается, но строка помечена как занятая.</li>
+        <li><strong>Публикация.</strong> Вне транзакции, с уже закоммиченной пачкой на руках. Здесь происходит сетевой вызов, который может занять секунды или не завершиться вовсе.</li>
+        <li><strong>Подтверждение.</strong> Отдельная короткая транзакция: успешные строки переводятся в <code>SENT</code>, неуспешные — в <code>FAILED</code> с увеличением <code>attempts</code> и новым <code>next_attempt_at</code>.</li>
+      </ol>
+      <p>Между вторым и третьим тактом процесс может умереть. Тогда строка остаётся в <code>IN_FLIGHT</code> навсегда — и её никто не подберёт, потому что основной индекс покрывает только <code>NEW</code> и <code>FAILED</code>. Ровно поэтому нужен <strong>reaper</strong>: отдельный проход возвращает в <code>NEW</code> строки со статусом <code>IN_FLIGHT</code> и истёкшим <code>locked_until</code>, опираясь на свой индекс <code>outbox_expired_lease_idx</code>. Без него сообщения молча застревают — это самый неприятный из возможных отказов, потому что он не проявляется ни ошибкой, ни ростом очереди.</p>
+      <p>Цена протокола — расширение окна дубликатов: событие, отправленное в Kafka и не подтверждённое в базе, уйдёт повторно. Это ожидаемо и безвредно, потому что потребитель идемпотентен.</p>
+
+      <h3>Экспоненциальная задержка с джиттером</h3>
+      <p>При недоступности Kafka все воркеры всех подов упрутся одновременно. Без джиттера они и повторять начнут одновременно, создавая синхронизированные волны нагрузки на восстанавливающийся брокер — так падают уже поднявшиеся кластеры. Случайное рассеивание задержки убирает синхронизацию.</p>
+
+      <h3>DLQ — это решение продукта, а не техники</h3>
+      <p>Стоит назвать вещи своими именами: система даёт не «гарантированную доставку», а durable intent — намерение, которое переживёт перезапуск, — плюс повторы и наблюдаемую недоставку. Строка в <code>DEAD</code> означает, что событие не будет доставлено без вмешательства человека. Стартер обязан кричать об этом: метрика, алерт, и <code>last_error</code> в таблице. Тихое умирание сообщений хуже, чем исходный баг, потому что создаёт ложное чувство надёжности.</p>
+    </div>
+    <aside class="note">
+      <span class="nlabel">Демо-момент</span>
+      <p>Сценарий «Kafka лежит 5 минут» на демо смотрится лучше всего: видно, как растёт очередь, как работает backoff, и как после подъёма брокера всё дренируется без потерь.</p>
+    </aside>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 7 -->
+  <section>
+    <div class="rail"><span class="num">§ 7</span><span class="tag">API</span></div>
+    <div class="main">
+      <h2>Публичный интерфейс стартера</h2>
+      <p>Критерий качества API здесь простой: сколько строк должен написать разработчик, чтобы перестать терять события. Цель — одна.</p>
+
+<pre><code><span class="c">// сторона отправителя — публикация внутри существующей транзакции</span>
+@Service
+<span class="k">public class</span> OrderService {
+
+    <span class="k">private final</span> OrderRepository orders;
+    <span class="k">private final</span> OutboxPublisher outbox;
+
+    <span class="k">public</span> OrderService(OrderRepository orders, OutboxPublisher outbox) {
+        <span class="k">this</span>.orders = orders;
+        <span class="k">this</span>.outbox = outbox;
+    }
+
+    @Transactional
+    <span class="k">public</span> OrderId placeOrder(PlaceOrder cmd) {
+        Order order = orders.save(Order.from(cmd));
+
+        outbox.publish(OutboxMessage.builder()
+                .topic(<span class="s">"orders.v1"</span>)
+                .aggregate(<span class="k">new</span> Aggregate(<span class="s">"order"</span>, order.id().toString()))
+                .payload(<span class="k">new</span> OrderPlaced(order.id(), order.total(), order.customerId()))
+                .build());
+
+        <span class="k">return</span> order.id();
+    }
+}</code></pre>
+
+      <p>Никакого <code>KafkaTemplate</code>, никаких колбэков на коммит транзакции, никаких <code>TransactionSynchronization</code>. Вызов <code>publish</code> — это обычный INSERT, он либо откатится вместе с заказом, либо переживёт его.</p>
+
+<pre><code><span class="c">// сторона получателя — идемпотентность через аннотацию</span>
+@Component
+<span class="k">public class</span> PaymentListener {
+
+    <span class="k">private final</span> PaymentService payments;
+
+    <span class="k">public</span> PaymentListener(PaymentService payments) {
+        <span class="k">this</span>.payments = payments;
+    }
+
+    @IdempotentConsumer(name = <span class="s">"payment-on-order-placed"</span>)
+    @KafkaListener(topics = <span class="s">"orders.v1"</span>)
+    <span class="k">public void</span> on(OrderPlaced event, MessageMeta meta) {
+        payments.reserve(event.orderId(), event.total());
+    }
+}</code></pre>
+
+      <p>Аннотация оборачивает вызов: открывает транзакцию, пытается вставить <code>message_id</code> в inbox, при конфликте уникальности молча выходит, иначе вызывает метод и коммитит всё вместе. Проверка и бизнес-эффект оказываются в одной транзакции — то самое требование из § 3.</p>
+
+      <div class="callout warn">
+        <h4>Где однократность заканчивается</h4>
+        <p>Эффект применяется один раз <strong>только для изменений в той же транзакции PostgreSQL</strong>, что и запись в inbox. Всё, что обработчик делает за пределами этой транзакции, однократным не становится: HTTP-вызов платёжного провайдера, запись в другую базу, отправка письма, публикация в другой топик. При повторной доставке транзакция откатится, а внешний вызов — нет.</p>
+        <p>Для таких случаев нужна идемпотентность на стороне получателя вызова — ключ идемпотентности в API провайдера — или отдельная запись о факте вызова в той же транзакции, с последующей сверкой. Стартер эту задачу не решает и не притворяется, что решает.</p>
+      </div>
+
+      <h4>Конфигурация</h4>
+<pre><code>outbox:
+  relay:
+    enabled: <span class="k">true</span>
+    workers: 2              <span class="c"># воркеров на под</span>
+    batch-size: 128
+    poll-interval: 200ms
+    lease-duration: 30s
+    max-attempts: 12
+  cleanup:
+    retention: 7d           <span class="c"># отправленные строки живут неделю</span>
+  inbox:
+    <span class="c"># обязателен и без дефолта: значение должно быть не меньше</span>
+    <span class="c"># максимального окна повторной доставки и ручного replay</span>
+    retention: 30d</code></pre>
+
+      <p>У <code>inbox.retention</code> намеренно нет значения по умолчанию. Слишком короткий срок незаметно ломает дедупликацию: после сброса оффсетов потребителя Kafka переиграет старые сообщения, записи о которых уже вычищены, и бизнес-эффект применится второй раз. Безопасного универсального значения не существует — оно зависит от retention топика и от того, насколько глубокий replay считается допустимым, — поэтому стартер отказывается стартовать, пока значение не задано явно.</p>
+    </div>
+    <aside class="note">
+      <span class="nlabel">Проверка на защите</span>
+      <p>Хороший вопрос себе: что произойдёт, если разработчик вызовет <code>outbox.publish</code> вне транзакции? Правильный ответ — исключение при старте вызова, а не тихая отправка. Явный отказ лучше молчаливой поломки инварианта.</p>
+    </aside>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 8 -->
+  <section>
+    <div class="rail"><span class="num">§ 8</span><span class="tag">Этап 1</span></div>
+    <div class="main">
+      <h2>Этап 1 — построить и доказать корректность</h2>
+      <p>Месяц первый. Задача этапа — получить работающий стартер и доказать, что заявленная гарантия соблюдается под сбоями. Производительность на этом этапе <em>не измеряется вообще</em>: сначала правильно, потом быстро.</p>
+
+      <h4>Объём работ</h4>
+      <ul class="checklist">
+        <li>Модуль стартера: автоконфигурация, Flyway-миграции, <code>OutboxPublisher</code>, <code>OutboxRelay</code> на SKIP LOCKED.</li>
+        <li>Ретраи с экспоненциальной задержкой и джиттером, DLQ, метрики Micrometer (глубина очереди, возраст старейшего неотправленного, счётчики попыток).</li>
+        <li><code>@IdempotentConsumer</code> и inbox-таблица.</li>
+        <li>Демо-стенд: два сервиса, docker-compose, скрипты нагрузки и сценариев сбоя.</li>
+        <li>Интеграционные тесты на Testcontainers, в том числе тест на конкурентный захват пачки несколькими релэями.</li>
+        <li>README: подключение за пять минут, описание гарантий и их границ.</li>
+      </ul>
+
+      <h4>Критерии готовности</h4>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Проверка</th><th>Ожидаемый результат</th></tr></thead>
+          <tbody>
+            <tr><td>Убить приложение <code>kill -9</code> под нагрузкой 500 rps</td><td>Число заказов в БД равно числу событий, дошедших до потребителя. Расхождение — ноль.</td></tr>
+            <tr><td>Остановить Kafka на 5 минут</td><td>Приложение продолжает принимать заказы, очередь растёт, после подъёма дренируется полностью.</td></tr>
+            <tr><td>Три пода релэя параллельно</td><td>Дубликаты в топике наблюдаются — это ожидаемое поведение at-least-once. Бизнес-эффект на стороне потребителя применён ровно один раз (сверяется по <code>message_id</code>).</td></tr>
+            <tr><td>Откат бизнес-транзакции</td><td>Событие не публикуется вообще.</td></tr>
+            <tr><td>Повторная доставка одного сообщения</td><td>Побочный эффект применён ровно один раз.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Сценарий демо</h4>
+      <p>Пятнадцать минут, из них десять — живой показ. Порядок такой: сначала запускается стенд с <em>выключенным</em> outbox — наивный dual-write, — под нагрузкой убивается процесс, и на экране видно расхождение счётчиков. Затем то же самое с включённым стартером: расхождение ноль. Дальше — падение Kafka и дренаж очереди на графике Grafana. Заканчиваем трейсом в Jaeger, где виден путь одного события целиком.</p>
+      <div class="callout accent">
+        <p>Главный приём этой защиты: не рассказывать про надёжность, а сломать систему на глазах у зала и показать, что она выжила. Слайд с архитектурой при этом нужен ровно один.</p>
+      </div>
+    </div>
+    <aside class="note">
+      <span class="nlabel">Риск этапа</span>
+      <p>Соблазн сделать «ещё фич» — приоритеты сообщений, батчинг, поддержку RabbitMQ. Всё это вне рамок. Этап 1 закрывается узким, но полностью доказанным набором свойств.</p>
+    </aside>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 9 -->
+  <section>
+    <div class="rail"><span class="num">§ 9</span><span class="tag">Этап 2</span></div>
+    <div class="main">
+      <h2>Этап 2 — измерить, сломать, удержать</h2>
+      <p>Месяц второй меняет роль: из автора кода вы становитесь его скептиком. Ничего нового не строится — берётся уже работающая система и выясняется, где у неё предел и во что она обходится хозяину.</p>
+
+      <div class="stages">
+        <div class="stage">
+          <span class="sm">Направление A</span>
+          <h3>Пропускная способность и латентность</h3>
+          <p>Нагрузка k6 по бизнес-эндпоинту, отдельно — измерение сквозной задержки «коммит → потребитель получил».</p>
+          <ul>
+            <li>p50 / p95 / p99 сквозной задержки, а не среднее</li>
+            <li>Предел релэя в событиях/сек и что упирается первым</li>
+            <li>Влияние <code>batch-size</code> и <code>poll-interval</code> на пару «задержка / нагрузка на БД»</li>
+          </ul>
+        </div>
+        <div class="stage">
+          <span class="sm">Направление B</span>
+          <h3>Профилирование JVM</h3>
+          <p>JFR и async-profiler по работающему стенду, флеймграфы на CPU и на аллокации.</p>
+          <ul>
+            <li>Где реально уходит время: сериализация, JDBC, продюсер</li>
+            <li>Аллокации на событие и давление на GC</li>
+            <li>G1 против ZGC на этом профиле нагрузки</li>
+          </ul>
+        </div>
+        <div class="stage">
+          <span class="sm">Направление C</span>
+          <h3>Virtual threads</h3>
+          <p>Релэй на пуле платформенных потоков против релэя на виртуальных потоках.</p>
+          <ul>
+            <li>Гипотеза: выигрыш есть, потому что нагрузка — сплошное блокирующее I/O</li>
+            <li>Поиск pinning: <code>synchronized</code> в драйвере и пуле соединений</li>
+            <li>Размер пула соединений по закону Литтла вместо подбора наугад</li>
+          </ul>
+        </div>
+        <div class="stage">
+          <span class="sm">Направление D</span>
+          <h3>Хаос и удержание</h3>
+          <p>Toxiproxy между приложением и зависимостями, затем автоматизация проверок в CI.</p>
+          <ul>
+            <li>Задержки, разрывы, частичная недоступность брокера</li>
+            <li>Поведение при рестарте пода в середине пачки</li>
+            <li>CI-гейт: PR с просадкой p99 не проходит</li>
+          </ul>
+        </div>
+      </div>
+
+      <h4>Гипотезы, которые проверяются</h4>
+      <p>Правильный способ вести этап 2 — записать предсказание <em>до</em> замера. Совпало — понимание есть; не совпало — вот это и есть самое ценное содержимое второго демо.</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th>№</th><th>Гипотеза</th><th>Как проверяется</th></tr></thead>
+          <tbody>
+            <tr><td class="n">H1</td><td>Узкое место релэя — не Kafka, а обращения к Postgres (захват пачки и обновление статусов)</td><td>Флеймграф под нагрузкой; доля времени в JDBC-кадрах</td></tr>
+            <tr><td class="n">H2</td><td>Виртуальные потоки дают выигрыш по пропускной способности, но упираются в размер пула соединений, а не в потоки</td><td>Замер при фиксированном пуле и при увеличенном</td></tr>
+            <tr><td class="n">H3</td><td>Увеличение <code>batch-size</code> снижает нагрузку на БД, но повышает p99 сквозной задержки</td><td>Серия замеров по сетке значений; график компромисса</td></tr>
+            <tr><td class="n">H4</td><td>Bloom-фильтр убирает большую часть запросов к inbox при ложноположительных срабатываниях около 1 %</td><td>Счётчик запросов к БД до и после включения</td></tr>
+            <tr><td class="n">H5</td><td>Autovacuum на outbox-таблице становится узким местом раньше, чем сам релэй</td><td>Наблюдение за раздуванием таблицы на длинном прогоне</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Целевые числа</h4>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Показатель</th><th>Цель</th><th>Почему такая</th></tr></thead>
+          <tbody>
+            <tr><td>Сквозная задержка p99</td><td class="n">&lt; 1,5 с</td><td>Верхняя граница, при которой асинхронность незаметна пользователю в сценариях уведомлений</td></tr>
+            <tr><td>Пропускная способность релэя</td><td class="n">&gt; 3 000 соб./с</td><td>Порядок, покрывающий пиковую нагрузку типового сервиса с запасом</td></tr>
+            <tr><td>Накладные расходы на бизнес-эндпоинт</td><td class="n">&lt; 5 % к p99</td><td>Плата за надёжность должна быть незаметна на фоне обычных колебаний</td></tr>
+            <tr><td>Потери сообщений при сбоях</td><td class="n">0</td><td>Единственное число, которое не подлежит обсуждению</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Сценарий демо</h4>
+      <p>Второе демо строится вокруг цифр, а не вокруг кода. Таблица гипотез с колонкой «подтвердилось / нет», два-три флеймграфа с указанием, что именно на них видно, график компромисса batch-size, и финал — открытый PR, который CI отклоняет с сообщением о просадке p99. Последнее особенно хорошо смотрится: видно, что результат работы закреплён и не разъедется.</p>
+    </div>
+    <aside class="note">
+      <span class="nlabel">Почему это ценно лично</span>
+      <p>Профилировать чужой сервис — гадание. Профилировать свой — обучение: вы можете предсказать результат заранее и узнать, ошиблись ли. Именно поэтому измерение идёт вторым этапом, а не первым.</p>
+    </aside>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 10 -->
+  <section>
+    <div class="rail"><span class="num">§ 10</span><span class="tag">Рамки</span></div>
+    <div class="main">
+      <h2>Что вне рамок и какие риски приняты</h2>
+
+      <h3>Вне рамок сознательно</h3>
+      <ul>
+        <li><strong>Другие брокеры.</strong> Только Kafka. Абстракция ради абстракции добавит интерфейсов и уберёт время на измерения.</li>
+        <li><strong>Другие СУБД.</strong> Только PostgreSQL: решение опирается на <code>SKIP LOCKED</code> и частичные индексы.</li>
+        <li><strong>Реестр схем и эволюция контрактов.</strong> Отдельная большая тема; в стартере payload — просто JSON.</li>
+        <li><strong>Saga и оркестрация процессов.</strong> Соблазнительно, но это надстройка над надёжной доставкой, а не её часть. Кандидат в отдельный проект.</li>
+      </ul>
+
+      <h3>Принятые риски</h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Риск</th><th>Смягчение</th></tr></thead>
+          <tbody>
+            <tr><td>Этап 1 разрастётся и не закроется за месяц</td><td>Объём зафиксирован в § 8. Всё, что не в списке критериев готовности, переезжает во «вне рамок».</td></tr>
+            <tr><td>Замеры этапа 2 окажутся шумными и невоспроизводимыми</td><td>Стенд фиксируется в docker-compose с ограничениями по CPU; каждый замер — три прогона, в отчёт идёт медиана; прогрев JVM обязателен.</td></tr>
+            <tr><td>Порядок событий внутри агрегата нарушится при SKIP LOCKED</td><td>Явная группировка пачки по <code>partition_key</code> плюс отдельный тест, который его ловит (ADR‑3).</td></tr>
+            <tr><td>Код пишет агент — понимание отстаёт от кода</td><td>Правило: каждое архитектурное решение сначала записывается в этот документ как ADR, и только потом реализуется. Этап 2 целиком построен на предсказаниях, которые нельзя сделать, не понимая систему.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 11 -->
+  <section>
+    <div class="rail"><span class="num">§ 11</span><span class="tag">IVP</span></div>
+    <div class="main">
+      <h2>Для карточки проекта</h2>
+      <p>Разделы ниже соответствуют шаблону Приложения 1 и переносятся в задачу PM как есть.</p>
+
+      <h4>Постановка задачи</h4>
+      <p>Разработать переиспользуемый Spring Boot стартер, реализующий паттерны Transactional Outbox и Idempotent Consumer для связки PostgreSQL + Kafka, с демо-стендом и набором нагрузочных и хаос-тестов, подтверждающих заявленные гарантии доставки. Реализацию выполнить на Java, полностью используя средства автоматизации программирования (Codex): декомпозиция задачи под агента, ревью и отладка сгенерированного кода.</p>
+
+      <h4>Этапы реализации</h4>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Этап</th><th>Работа</th><th>Часы</th></tr></thead>
+          <tbody>
+            <tr><td class="n">1</td><td>Изучение паттернов, гарантий доставки Kafka и механики блокировок PostgreSQL</td><td class="n">24</td></tr>
+            <tr><td class="n">1</td><td>Проектирование, схема данных, ADR, ревизия спецификации</td><td class="n">24</td></tr>
+            <tr><td class="n">1</td><td>Реализация стартера: outbox, релэй, reaper, метрики</td><td class="n">40</td></tr>
+            <tr><td class="n">1</td><td>Идемпотентный консьюмер, повторы, DLQ, интеграционные тесты</td><td class="n">40</td></tr>
+            <tr><td class="n">1</td><td>Демо-стенд, сценарии сбоя, документация</td><td class="n">32</td></tr>
+            <tr><td class="n">1</td><td>Демо этапа 1</td><td class="n">8</td></tr>
+            <tr><td class="n">2</td><td>Методика замеров, нагрузочный стенд, базовая линия</td><td class="n">40</td></tr>
+            <tr><td class="n">2</td><td>Профилирование (JFR, async-profiler), устранение узких мест</td><td class="n">40</td></tr>
+            <tr><td class="n">2</td><td>Виртуальные потоки, пул соединений, настройка параметров релэя</td><td class="n">40</td></tr>
+            <tr><td class="n">2</td><td>Хаос-тесты, CI-гейт, финальный отчёт</td><td class="n">24</td></tr>
+            <tr><td class="n">2</td><td>Демо этапа 2</td><td class="n">8</td></tr>
+            <tr><td class="s">Итого</td><td></td><td class="n">320</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Польза для компании</h4>
+      <p>Потеря событий при dual-write — дефект, воспроизводящийся в любом сервисе, который меняет состояние в БД и уведомляет об этом остальных. Обнаруживается он поздно и разбирается вручную: расхождения сверяются по логам, состояние правится точечными запросами. Стартер подключается зависимостью и убирает этот класс дефектов целиком; перф-стенд и методика замеров дальше переиспользуются любой командой для собственных сервисов.</p>
+
+      <h4>Личное развитие</h4>
+      <p>Семантика доставки Kafka, партиционирование и гарантии порядка, консьюмер-группы и ребалансы. PostgreSQL: уровни изоляции, MVCC, <code>SKIP LOCKED</code>, частичные индексы, autovacuum на таблицах с высоким churn. Проектирование отказоустойчивых компонентов: аренда, идемпотентность, экспоненциальные повторы, DLQ. Testcontainers и Toxiproxy для воспроизводимого хаос-тестирования. Профилирование JVM через JFR и async-profiler, чтение флеймграфов, поведение сборщиков мусора. Виртуальные потоки Project Loom и диагностика pinning. Методика нагрузочного тестирования: перцентили вместо средних, закон Литтла, JMH.</p>
+    </div>
+    <aside class="note">
+      <span class="nlabel">Соответствие KPI</span>
+      <p><strong>Осязаемость</strong> — публикуемый артефакт после каждого этапа. <strong>Тиражируемость</strong> — библиотека плюс README, подключается без автора. <strong>Актуальность</strong> — дефект есть в любом событийном сервисе. <strong>Качество защиты</strong> — оба демо построены на живых экспериментах, а не на слайдах.</p>
+    </aside>
+  </section>
+
+  <footer class="colophon full">
+    <span>Reliable Messaging Kit</span>
+    <span>Дизайн-документ v1.1</span>
+    <span>Internal Value Project · 2 этапа × 1 месяц</span>
+    <span>Java 21 · Spring Boot 3 · PostgreSQL 16 · Apache Kafka</span>
+  </footer>
+
+</div>

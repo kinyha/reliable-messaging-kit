@@ -1,0 +1,652 @@
+<meta charset="utf-8">
+<title>Восемь недель RMK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap">
+
+<style>
+  :root {
+    --ground:      #F1F4F3;
+    --surface:     #FBFCFC;
+    --surface-alt: #E7ECEA;
+    --ink:         #141A19;
+    --ink-soft:    #3D4A47;
+    --muted:       #5F6E6B;
+    --line:        #CFD8D5;
+    --line-soft:   #DFE6E4;
+    --accent:      #1B5F5A;
+    --accent-soft: #D6E7E4;
+    --warn:        #A8511C;
+    --warn-soft:   #F2E2D5;
+
+    --f-display: "IBM Plex Sans Condensed", "Helvetica Neue", Arial, sans-serif;
+    --f-body:    "IBM Plex Serif", Georgia, "Times New Roman", serif;
+    --f-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #0F1413;
+      --surface:     #161D1C;
+      --surface-alt: #1E2726;
+      --ink:         #E4EBE9;
+      --ink-soft:    #C2CFCC;
+      --muted:       #8A9A96;
+      --line:        #2B3634;
+      --line-soft:   #222C2B;
+      --accent:      #57B3AA;
+      --accent-soft: #16302E;
+      --warn:        #DB8B4F;
+      --warn-soft:   #2E2118;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #0F1413;
+    --surface:     #161D1C;
+    --surface-alt: #1E2726;
+    --ink:         #E4EBE9;
+    --ink-soft:    #C2CFCC;
+    --muted:       #8A9A96;
+    --line:        #2B3634;
+    --line-soft:   #222C2B;
+    --accent:      #57B3AA;
+    --accent-soft: #16302E;
+    --warn:        #DB8B4F;
+    --warn-soft:   #2E2118;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0 1.5rem 6rem;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .doc { max-width: 62rem; margin: 0 auto; }
+
+  /* ---------- masthead ---------- */
+
+  .masthead { border-bottom: 2px solid var(--ink); padding: 4rem 0 1.4rem; margin-bottom: 2.4rem; }
+  .eyebrow {
+    font-family: var(--f-mono);
+    font-size: 0.7rem; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 0.9rem;
+  }
+  .masthead h1 {
+    font-family: var(--f-display); font-weight: 700;
+    font-size: clamp(2.4rem, 5.5vw, 3.7rem);
+    line-height: 1.03; letter-spacing: -0.015em;
+    text-wrap: balance; margin: 0 0 0.55rem;
+  }
+  .masthead .lede { font-size: 1.13rem; color: var(--ink-soft); max-width: 46rem; margin: 0 0 1.8rem; text-wrap: pretty; }
+  .meta {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 1rem 2rem; border-top: 1px solid var(--line); padding-top: 1.15rem;
+  }
+  .meta div { display: flex; flex-direction: column; gap: 0.15rem; }
+  .meta .k {
+    font-family: var(--f-mono); font-size: 0.65rem;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+  }
+  .meta .v { font-family: var(--f-display); font-weight: 600; font-size: 0.97rem; }
+
+  /* ---------- type ---------- */
+
+  h2 {
+    font-family: var(--f-display); font-weight: 700;
+    font-size: 1.66rem; line-height: 1.14; letter-spacing: -0.008em;
+    text-wrap: balance; margin: 3rem 0 0.85rem;
+    padding-bottom: 0.5rem; border-bottom: 1px solid var(--line);
+  }
+  h3 { font-family: var(--f-display); font-weight: 600; font-size: 1.1rem; margin: 1.8rem 0 0.5rem; text-wrap: balance; }
+  h4 {
+    font-family: var(--f-mono); font-weight: 600; font-size: 0.72rem;
+    letter-spacing: 0.11em; text-transform: uppercase; color: var(--muted);
+    margin: 1.3rem 0 0.4rem;
+  }
+  p { margin: 0 0 1rem; max-width: 46rem; text-wrap: pretty; }
+  ul, ol { margin: 0 0 1.1rem; padding-left: 1.15rem; max-width: 46rem; }
+  li { margin-bottom: 0.38rem; }
+  li::marker { color: var(--accent); }
+  strong { font-weight: 600; }
+  a { color: var(--accent); text-underline-offset: 0.15em; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  code {
+    font-family: var(--f-mono); font-size: 0.85em;
+    background: var(--surface-alt); padding: 0.1em 0.34em; border-radius: 3px;
+  }
+
+  /* ---------- tables ---------- */
+
+  .tw { overflow-x: auto; margin: 0 0 1.4rem; border: 1px solid var(--line); background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.88rem; min-width: 34rem; }
+  th, td { text-align: left; padding: 0.6rem 0.85rem; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  th {
+    font-family: var(--f-mono); font-size: 0.65rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); font-weight: 500;
+    background: var(--surface-alt); border-bottom: 1px solid var(--line);
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.n, th.n { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.d {
+    font-family: var(--f-mono); font-size: 0.78rem; font-weight: 500;
+    color: var(--accent); white-space: nowrap; letter-spacing: 0.04em;
+  }
+  td.s { font-family: var(--f-display); font-weight: 600; }
+
+  /* ---------- week blocks ---------- */
+
+  .week {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    margin: 0 0 1.6rem;
+  }
+  .week-head {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 1rem;
+    padding: 0.9rem 1.2rem; background: var(--surface-alt);
+    border-bottom: 1px solid var(--line);
+  }
+  .week-n {
+    font-family: var(--f-mono); font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase;
+  }
+  .week-t { font-family: var(--f-display); font-weight: 600; font-size: 1.12rem; margin: 0; flex: 1 1 12rem; }
+  .week-h {
+    font-family: var(--f-mono); font-size: 0.72rem; color: var(--muted);
+    font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .week-body { padding: 1rem 1.2rem 0.4rem; }
+  .week-body .tw { margin-bottom: 1.1rem; border-left: none; border-right: none; }
+  .week-body > p { font-size: 0.95rem; }
+
+  .core {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 0.85rem 1.1rem;
+    margin: 0 0 1.1rem;
+  }
+  .core h4 { margin-top: 0; color: var(--accent); }
+  .core ul { margin-bottom: 0; font-size: 0.9rem; }
+  .core ul li::marker { color: var(--accent); }
+
+  .done {
+    font-family: var(--f-mono); font-size: 0.8rem;
+    color: var(--ink-soft); border-top: 1px dashed var(--line);
+    padding: 0.7rem 0 0.9rem;
+  }
+  .done b { font-family: var(--f-display); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 0.25rem; }
+
+  .callout { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); padding: 1rem 1.2rem; margin: 0 0 1.4rem; }
+  .callout.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+  .callout > :last-child { margin-bottom: 0; }
+  .callout h4 { margin-top: 0; }
+
+  .stagebar {
+    display: flex; align-items: baseline; gap: 0.9rem;
+    font-family: var(--f-mono); font-size: 0.72rem;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+    margin: 2.4rem 0 1.1rem; padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent);
+  }
+  .stagebar b { font-family: var(--f-display); font-size: 1.05rem; letter-spacing: 0; text-transform: none; color: var(--ink); }
+
+  /* ---------- figure ---------- */
+
+  figure { margin: 0 0 1.7rem; background: var(--surface); border: 1px solid var(--line); padding: 1.25rem 1.25rem 0.9rem; }
+  .figscroll { overflow-x: auto; }
+  figure svg { display: block; width: 100%; height: auto; min-width: 34rem; color: var(--ink-soft); }
+  figcaption {
+    font-family: var(--f-display); font-weight: 500; font-size: 0.83rem;
+    color: var(--muted); margin-top: 0.85rem; padding-top: 0.65rem;
+    border-top: 1px solid var(--line-soft); text-wrap: pretty;
+  }
+  .svg-box { fill: var(--surface); stroke: var(--line); stroke-width: 1.25; }
+  .svg-box-alt { fill: var(--surface-alt); stroke: var(--line); stroke-width: 1.25; }
+  .svg-t { font-family: var(--f-display); font-size: 13px; font-weight: 600; fill: var(--ink); }
+  .svg-s { font-family: var(--f-mono); font-size: 10px; fill: var(--muted); }
+  .svg-acc-t { font-family: var(--f-mono); font-size: 10.5px; fill: var(--accent); }
+  .svg-line { stroke: var(--ink-soft); stroke-width: 1.5; fill: none; }
+
+  footer.colophon {
+    border-top: 2px solid var(--ink); margin-top: 3.5rem; padding-top: 1.1rem;
+    font-family: var(--f-mono); font-size: 0.72rem; color: var(--muted);
+    display: flex; flex-wrap: wrap; gap: 0.5rem 1.6rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="doc">
+
+  <header class="masthead">
+    <p class="eyebrow">Reliable Messaging Kit · План реализации</p>
+    <h1>Восемь недель</h1>
+    <p class="lede">Понедельная сетка на два этапа: что делается, что записывается в лог и какой минимум обязателен, чтобы демо состоялось даже в занятую неделю.</p>
+    <div class="meta">
+      <div><span class="k">Длительность</span><span class="v">8 недель</span></div>
+      <div><span class="k">Лог</span><span class="v">40 ч / неделю</span></div>
+      <div><span class="k">Всего в лог</span><span class="v">320 часов</span></div>
+      <div><span class="k">Демо</span><span class="v">конец W4 и W8</span></div>
+      <div><span class="k">Спека</span><span class="v">design.html v1.1</span></div>
+    </div>
+  </header>
+
+  <h2>Как устроен этот план</h2>
+
+  <p>Документ читается на двух уровнях, и это сделано намеренно.</p>
+
+  <p><strong>Строки дней</strong> — формулировки для лога. Каждая описывает одно осмысленное занятие: разобраться с механизмом, реализовать узел, снять серию замеров. Они крупные и техничные, потому что работа именно такая: неделя уходит на то, чтобы разобраться в блокировках Postgres и переписать под них протокол релэя, а не на двадцать мелких тикетов.</p>
+
+  <p><strong>Ядро недели</strong> — выделенный блок с тем минимумом, без которого следующая неделя не стартует, а демо не состоится. Если неделя выдалась занятой, делается ядро; если свободной — берётся вся строка целиком, вглубь. Порядок работ внутри недели значения не имеет, кроме недели 1, где спека должна быть закрыта до кода.</p>
+
+  <div class="callout">
+    <h4>Принцип, на котором держится сетка</h4>
+    <p>Этап 1 не измеряет производительность вообще, этап 2 не добавляет функциональность вообще. Смешение этих режимов — самый частый способ провалить оба: оптимизация недоказанного кода и допиливание фич вместо замеров. Граница проходит ровно по демо после недели 4.</p>
+  </div>
+
+  <figure>
+    <div class="figscroll">
+      <svg viewBox="0 0 960 210" role="img" aria-label="Таймлайн восьми недель: недели с первой по четвёртую составляют этап 1 и заканчиваются первым демо, недели с пятой по восьмую составляют этап 2 и заканчиваются вторым демо. Темы недель: спецификация, отправитель, получатель, стенд, базовая линия, профилирование, Loom и тюнинг, хаос и CI.">
+        <defs>
+          <marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"></path>
+          </marker>
+        </defs>
+
+        <text class="svg-acc-t" x="24" y="26">ЭТАП 1 · доказать корректность</text>
+        <line x1="24" y1="34" x2="470" y2="34" stroke="var(--accent)" stroke-width="2"></line>
+
+        <text class="svg-acc-t" x="506" y="26">ЭТАП 2 · измерить и удержать</text>
+        <line x1="506" y1="34" x2="936" y2="34" stroke="var(--accent)" stroke-width="2"></line>
+
+        <rect class="svg-box" x="24" y="52" width="104" height="58" rx="2"></rect>
+        <text class="svg-t" x="76" y="76" text-anchor="middle">W1</text>
+        <text class="svg-s" x="76" y="94" text-anchor="middle">спека v1.1</text>
+
+        <rect class="svg-box" x="138" y="52" width="104" height="58" rx="2"></rect>
+        <text class="svg-t" x="190" y="76" text-anchor="middle">W2</text>
+        <text class="svg-s" x="190" y="94" text-anchor="middle">отправитель</text>
+
+        <rect class="svg-box" x="252" y="52" width="104" height="58" rx="2"></rect>
+        <text class="svg-t" x="304" y="76" text-anchor="middle">W3</text>
+        <text class="svg-s" x="304" y="94" text-anchor="middle">получатель</text>
+
+        <rect class="svg-box" x="366" y="52" width="104" height="58" rx="2"></rect>
+        <text class="svg-t" x="418" y="76" text-anchor="middle">W4</text>
+        <text class="svg-s" x="418" y="94" text-anchor="middle">стенд + сбои</text>
+
+        <rect class="svg-box" x="506" y="52" width="104" height="58" rx="2"></rect>
+        <text class="svg-t" x="558" y="76" text-anchor="middle">W5</text>
+        <text class="svg-s" x="558" y="94" text-anchor="middle">базовая линия</text>
+
+        <rect class="svg-box" x="620" y="52" width="104" height="58" rx="2"></rect>
+        <text class="svg-t" x="672" y="76" text-anchor="middle">W6</text>
+        <text class="svg-s" x="672" y="94" text-anchor="middle">профилирование</text>
+
+        <rect class="svg-box" x="734" y="52" width="104" height="58" rx="2"></rect>
+        <text class="svg-t" x="786" y="76" text-anchor="middle">W7</text>
+        <text class="svg-s" x="786" y="94" text-anchor="middle">Loom + тюнинг</text>
+
+        <rect class="svg-box" x="848" y="52" width="88" height="58" rx="2"></rect>
+        <text class="svg-t" x="892" y="76" text-anchor="middle">W8</text>
+        <text class="svg-s" x="892" y="94" text-anchor="middle">хаос + CI</text>
+
+        <path d="M 470 122 L 482 140 L 470 158 L 458 140 z" fill="var(--accent)"></path>
+        <text class="svg-acc-t" x="470" y="178" text-anchor="middle">ДЕМО 1</text>
+        <text class="svg-s" x="470" y="194" text-anchor="middle">ломаем вживую</text>
+
+        <path d="M 892 122 L 904 140 L 892 158 L 880 140 z" fill="var(--accent)"></path>
+        <text class="svg-acc-t" x="892" y="178" text-anchor="middle">ДЕМО 2</text>
+        <text class="svg-s" x="892" y="194" text-anchor="middle">показываем числа</text>
+
+        <path class="svg-line" d="M 24 140 L 450 140" marker-end="url(#pa)"></path>
+        <path class="svg-line" d="M 506 140 L 872 140" marker-end="url(#pa)"></path>
+        <text class="svg-s" x="200" y="134">артефакт растёт, замеров нет</text>
+        <text class="svg-s" x="600" y="134">код заморожен по функциональности</text>
+      </svg>
+    </div>
+    <figcaption>Два этапа по четыре недели с демо-вехой в конце каждого. Первая неделя стоит особняком: это не разработка, а закрытие дыр в спецификации, найденных на ревью.</figcaption>
+  </figure>
+
+  <h2>Что чинится на неделе 1</h2>
+
+  <p>Ревью дизайн-документа нашло семь дефектов спецификации. Все они закрываются до первой строчки кода — реализовывать протокол, про который известно, что он неверен, бессмысленно.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Дефект</th><th>Что делаем</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="s">Протокол claim / lease не определён</td>
+          <td>Блокировка <code>FOR UPDATE</code> живёт до конца транзакции и не может защищать сетевой вызов. Фиксируем трёхтактный протокол: claim с переводом в <code>IN_FLIGHT</code> и коммитом → публикация вне транзакции → отдельный update результата. Добавляем reaper просроченных <code>IN_FLIGHT</code> и индекс, который их покрывает.</td>
+        </tr>
+        <tr>
+          <td class="s">Порядок по агрегату не доказан</td>
+          <td>Развилка решается явно: либо per-aggregate advisory lock и sequence с проверкой на потребителе, либо честное ослабление обещания до «порядок не гарантируется, обработчики коммутативны». Второе дешевле и, вероятно, правильнее для этого проекта. Решение записывается как ADR‑3 v2.</td>
+        </tr>
+        <tr>
+          <td class="s">ADR‑5 (bloom-фильтр) неверен</td>
+          <td>Удаляется целиком. Горячий путь дедупликации — один <code>INSERT … ON CONFLICT DO NOTHING</code> в транзакции с бизнес-эффектом, без предварительного <code>SELECT</code>. Фильтр экономил бы запрос, которого не существует, и добавлял рассинхронизацию между подами.</td>
+        </tr>
+        <tr>
+          <td class="s">Противоречие в критериях готовности</td>
+          <td>Критерий «три релэя не отправили ни одного дубля» противоречит выбранной at-least-once семантике. Переформулируется: дубли воспроизводятся намеренно, однократен бизнес-эффект.</td>
+        </tr>
+        <tr>
+          <td class="s"><code>inbox.retention: 3d</code></td>
+          <td>Ломает дедупликацию при replay после сброса оффсетов. Retention назначается не меньше максимального окна повторной доставки, либо ограничение объявляется явно в README.</td>
+        </tr>
+        <tr>
+          <td class="s">Границы «exactly-once effect»</td>
+          <td>Однократность действует только для изменений в той же транзакции Postgres. HTTP-вызов к внешнему провайдеру идемпотентным не становится. Это переезжает в раздел про API потребителя, к самому примеру кода.</td>
+        </tr>
+        <tr>
+          <td class="s"><code>DEAD</code> обещает больше, чем даёт</td>
+          <td>Честная формулировка гарантии: durable intent, наблюдаемая недоставка, ручное восстановление. Слово «гарантированная доставка» из документа убирается.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warn">
+    <h4>Выведено из обязательного объёма</h4>
+    <p>Bloom-фильтр — удалён как ошибочный. Сравнение сборщиков мусора, микробенчмарки JMH, режим CDC и saga — переведены в stretch goals в конце документа. Берутся только если этап закрыт досрочно.</p>
+  </div>
+
+  <!-- ============ ЭТАП 1 ============ -->
+
+  <div class="stagebar"><b>Этап 1</b><span>недели 1–4 · доказать корректность</span></div>
+
+  <div class="week">
+    <div class="week-head">
+      <span class="week-n">Неделя 1</span>
+      <h3 class="week-t">Спецификация v1.1 и фундамент</h3>
+      <span class="week-h">40 ч</span>
+    </div>
+    <div class="week-body">
+      <div class="tw">
+        <table>
+          <thead><tr><th class="n">День</th><th>Запись в лог</th><th class="n">Ч</th></tr></thead>
+          <tbody>
+            <tr><td class="d">Пн</td><td>Разбор ревью дизайн-документа: инвентаризация замечаний, решение по каждому, черновик changelog версии 1.1</td><td class="n">8</td></tr>
+            <tr><td class="d">Вт</td><td>Изучение блокировок PostgreSQL: <code>FOR UPDATE</code>, <code>SKIP LOCKED</code>, время жизни блокировки; эксперименты в параллельных сессиях psql</td><td class="n">8</td></tr>
+            <tr><td class="d">Ср</td><td>Проектирование протокола релэя v1.1: трёхтактный claim → publish → ack, аренда и reaper; диаграмма последовательности</td><td class="n">8</td></tr>
+            <tr><td class="d">Чт</td><td>Изучение гарантий Kafka: партиционирование и порядок, <code>acks</code>, идемпотентный продюсер; решение по гарантии порядка (ADR‑3 v2)</td><td class="n">8</td></tr>
+            <tr><td class="d">Пт</td><td>Публикация design.html v1.1; скелет репозитория на Gradle и docker-compose с Postgres, Kafka, Jaeger, Grafana</td><td class="n">8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="core">
+        <h4>Ядро недели</h4>
+        <ul>
+          <li>Протокол релэя расписан по тактам — это фундамент всего кода дальше.</li>
+          <li>Решение по гарантии порядка принято и записано, каким бы оно ни было.</li>
+          <li><code>docker compose up</code> поднимает окружение, Flyway применяет миграции.</li>
+        </ul>
+      </div>
+      <p class="done"><b>Критерий закрытия</b>Все семь замечаний ревью имеют письменное решение; спека v1.1 опубликована; окружение поднимается с нуля одной командой.</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-head">
+      <span class="week-n">Неделя 2</span>
+      <h3 class="week-t">Сторона отправителя</h3>
+      <span class="week-h">40 ч</span>
+    </div>
+    <div class="week-body">
+      <div class="tw">
+        <table>
+          <thead><tr><th class="n">День</th><th>Запись в лог</th><th class="n">Ч</th></tr></thead>
+          <tbody>
+            <tr><td class="d">Пн</td><td>Реализация <code>OutboxPublisher</code>: публикация внутри транзакции, отказ при вызове вне транзакции, сериализация payload и заголовков</td><td class="n">8</td></tr>
+            <tr><td class="d">Вт</td><td>Реализация такта claim: выборка со <code>SKIP LOCKED</code>, перевод в <code>IN_FLIGHT</code>, коммит; интеграционные тесты на конкурентный захват двумя воркерами</td><td class="n">8</td></tr>
+            <tr><td class="d">Ср</td><td>Публикация в Kafka: настройка продюсера (<code>acks=all</code>, идемпотентность), такт подтверждения, батчевое обновление статусов</td><td class="n">8</td></tr>
+            <tr><td class="d">Чт</td><td>Reaper просроченных <code>IN_FLIGHT</code> и индекс под него; <code>EXPLAIN</code> горячих запросов, проверка что частичный индекс действительно используется</td><td class="n">8</td></tr>
+            <tr><td class="d">Пт</td><td>Метрики Micrometer: глубина очереди, возраст старейшего неотправленного, счётчики попыток; автоконфигурация Spring Boot стартера</td><td class="n">8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="core">
+        <h4>Ядро недели</h4>
+        <ul>
+          <li>Событие доезжает до Kafka по полному трёхтактному протоколу.</li>
+          <li>Тест на конкурентный claim зелёный — два релэя не берут одну строку.</li>
+          <li>Reaper возвращает в работу строки умершего пода.</li>
+        </ul>
+      </div>
+      <p class="done"><b>Критерий закрытия</b>Убитый на середине пачки процесс не приводит к потере событий: после перезапуска всё уезжает.</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-head">
+      <span class="week-n">Неделя 3</span>
+      <h3 class="week-t">Сторона получателя и отказы</h3>
+      <span class="week-h">40 ч</span>
+    </div>
+    <div class="week-body">
+      <div class="tw">
+        <table>
+          <thead><tr><th class="n">День</th><th>Запись в лог</th><th class="n">Ч</th></tr></thead>
+          <tbody>
+            <tr><td class="d">Пн</td><td>Таблица inbox и идемпотентный консьюмер: <code>INSERT … ON CONFLICT DO NOTHING</code> в одной транзакции с бизнес-эффектом</td><td class="n">8</td></tr>
+            <tr><td class="d">Вт</td><td>Тесты идемпотентности: повторная доставка, параллельная обработка одного <code>message_id</code>; отдельный тест границы гарантии для внешнего HTTP-вызова</td><td class="n">8</td></tr>
+            <tr><td class="d">Ср</td><td>Экспоненциальные повторы с джиттером: расчёт <code>next_attempt_at</code>, тест на отсутствие синхронных волн повторов после восстановления брокера</td><td class="n">8</td></tr>
+            <tr><td class="d">Чт</td><td>DLQ: переход в <code>DEAD</code>, сохранение <code>last_error</code>, метрика и алерт; политики очистки outbox и inbox с обоснованием сроков</td><td class="n">8</td></tr>
+            <tr><td class="d">Пт</td><td>Стабилизация набора интеграционных тестов на Testcontainers; документация публичного API стартера</td><td class="n">8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="core">
+        <h4>Ядро недели</h4>
+        <ul>
+          <li>Повторная доставка не приводит к двойному бизнес-эффекту.</li>
+          <li>Проверка дубля и сам эффект — в одной транзакции, иначе чиним ровно тот баг, от которого лечим.</li>
+          <li>Повторы не бьют по восстановившемуся брокеру синхронной волной.</li>
+        </ul>
+      </div>
+      <p class="done"><b>Критерий закрытия</b>Стартер закрывает обе стороны задачи; набор тестов проходит стабильно десять прогонов подряд.</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-head">
+      <span class="week-n">Неделя 4</span>
+      <h3 class="week-t">Демо-стенд, сценарии сбоя, защита</h3>
+      <span class="week-h">40 ч</span>
+    </div>
+    <div class="week-body">
+      <div class="tw">
+        <table>
+          <thead><tr><th class="n">День</th><th>Запись в лог</th><th class="n">Ч</th></tr></thead>
+          <tbody>
+            <tr><td class="d">Пн</td><td>Демо-стенд: <code>order-service</code> и <code>payment-service</code> поверх стартера, режим с отключённым outbox для контрастного показа</td><td class="n">8</td></tr>
+            <tr><td class="d">Вт</td><td>Сценарии сбоя: <code>kill -9</code> под нагрузкой и остановка Kafka на пять минут; скрипты сверки счётчиков базы и потребителя</td><td class="n">8</td></tr>
+            <tr><td class="d">Ср</td><td>Сценарий трёх параллельных релэев; трассировка OpenTelemetry, дашборд Grafana с глубиной очереди и возрастом сообщений</td><td class="n">8</td></tr>
+            <tr><td class="d">Чт</td><td>README: подключение за пять минут, раздел гарантий и их границ; прогон всех сценариев с чистого состояния и фиксация результатов</td><td class="n">8</td></tr>
+            <tr><td class="d">Пт</td><td>Подготовка демо этапа 1: сценарий показа, репетиция, тайминг; проведение демо и фиксация вопросов</td><td class="n">8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="core">
+        <h4>Ядро недели</h4>
+        <ul>
+          <li>Работает контрастный показ: сначала ломаем стенд без outbox, потом тот же сценарий с ним.</li>
+          <li>Сценарии запускаются скриптом, а не руками — на демо нет места импровизации.</li>
+          <li>README позволяет подключить стартер без вас.</li>
+        </ul>
+      </div>
+      <p class="done"><b>Критерий закрытия</b>Демо проведено. Расхождение счётчиков при <code>kill -9</code> — ноль; дубли при трёх релэях наблюдаются, бизнес-эффект однократен.</p>
+    </div>
+  </div>
+
+  <!-- ============ ЭТАП 2 ============ -->
+
+  <div class="stagebar"><b>Этап 2</b><span>недели 5–8 · измерить и удержать</span></div>
+
+  <div class="week">
+    <div class="week-head">
+      <span class="week-n">Неделя 5</span>
+      <h3 class="week-t">Перф-стенд и базовая линия</h3>
+      <span class="week-h">40 ч</span>
+    </div>
+    <div class="week-body">
+      <div class="tw">
+        <table>
+          <thead><tr><th class="n">День</th><th>Запись в лог</th><th class="n">Ч</th></tr></thead>
+          <tbody>
+            <tr><td class="d">Пн</td><td>Изучение методики нагрузочного тестирования: перцентили против средних, coordinated omission, прогрев JVM и его влияние на числа</td><td class="n">8</td></tr>
+            <tr><td class="d">Вт</td><td>Сценарии k6 по бизнес-эндпоинту; инструментирование сквозной задержки «коммит → потребитель получил»</td><td class="n">8</td></tr>
+            <tr><td class="d">Ср</td><td>Фиксация окружения замеров: лимиты CPU и памяти в compose; базовая линия — три прогона, медиана и разброс</td><td class="n">8</td></tr>
+            <tr><td class="d">Чт</td><td>Таблица гипотез H1–H5 с предсказаниями, записанными до замеров; измерение накладных расходов релэя на бизнес-эндпоинт</td><td class="n">8</td></tr>
+            <tr><td class="d">Пт</td><td>Поиск точки насыщения релэя по пропускной способности; автоматизация прогона замеров одной командой</td><td class="n">8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="core">
+        <h4>Ядро недели</h4>
+        <ul>
+          <li>Есть воспроизводимая базовая линия — числа, с которыми будет сравниваться всё дальнейшее.</li>
+          <li>Предсказания записаны <em>до</em> замеров: без этого этап 2 превращается в пересказ чужих графиков.</li>
+        </ul>
+      </div>
+      <p class="done"><b>Критерий закрытия</b>Повторный прогон базовой линии даёт числа в пределах разброса первого. Если нет — стенд не готов, и это важнее любых оптимизаций.</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-head">
+      <span class="week-n">Неделя 6</span>
+      <h3 class="week-t">Профилирование</h3>
+      <span class="week-h">40 ч</span>
+    </div>
+    <div class="week-body">
+      <div class="tw">
+        <table>
+          <thead><tr><th class="n">День</th><th>Запись в лог</th><th class="n">Ч</th></tr></thead>
+          <tbody>
+            <tr><td class="d">Пн</td><td>Изучение JFR: набор событий, настройка записи, снятие профиля работающего под нагрузкой приложения</td><td class="n">8</td></tr>
+            <tr><td class="d">Вт</td><td>async-profiler: снятие CPU-профиля, построение флеймграфа, интерпретация; проверка гипотезы H1 о доле времени в JDBC</td><td class="n">8</td></tr>
+            <tr><td class="d">Ср</td><td>Профиль аллокаций и давление на сборщик мусора; устранение первого найденного узкого места</td><td class="n">8</td></tr>
+            <tr><td class="d">Чт</td><td>Повторный замер после оптимизации и сравнение с базовой линией; поиск и разбор второго узкого места</td><td class="n">8</td></tr>
+            <tr><td class="d">Пт</td><td>Анализ блокировок и contention по событиям JFR; оформление отчёта по профилированию с флеймграфами</td><td class="n">8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="core">
+        <h4>Ядро недели</h4>
+        <ul>
+          <li>Снят и прочитан хотя бы один настоящий флеймграф своего кода.</li>
+          <li>Гипотеза H1 закрыта фактом — неважно, подтвердилась или нет.</li>
+          <li>Одна оптимизация сделана и подтверждена повторным замером.</li>
+        </ul>
+      </div>
+      <p class="done"><b>Критерий закрытия</b>Названо конкретное узкое место с указанием на кадр стека, а не «где-то в базе».</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-head">
+      <span class="week-n">Неделя 7</span>
+      <h3 class="week-t">Виртуальные потоки и настройка</h3>
+      <span class="week-h">40 ч</span>
+    </div>
+    <div class="week-body">
+      <div class="tw">
+        <table>
+          <thead><tr><th class="n">День</th><th>Запись в лог</th><th class="n">Ч</th></tr></thead>
+          <tbody>
+            <tr><td class="d">Пн</td><td>Изучение виртуальных потоков: модель выполнения, carrier threads, причины и последствия pinning</td><td class="n">8</td></tr>
+            <tr><td class="d">Вт</td><td>Перевод релэя на виртуальные потоки за флагом конфигурации; сравнительный замер с платформенными потоками, проверка H2</td><td class="n">8</td></tr>
+            <tr><td class="d">Ср</td><td>Диагностика pinning (<code>jdk.tracePinnedThreads</code>, события JFR); расчёт размера пула соединений по закону Литтла и проверка расчёта замером</td><td class="n">8</td></tr>
+            <tr><td class="d">Чт</td><td>Сетка значений <code>batch-size</code> × <code>poll-interval</code>: компромисс между задержкой и нагрузкой на базу, проверка H3</td><td class="n">8</td></tr>
+            <tr><td class="d">Пт</td><td>Наблюдение autovacuum на outbox-таблице на длинном прогоне (H5), настройка параметров; обновление дефолтов стартера по результатам</td><td class="n">8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="core">
+        <h4>Ядро недели</h4>
+        <ul>
+          <li>Есть число: сколько дают виртуальные потоки на этой нагрузке — и упирается ли выигрыш в пул соединений.</li>
+          <li>Дефолты стартера подкреплены замером, а не взяты из головы.</li>
+        </ul>
+      </div>
+      <p class="done"><b>Критерий закрытия</b>График компромисса <code>batch-size</code> готов и объясним: видно, чем платим за снижение задержки.</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-head">
+      <span class="week-n">Неделя 8</span>
+      <h3 class="week-t">Хаос, CI-гейт, защита</h3>
+      <span class="week-h">40 ч</span>
+    </div>
+    <div class="week-body">
+      <div class="tw">
+        <table>
+          <thead><tr><th class="n">День</th><th>Запись в лог</th><th class="n">Ч</th></tr></thead>
+          <tbody>
+            <tr><td class="d">Пн</td><td>Toxiproxy: встраивание в стенд, профили сетевых сбоев — латентность, разрывы, частичная недоступность брокера</td><td class="n">8</td></tr>
+            <tr><td class="d">Вт</td><td>Оформление хаос-сценариев как автотестов; отдельный сценарий рестарта пода в середине обработки пачки</td><td class="n">8</td></tr>
+            <tr><td class="d">Ср</td><td>CI-гейт: workflow с порогами по p99, публикация отчётов как артефактов сборки; проверка на намеренно замедленном PR</td><td class="n">8</td></tr>
+            <tr><td class="d">Чт</td><td>Финальный отчёт: таблица гипотез с фактическими результатами и разбором расхождений; обновление README и спеки по фактам</td><td class="n">8</td></tr>
+            <tr><td class="d">Пт</td><td>Подготовка демо этапа 2, репетиция показа; проведение демо и ретроспектива проекта</td><td class="n">8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="core">
+        <h4>Ядро недели</h4>
+        <ul>
+          <li>CI отклоняет замедляющий PR — результат работы закреплён и не разъедется.</li>
+          <li>Таблица гипотез заполнена фактами; расхождения объяснены, а не спрятаны.</li>
+        </ul>
+      </div>
+      <p class="done"><b>Критерий закрытия</b>Демо проведено. Главный слайд — не архитектура, а таблица «предсказал / получил».</p>
+    </div>
+  </div>
+
+  <h2>Как вести лог</h2>
+
+  <p>Три правила, которые делают лог полезным вам же — через месяц, когда придётся вспоминать, что происходило на неделе 3.</p>
+
+  <ul>
+    <li><strong>Записывайте занятие, а не действие.</strong> «Разбирался с временем жизни блокировок в Postgres, переписал протокол релэя» — это запись. «Правил код» — нет.</li>
+    <li><strong>Фиксируйте, что выяснилось.</strong> Одна строка вывода к записи дня превращает лог в черновик демо. К неделе 8 у вас уже готов материал для отчёта, а не сорок строк «работал над задачей».</li>
+    <li><strong>Отмечайте несовпадения с планом.</strong> Если неделя ушла не туда, это самая ценная запись: на ретроспективе именно она объясняет, почему оценка в 14 часов на стартер была оптимистичной.</li>
+  </ul>
+
+  <h2>Stretch goals</h2>
+
+  <p>Берутся только если этап закрыт досрочно. В обязательный объём не входят и в критериях закрытия не участвуют.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Тема</th><th>Почему вне обязательного</th></tr></thead>
+      <tbody>
+        <tr><td class="s">Сравнение G1 / ZGC / Shenandoah</td><td>Интересно и хорошо смотрится на демо, но требует длинных прогонов и аккуратной статистики. Без стабильной базовой линии даёт шум вместо выводов.</td></tr>
+        <tr><td class="s">Микробенчмарки JMH</td><td>Отдельный навык со своими граблями (прогрев, dead-code elimination). Ценен сам по себе, но не нужен для основных выводов этапа 2.</td></tr>
+        <tr><td class="s">Режим CDC через Debezium</td><td>Проверка оговорки из ADR‑1: реализация <code>OutboxDispatcher</code> поверх Debezium без изменения кода приложения. Сильный ход на защите, если останется время.</td></tr>
+        <tr><td class="s">Saga и компенсации</td><td>Надстройка над надёжной доставкой, а не её часть. Кандидат в отдельный проект следующего цикла.</td></tr>
+        <tr><td class="s">Bloom-фильтр</td><td>Удалён как технически неверный — см. раздел про неделю 1. Здесь только чтобы не вернулся.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="colophon">
+    <span>Reliable Messaging Kit</span>
+    <span>План реализации v1.0</span>
+    <span>8 недель · 320 ч в лог</span>
+    <span>Демо: конец W4 и конец W8</span>
+  </footer>
+
+</div>

@@ -1,0 +1,17 @@
+.DS_Store
+.gradle/
+.idea/
+build/
+**/build/
+*.iml
+out/
+
+# Local environment and profiler output
+.env
+*.jfr
+*.hprof
+perf-results/
+
+# Внутреннее: отчётность, черновики, записи для лога часов.
+# Не попадает в репозиторий — см. private/README.md
+private/
