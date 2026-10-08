@@ -7,17 +7,31 @@ spring:
     password: ${PAYMENT_DB_PASSWORD:payments}
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      observation-enabled: true
+    template:
+      observation-enabled: true
 
 server:
   port: ${PAYMENT_SERVICE_PORT:8082}
 
 outbox:
   relay:
-    enabled: false # Relay implementation lands after the protocol is fixed in design v1.1.
+    enabled: false
   inbox:
     retention: 30d
 
 management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
   endpoints:
     web:
       exposure:
@@ -28,3 +42,6 @@ management:
   otlp:
     tracing:
       endpoint: ${OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:http://localhost:4318/v1/traces}
+
+demo:
+  consumer-mode: idempotent
