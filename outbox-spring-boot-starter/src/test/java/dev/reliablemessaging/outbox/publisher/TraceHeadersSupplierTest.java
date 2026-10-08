@@ -28,4 +28,12 @@ class TraceHeadersSupplierTest {
             .withBean(Tracer.class,() -> tracer).withBean(Propagator.class,() -> propagator)
             .run(c -> assertThat(c.getBean(TraceHeadersSupplier.class).get()).containsKey("traceparent"));
     }
+    @Test void optionalTracingCanBeAbsentFromClasspath() {
+        new ApplicationContextRunner().withClassLoader(new org.springframework.boot.test.context.FilteredClassLoader("io.micrometer.tracing"))
+            .withConfiguration(AutoConfigurations.of(ReliableMessagingAutoConfiguration.class,OutboxPublisherAutoConfiguration.class))
+            .withPropertyValues("outbox.inbox.retention=30d","outbox.migrations.enabled=false")
+            .withBean(DataSource.class,() -> mock(DataSource.class))
+            .withBean(PlatformTransactionManager.class,() -> mock(PlatformTransactionManager.class))
+            .run(c -> assertThat(c.getBean(TraceHeadersSupplier.class).get()).isEmpty());
+    }
 }

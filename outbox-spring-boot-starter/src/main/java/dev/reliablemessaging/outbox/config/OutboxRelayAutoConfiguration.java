@@ -9,7 +9,7 @@ import org.springframework.boot.ssl.SslBundles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.core.KafkaTemplate;
 import javax.sql.DataSource;
-import java.util.random.RandomGenerator;
+import java.util.Random;
 
 @AutoConfiguration(after={OutboxPublisherAutoConfiguration.class,KafkaAutoConfiguration.class})
 @ConditionalOnClass(KafkaTemplate.class)
@@ -22,7 +22,7 @@ public class OutboxRelayAutoConfiguration {
     }
     @Bean @ConditionalOnMissingBean
     RetryBackoff retryBackoff(OutboxProperties properties) {
-        return new RetryBackoff(properties.relay().backoffBase(),properties.relay().backoffMax(),RandomGenerator.getDefault());
+        return new RetryBackoff(properties.relay().backoffBase(),properties.relay().backoffMax(),new Random());
     }
     @Bean @ConditionalOnMissingBean
     OutboxRelay outboxRelay(OutboxRepository repository, OutboxDispatcher dispatcher, OutboxProperties properties, RetryBackoff backoff, OutboxMetrics metrics) {

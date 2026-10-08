@@ -94,8 +94,11 @@ public final class OutboxRepository {
     private static String truncate(String error) {
         return error == null ? "unknown error" : error.substring(0, Math.min(2000, error.length()));
     }
-    public int reclaimExpired(int maxAttempts) {
-        return transaction.execute(status -> jdbc.update("""
+    public record ReclaimCounts(int reclaimed, int dead) { }
+    private record Reclaimed(UUID messageId, String status, String error) { }
+    public int reclaimExpired(int maxAttempts) { return reclaimExpiredWithCounts(maxAttempts).reclaimed(); }
+    public ReclaimCounts reclaimExpiredWithCounts(int maxAttempts) {
+        var rows=transaction.execute(status -> jdbc.query("""
                 with expired as (
                     select id from outbox_message where status='IN_FLIGHT' and locked_until < now()
                     order by locked_until,id limit 1000 for update skip locked
@@ -105,7 +108,15 @@ public final class OutboxRepository {
                        locked_until=null, claim_token=null, next_attempt_at=now(),
                        last_error=case when m.attempts >= ? then 'lease expired after final attempt' else m.last_error end
                   from expired where m.id=expired.id
-                """,maxAttempts,maxAttempts));
+                returning m.message_id,m.status,m.last_error
+                """,(rs,row) -> new Reclaimed(rs.getObject("message_id",UUID.class),rs.getString("status"),rs.getString("last_error")),
+                maxAttempts,maxAttempts));
+        int dead=0;
+        for(var row:rows) if(row.status().equals("DEAD")) {
+            dead++;
+            LoggerFactory.getLogger(OutboxRepository.class).warn("Outbox message id={} became DEAD: {}",row.messageId(),row.error());
+        }
+        return new ReclaimCounts(rows.size(),dead);
     }
     public static String interval(Duration duration) { return duration.toMillis() + " milliseconds"; }
     private OutboxRecord read(ResultSet rs, int row) throws SQLException {

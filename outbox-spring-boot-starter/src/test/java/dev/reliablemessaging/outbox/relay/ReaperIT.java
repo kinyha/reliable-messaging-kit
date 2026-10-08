@@ -3,6 +3,7 @@ import dev.reliablemessaging.outbox.api.*;
 import dev.reliablemessaging.outbox.config.OutboxProperties;
 import dev.reliablemessaging.outbox.support.*;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.*;
 import org.springframework.boot.context.properties.source.MapConfigurationPropertySource;
@@ -38,7 +39,9 @@ class ReaperIT {
             try { blocked.await(); } catch(InterruptedException ex) { Thread.currentThread().interrupt(); }
             throw new IllegalStateException("crashed dispatcher");
         },properties.relay(),backoff);
-        first.start();
+        var firstContext=new AnnotationConfigApplicationContext();
+        firstContext.registerBean(OutboxRelay.class,() -> first);
+        firstContext.refresh();
         try {
             new TransactionTemplate(tm).executeWithoutResult(s -> {
                 for(int i=0;i<200;i++) publisher.publish(OutboxMessage.builder().topic(topic).aggregate(new Aggregate("test","a"))
@@ -46,17 +49,20 @@ class ReaperIT {
             });
             await().atMost(Duration.ofSeconds(10)).untilAsserted(() ->
                     assertThat(jdbc.queryForObject("select count(*) from outbox_message where status='IN_FLIGHT'",Integer.class)).isEqualTo(200));
-        } finally { first.stop(); }
+        } finally { firstContext.close(); }
         var kafkaProperties=new KafkaProperties(); kafkaProperties.setBootstrapServers(List.of(kafka.getBootstrapServers()));
         var dispatcher=new KafkaOutboxDispatcher(kafkaProperties,null,Duration.ofSeconds(1));
         var second=new OutboxRelay(repository,dispatcher,properties.relay(),backoff);
         var reaper=new LeaseReaper(repository,properties.relay());
-        try {
-            reaper.start(); second.start();
+        try(var secondContext=new AnnotationConfigApplicationContext()) {
+            secondContext.registerBean(KafkaOutboxDispatcher.class,() -> dispatcher);
+            secondContext.registerBean(LeaseReaper.class,() -> reaper);
+            secondContext.registerBean(OutboxRelay.class,() -> second);
+            secondContext.refresh();
             await().atMost(Duration.ofSeconds(30)).untilAsserted(() ->
                     assertThat(jdbc.queryForObject("select count(*) from outbox_message where status='SENT'",Integer.class)).isEqualTo(200));
             assertThat(KafkaTestSupport.read(kafka,topic,200)).hasSize(200);
-        } finally { second.stop(); reaper.stop(); dispatcher.destroy(); }
+        }
     }
     @Test void finalExpiredAttemptBecomesDeadInsteadOfRetryingForever() {
         jdbc.execute("truncate outbox_message");
@@ -64,7 +70,13 @@ class ReaperIT {
             insert into outbox_message(message_id,aggregate_type,aggregate_id,topic,partition_key,payload,status,attempts,locked_until)
             values (?,'test','a','events','a','{}','IN_FLIGHT',3,now()-interval '1 second')
             """,UUID.randomUUID());
-        assertThat(repository.reclaimExpired(3)).isEqualTo(1);
+        var properties=new Binder(new MapConfigurationPropertySource(Map.of("outbox.inbox.retention","30d",
+                "outbox.relay.max-attempts","3"))).bind("outbox",Bindable.of(OutboxProperties.class)).get();
+        var registry=new io.micrometer.core.instrument.simple.SimpleMeterRegistry();
+        var metrics=new dev.reliablemessaging.outbox.metrics.OutboxMetrics(jdbc,registry,Duration.ofSeconds(5));
+        new LeaseReaper(repository,properties.relay(),metrics).tick();
+        assertThat(registry.get("outbox.relay.published").tag("result","dead").counter().count()).isEqualTo(1);
+        assertThat(registry.get("outbox.relay.reclaimed").counter().count()).isEqualTo(1);
         assertThat(jdbc.queryForObject("select status from outbox_message",String.class)).isEqualTo("DEAD");
     }
 }

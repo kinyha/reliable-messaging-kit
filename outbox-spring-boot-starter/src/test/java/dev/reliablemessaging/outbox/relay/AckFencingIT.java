@@ -22,4 +22,11 @@ class AckFencingIT {
                 .containsEntry("status","IN_FLIGHT").containsEntry("claim_token",b);
         assertThat(repository.markSent(List.of(row.id()),b)).isEqualTo(1);
     }
+    @Test void failedAcknowledgementLimitsDiagnosticLength() {
+        jdbc.update("insert into outbox_message(message_id,aggregate_type,aggregate_id,topic,partition_key,payload) values (?,'test','1','events','1','{}')", UUID.randomUUID());
+        var token=UUID.randomUUID(); var row=repository.claim(1,Duration.ofSeconds(30),token).getFirst();
+        assertThat(repository.markFailed(row.id(),token,"x".repeat(3000),Instant.now(),true)).isEqualTo(1);
+        assertThat(jdbc.queryForObject("select length(last_error) from outbox_message",Integer.class)).isEqualTo(2000);
+        assertThat(jdbc.queryForObject("select status from outbox_message",String.class)).isEqualTo("DEAD");
+    }
 }

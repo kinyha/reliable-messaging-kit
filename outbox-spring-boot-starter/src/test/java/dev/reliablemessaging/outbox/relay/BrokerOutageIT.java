@@ -57,7 +57,7 @@ class BrokerOutageIT {
                 var ids=KafkaTestSupport.readUnique(outage,topic,301).stream().map(r ->
                     new String(r.headers().lastHeader(MessageHeaders.MESSAGE_ID).value(),StandardCharsets.UTF_8))
                     .filter(id -> !id.equals(warmId.toString())).collect(java.util.stream.Collectors.toSet());
-                assertThat(ids).hasSize(300);
+                assertThat(ids).hasSize(300).containsExactlyInAnyOrderElementsOf(jdbc.queryForList("select message_id::text from outbox_message",String.class));
             } finally {
                 if(paused) outage.getDockerClient().unpauseContainerCmd(outage.getContainerId()).exec();
                 relay.stop(); dispatcher.destroy();

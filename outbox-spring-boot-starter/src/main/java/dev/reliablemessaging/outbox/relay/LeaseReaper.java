@@ -13,7 +13,9 @@ public final class LeaseReaper extends BackgroundTask {
         super("outbox-reaper",settings.reaperInterval()); this.repository=repository; maxAttempts=settings.maxAttempts(); this.metrics=metrics;
     }
     @Override protected void tick() {
-        int count=repository.reclaimExpired(maxAttempts);
+        var result=repository.reclaimExpiredWithCounts(maxAttempts);
+        int count=result.reclaimed();
+        metrics.increment("outbox.relay.published",result.dead(),"result","dead");
         metrics.increment("outbox.relay.reclaimed",count);
         if(count>0) LoggerFactory.getLogger(LeaseReaper.class).warn("Reclaimed {} expired outbox leases",count);
     }
