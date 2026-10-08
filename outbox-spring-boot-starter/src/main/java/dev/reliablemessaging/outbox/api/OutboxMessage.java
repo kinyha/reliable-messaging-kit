@@ -81,11 +81,14 @@ public final class OutboxMessage {
 
         public Builder headers(Map<String, String> headers) {
             this.headers.clear();
-            this.headers.putAll(Objects.requireNonNull(headers, "headers must not be null"));
+            Objects.requireNonNull(headers, "headers must not be null").forEach(this::header);
             return this;
         }
 
         public Builder header(String name, String value) {
+            if (requireText(name, "header name").startsWith("rm-")) {
+                throw new IllegalArgumentException("header prefix rm- is reserved");
+            }
             headers.put(
                     requireText(name, "header name"),
                     Objects.requireNonNull(value, "header value must not be null")

@@ -52,4 +52,11 @@ class OutboxMessageTest {
 
     private record TestEvent(String orderId) {
     }
+    @org.junit.jupiter.api.Test
+    void rejectsReservedHeadersThroughBothBuilderMethods() {
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> OutboxMessage.builder().header("rm-message-id", "x"))
+                .isInstanceOf(IllegalArgumentException.class);
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> OutboxMessage.builder().headers(java.util.Map.of("rm-any", "x")))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 }
