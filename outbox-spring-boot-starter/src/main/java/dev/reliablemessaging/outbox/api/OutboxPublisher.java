@@ -5,9 +5,11 @@ import java.util.UUID;
 /**
  * Records an event in the outbox as part of the caller's database transaction.
  *
- * <p>The first implementation will reject calls made without an active transaction.</p>
+ * <p>Calls require an active transaction on the publisher's DataSource.
+ * Rollback removes both the event and the caller's database changes.</p>
  */
 @FunctionalInterface
 public interface OutboxPublisher {
+    /** Returns the identity recorded durably with the business transaction. */
     UUID publish(OutboxMessage message);
 }

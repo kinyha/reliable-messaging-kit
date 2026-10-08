@@ -54,7 +54,7 @@ class BrokerOutageIT {
                 relay.start();
                 await().atMost(Duration.ofSeconds(60)).untilAsserted(() ->
                     assertThat(jdbc.queryForObject("select count(*) from outbox_message where status='SENT'",Integer.class)).isEqualTo(300));
-                var ids=KafkaTestSupport.read(outage,topic,301).stream().map(r ->
+                var ids=KafkaTestSupport.readUnique(outage,topic,301).stream().map(r ->
                     new String(r.headers().lastHeader(MessageHeaders.MESSAGE_ID).value(),StandardCharsets.UTF_8))
                     .filter(id -> !id.equals(warmId.toString())).collect(java.util.stream.Collectors.toSet());
                 assertThat(ids).hasSize(300);

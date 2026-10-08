@@ -15,6 +15,12 @@ public final class KafkaTestSupport {
         return topic;
     }
     public static List<ConsumerRecord<String, String>> read(KafkaContainer kafka, String topic, int count) {
+        return readRecords(kafka,topic,count,false);
+    }
+    public static List<ConsumerRecord<String,String>> readUnique(KafkaContainer kafka,String topic,int count) {
+        return readRecords(kafka,topic,count,true);
+    }
+    private static List<ConsumerRecord<String,String>> readRecords(KafkaContainer kafka,String topic,int count,boolean unique) {
         var properties = new HashMap<String, Object>();
         properties.put("bootstrap.servers", kafka.getBootstrapServers());
         properties.put("group.id", UUID.randomUUID().toString());
@@ -26,7 +32,9 @@ public final class KafkaTestSupport {
             consumer.subscribe(List.of(topic));
             await().atMost(Duration.ofSeconds(40)).until(() -> {
                 consumer.poll(Duration.ofMillis(100)).forEach(records::add);
-                return records.size() >= count;
+                return unique ? records.stream().map(r -> new String(r.headers().lastHeader(
+                    dev.reliablemessaging.outbox.api.MessageHeaders.MESSAGE_ID).value(),java.nio.charset.StandardCharsets.UTF_8))
+                    .distinct().count() >= count : records.size() >= count;
             });
         }
         return records;
