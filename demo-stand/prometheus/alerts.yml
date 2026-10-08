@@ -1,0 +1,11 @@
+groups:
+  - name: reliable-messaging
+    rules:
+      - alert: OutboxDeadMessages
+        expr: outbox_messages_dead > 0
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: 'Outbox contains DEAD messages on {{ $labels.instance }}'
+          description: 'Manual investigation and replay are required; DEAD rows are retained.'
