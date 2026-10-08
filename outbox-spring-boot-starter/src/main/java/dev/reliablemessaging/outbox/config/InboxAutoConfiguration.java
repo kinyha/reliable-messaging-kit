@@ -20,4 +20,16 @@ public class InboxAutoConfiguration {
     IdempotentExecutor idempotentExecutor(InboxRepository repository,PlatformTransactionManager tm,OutboxMetrics metrics) {
         return new IdempotentExecutor(repository,tm,metrics);
     }
+    @Configuration(proxyBeanMethods=false)
+    @ConditionalOnClass({KafkaListener.class,Aspect.class})
+    static class ConsumerConfiguration {
+        @Bean @ConditionalOnMissingBean
+        IdempotentConsumerAspect idempotentConsumerAspect(IdempotentExecutor executor) { return new IdempotentConsumerAspect(executor); }
+        @Bean @ConditionalOnMissingBean
+        MessageMetaArgumentResolver messageMetaArgumentResolver() { return new MessageMetaArgumentResolver(); }
+        @Bean
+        KafkaListenerConfigurer reliableMessagingListenerConfigurer(MessageMetaArgumentResolver resolver) {
+            return registrar -> registrar.setCustomMethodArgumentResolvers(resolver);
+        }
+    }
 }
