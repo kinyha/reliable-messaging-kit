@@ -3,7 +3,7 @@ package dev.reliablemessaging.outbox.config;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
-import org.springframework.boot.autoconfigure.flyway.FlywayConfigurationCustomizer;
+
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
 import java.time.Duration;
@@ -40,18 +40,16 @@ class OutboxPropertiesTest {
     }
 
     @Test
-    void addsStarterMigrationsToTheApplicationsFlywayConfiguration() {
-        contextRunner.run(context -> {
-            var configuration = Flyway.configure().locations("classpath:db/migration");
+    void doesNotModifyApplicationFlywayWithoutDataSource() {
+        contextRunner.run(context -> assertThat(context).doesNotHaveBean(ReliableMessagingSchemaMigrator.class));
+    }
 
-            context.getBean(FlywayConfigurationCustomizer.class).customize(configuration);
-
-            assertThat(configuration.getLocations())
-                    .extracting(location -> location.getDescriptor())
-                    .containsExactly(
-                            "classpath:db/migration",
-                            "classpath:reliable-messaging/db/migration"
-                    );
+    @Test
+    void rejectsSendTimeoutAtLeaseBoundary() {
+        contextRunner.withPropertyValues("outbox.relay.send-timeout=30s").run(context -> {
+            assertThat(context).hasFailed();
+            assertThat(context.getStartupFailure()).hasRootCauseMessage(
+                    "outbox.relay.send-timeout must be shorter than outbox.relay.lease-duration");
         });
     }
 }
