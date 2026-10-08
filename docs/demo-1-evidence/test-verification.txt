@@ -1,0 +1,31 @@
+Окончательный код: 2026-10-08, JDK 21, Docker/Testcontainers включены.
+
+[1/10] Full starter test suite, including PostgreSQL and Kafka
+[1/10] PASS (31s elapsed)
+[2/10] Full starter test suite, including PostgreSQL and Kafka
+[2/10] PASS (62s elapsed)
+[3/10] Full starter test suite, including PostgreSQL and Kafka
+[3/10] PASS (93s elapsed)
+[4/10] Full starter test suite, including PostgreSQL and Kafka
+[4/10] PASS (124s elapsed)
+[5/10] Full starter test suite, including PostgreSQL and Kafka
+[5/10] PASS (155s elapsed)
+[6/10] Full starter test suite, including PostgreSQL and Kafka
+[6/10] PASS (187s elapsed)
+[7/10] Full starter test suite, including PostgreSQL and Kafka
+[7/10] PASS (219s elapsed)
+[8/10] Full starter test suite, including PostgreSQL and Kafka
+[8/10] PASS (251s elapsed)
+[9/10] Full starter test suite, including PostgreSQL and Kafka
+[9/10] PASS (282s elapsed)
+[10/10] Full starter test suite, including PostgreSQL and Kafka
+[10/10] PASS (313s elapsed)
+PASS: 10 consecutive runs; 313s
+
+Финальная сборка: ./gradlew clean build :outbox-spring-boot-starter:publishToMavenLocal --no-build-cache
+BUILD SUCCESSFUL in 32s; 25 actionable tasks: 25 executed.
+Starter: tests=54, failures=0, errors=0, skipped=0.
+Order demo: tests=1, failures=0, errors=0, skipped=0.
+Артефакт 0.1.0-SNAPSHOT и sources установлены в MavenLocal.
+
+Сводка сохранена вне build/, который удаляется Gradle clean.
