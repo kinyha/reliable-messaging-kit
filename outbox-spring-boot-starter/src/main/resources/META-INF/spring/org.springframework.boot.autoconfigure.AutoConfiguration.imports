@@ -1,3 +1,4 @@
 dev.reliablemessaging.outbox.config.ReliableMessagingAutoConfiguration
 dev.reliablemessaging.outbox.config.OutboxPublisherAutoConfiguration
 dev.reliablemessaging.outbox.config.OutboxRelayAutoConfiguration
+dev.reliablemessaging.outbox.config.OutboxMetricsAutoConfiguration

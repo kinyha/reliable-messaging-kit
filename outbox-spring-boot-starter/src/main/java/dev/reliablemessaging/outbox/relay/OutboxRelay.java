@@ -1,6 +1,7 @@
 package dev.reliablemessaging.outbox.relay;
 import dev.reliablemessaging.outbox.config.OutboxProperties;
 import org.slf4j.LoggerFactory;
+import dev.reliablemessaging.outbox.metrics.OutboxMetrics;
 import org.springframework.context.SmartLifecycle;
 import java.util.UUID;
 import java.util.concurrent.*;
@@ -11,11 +12,16 @@ public final class OutboxRelay implements SmartLifecycle {
     private final OutboxDispatcher dispatcher;
     private final OutboxProperties.Relay settings;
     private final RetryBackoff backoff;
+    private final OutboxMetrics metrics;
     private volatile boolean running;
     private ExecutorService executor;
     public OutboxRelay(OutboxRepository repository, OutboxDispatcher dispatcher,
                        OutboxProperties.Relay settings, RetryBackoff backoff) {
-        this.repository=repository; this.dispatcher=dispatcher; this.settings=settings; this.backoff=backoff;
+        this(repository,dispatcher,settings,backoff,OutboxMetrics.noop());
+    }
+    public OutboxRelay(OutboxRepository repository,OutboxDispatcher dispatcher,
+                       OutboxProperties.Relay settings,RetryBackoff backoff,OutboxMetrics metrics) {
+        this.repository=repository; this.dispatcher=dispatcher; this.settings=settings; this.backoff=backoff; this.metrics=metrics;
     }
     @Override public synchronized void start() {
         if(running) return;
@@ -33,8 +39,9 @@ public final class OutboxRelay implements SmartLifecycle {
                 var token=UUID.randomUUID();
                 var batch=repository.claim(settings.batchSize(),settings.leaseDuration(),token);
                 if(!batch.isEmpty()) {
-                    var results=dispatcher.dispatch(batch);
-                    repository.acknowledge(batch,results,token,settings.maxAttempts(),backoff);
+                    metrics.increment("outbox.relay.claimed",batch.size());
+                    var results=metrics.dispatch(() -> dispatcher.dispatch(batch));
+                    metrics.acknowledged(repository.acknowledge(batch,results,token,settings.maxAttempts(),backoff));
                 }
                 if(batch.size()<settings.batchSize()) pause();
             } catch(InterruptedException ex) { Thread.currentThread().interrupt(); break; }

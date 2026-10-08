@@ -1,5 +1,6 @@
 package dev.reliablemessaging.outbox.config;
 import dev.reliablemessaging.outbox.relay.*;
+import dev.reliablemessaging.outbox.metrics.OutboxMetrics;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.*;
@@ -24,11 +25,11 @@ public class OutboxRelayAutoConfiguration {
         return new RetryBackoff(properties.relay().backoffBase(),properties.relay().backoffMax(),RandomGenerator.getDefault());
     }
     @Bean @ConditionalOnMissingBean
-    OutboxRelay outboxRelay(OutboxRepository repository, OutboxDispatcher dispatcher, OutboxProperties properties, RetryBackoff backoff) {
-        return new OutboxRelay(repository,dispatcher,properties.relay(),backoff);
+    OutboxRelay outboxRelay(OutboxRepository repository, OutboxDispatcher dispatcher, OutboxProperties properties, RetryBackoff backoff, OutboxMetrics metrics) {
+        return new OutboxRelay(repository,dispatcher,properties.relay(),backoff,metrics);
     }
     @Bean @ConditionalOnMissingBean
-    LeaseReaper leaseReaper(OutboxRepository repository, OutboxProperties properties) {
-        return new LeaseReaper(repository,properties.relay());
+    LeaseReaper leaseReaper(OutboxRepository repository, OutboxProperties properties, OutboxMetrics metrics) {
+        return new LeaseReaper(repository,properties.relay(),metrics);
     }
 }
