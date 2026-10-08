@@ -17,3 +17,29 @@ run-order:
 
 run-payment:
 	./gradlew :demo-stand:payment-service:bootRun
+
+.PHONY: demo-reset demo-reconcile demo-kill9 demo-kill9-naive demo-kafka-down demo-three-relays demo-rollback demo-replay
+
+demo-reset:
+	demo-stand/scripts/reset.sh
+
+demo-reconcile:
+	demo-stand/scripts/reconcile.sh
+
+demo-kill9:
+	demo-stand/scripts/scenario-kill9.sh outbox
+
+demo-kill9-naive:
+	demo-stand/scripts/scenario-kill9.sh naive
+
+demo-kafka-down:
+	demo-stand/scripts/scenario-kafka-down.sh
+
+demo-three-relays:
+	demo-stand/scripts/scenario-three-relays.sh
+
+demo-rollback:
+	demo-stand/scripts/scenario-rollback.sh
+
+demo-replay:
+	demo-stand/scripts/scenario-replay.sh
