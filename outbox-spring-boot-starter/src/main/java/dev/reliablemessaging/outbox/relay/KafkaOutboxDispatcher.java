@@ -5,6 +5,11 @@ import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.boot.autoconfigure.kafka.KafkaConnectionDetails;
+import org.springframework.boot.autoconfigure.kafka.SslBundleSslEngineFactory;
+import org.springframework.boot.ssl.SslBundle;
+import org.apache.kafka.common.config.SslConfigs;
+import org.apache.kafka.clients.CommonClientConfigs;
 import org.springframework.boot.ssl.SslBundles;
 import org.springframework.kafka.core.*;
 import java.nio.charset.StandardCharsets;
@@ -17,8 +22,20 @@ public final class KafkaOutboxDispatcher implements OutboxDispatcher, Disposable
     private final KafkaTemplate<String, String> template;
     private final Duration timeout;
     public KafkaOutboxDispatcher(KafkaProperties properties, SslBundles bundles, Duration timeout) {
+        this(properties,bundles,timeout,null);
+    }
+    public KafkaOutboxDispatcher(KafkaProperties properties,SslBundles bundles,Duration timeout,KafkaConnectionDetails details) {
         this.timeout = timeout;
         var config = new HashMap<>(properties.buildProducerProperties(bundles));
+        if(details!=null) {
+            var producer=details.getProducer();
+            config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,producer.getBootstrapServers());
+            if(producer.getSecurityProtocol()!=null) config.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG,producer.getSecurityProtocol());
+            if(producer.getSslBundle()!=null) {
+                config.put(SslConfigs.SSL_ENGINE_FACTORY_CLASS_CONFIG,SslBundleSslEngineFactory.class);
+                config.put(SslBundle.class.getName(),producer.getSslBundle());
+            }
+        }
         int millis = Math.toIntExact(timeout.toMillis());
         int linger = Math.min(5, millis - 1);
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);

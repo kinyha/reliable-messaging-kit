@@ -5,7 +5,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @SpringBootTest(classes = TestApplication.class, properties = {
-    "outbox.inbox.retention=30d", "outbox.relay.enabled=false"})
+    "outbox.inbox.retention=30d"})
+@org.springframework.test.context.TestPropertySource(properties="outbox.relay.enabled=false")
 @org.springframework.context.annotation.Import(Containers.class)
 @Testcontainers
 public @interface IntegrationTest { }

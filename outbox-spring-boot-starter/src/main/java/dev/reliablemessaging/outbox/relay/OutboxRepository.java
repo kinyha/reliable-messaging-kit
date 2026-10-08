@@ -93,6 +93,19 @@ public final class OutboxRepository {
     private static String truncate(String error) {
         return error == null ? "unknown error" : error.substring(0, Math.min(2000, error.length()));
     }
+    public int reclaimExpired(int maxAttempts) {
+        return transaction.execute(status -> jdbc.update("""
+                with expired as (
+                    select id from outbox_message where status='IN_FLIGHT' and locked_until < now()
+                    order by locked_until,id limit 1000 for update skip locked
+                )
+                update outbox_message m
+                   set status=case when m.attempts >= ? then 'DEAD' else 'NEW' end,
+                       locked_until=null, claim_token=null, next_attempt_at=now(),
+                       last_error=case when m.attempts >= ? then 'lease expired after final attempt' else m.last_error end
+                  from expired where m.id=expired.id
+                """,maxAttempts,maxAttempts));
+    }
     public static String interval(Duration duration) { return duration.toMillis() + " milliseconds"; }
     private OutboxRecord read(ResultSet rs, int row) throws SQLException {
         try {
