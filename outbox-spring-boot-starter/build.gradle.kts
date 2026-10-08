@@ -1,5 +1,6 @@
 plugins {
     `java-library`
+    `maven-publish`
 }
 
 dependencies {
@@ -34,4 +35,12 @@ java {
         languageVersion = JavaLanguageVersion.of(21)
     }
     withSourcesJar()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("starter") {
+            from(components["java"])
+        }
+    }
 }

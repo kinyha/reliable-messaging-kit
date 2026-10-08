@@ -1,44 +1,200 @@
 # Reliable Messaging Kit
 
-Spring Boot стартер, реализующий паттерны **Transactional Outbox** и **Idempotent Consumer**
-для связки PostgreSQL + Kafka, плюс демо-стенд и перф/хаос-харнесс.
-
-Проект в рамках корпоративной схемы Self-Education (Internal Value Project):
-2 этапа по одному месяцу, демо в конце каждого.
+Spring Boot стартер для **Transactional Outbox** и **Idempotent Consumer** в PostgreSQL + Kafka.
+Бизнес-изменение и событие записываются в одной транзакции; релэй отправляет событие после коммита,
+а inbox предотвращает повторный эффект в транзакции потребителя.
 
 ## Статус
 
-| | |
-|---|---|
-| Текущая фаза | Инфраструктурный скелет готов, реализация протокола не начата |
-| Этап 1 | В работе — стартер + демо-стенд, доказательство корректности |
-| Этап 2 | Не начат — нагрузка, профилирование, virtual threads, хаос, CI-гейт |
+Этап 1 реализован: публикатор, claim/send/ack, аренды и fencing, повторы с джиттером, DEAD,
+метрики, inbox, аннотация потребителя и демонстрационные сервисы. Проверки и реальные результаты:
+[`docs/demo-1-results.md`](docs/demo-1-results.md). Этап 2 остаётся отдельной работой в ветке `stage-2`.
 
-## Быстрый старт
+## Быстрый старт демо
 
-Нужны JDK 21 и Docker с Compose. Первый запуск загружает Gradle-плагины и Docker-образы.
+Нужны **JDK 21 и работающий Docker с Compose**. Интеграционные тесты запускают настоящие
+PostgreSQL и Kafka через Testcontainers; без Docker сборка не считается полной.
 
 ```bash
-# проверить сборку и тесты
 ./gradlew build
-
-# поднять PostgreSQL, Kafka, Jaeger и Grafana
 make infra-up
-
-# запустить сервисы в двух отдельных терминалах
+# В двух терминалах:
 make run-order
 make run-payment
+# В третьем:
+curl -X POST localhost:8081/orders -H 'content-type: application/json' \
+  -d '{"customerId":"c-1","total":42.50}'
+make demo-reconcile
 ```
 
-После старта доступны:
+Сервисы слушают 8081/8082, PostgreSQL — 5433/5434, Kafka — 9092.
+[Grafana](http://localhost:3000/d/reliable-messaging), [Prometheus](http://localhost:9090),
+[Jaeger](http://localhost:16686). Grafana provisioned автоматически; демо использует локальный
+анонимный доступ. Остановить инфраструктуру: `make infra-down`.
 
-- order-service: <http://localhost:8081/actuator/health>
-- payment-service: <http://localhost:8082/actuator/health>
-- Jaeger UI: <http://localhost:16686>
-- Grafana: <http://localhost:3000> (анонимный локальный доступ)
+## Подключение за пять минут
 
-Миграции стартера применяются при запуске каждого приложения в отдельную базу. Состояние
-PostgreSQL и Grafana сохраняется в Docker volumes. Остановить окружение: `make infra-down`.
+В этом Gradle-проекте:
+
+```kotlin
+implementation(project(":outbox-spring-boot-starter"))
+implementation("org.springframework.boot:spring-boot-starter-jdbc")
+runtimeOnly("org.postgresql:postgresql")
+```
+
+Для отдельного проекта можно установить артефакт локально:
+`./gradlew :outbox-spring-boot-starter:publishToMavenLocal`, добавить `mavenLocal()` и
+`implementation("dev.reliablemessaging:outbox-spring-boot-starter:0.1.0-SNAPSHOT")`.
+Публичный Maven-репозиторий пока не опубликован.
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/orders
+    username: orders
+    password: orders
+  kafka:
+    bootstrap-servers: localhost:9092
+outbox:
+  inbox:
+    retention: 30d
+```
+
+`outbox.inbox.retention` обязателен. Он должен покрывать всё разрешённое окно повторной
+доставки и ручного replay, включая Kafka retention. После удаления inbox-записи replay снова
+применит эффект. Стартер не может выбрать безопасное значение за приложение.
+
+Отправитель — внутри существующей бизнес-транзакции:
+
+```java
+@Transactional
+public UUID place(String customerId, BigDecimal total) {
+    var id = UUID.randomUUID();
+    jdbc.update("insert into orders(id, customer_id, total) values (?, ?, ?)", id, customerId, total);
+    outbox.publish(OutboxMessage.builder()
+            .topic("orders.v1")
+            .aggregate(new Aggregate("order", id.toString()))
+            .payload(new OrderPlaced(id, customerId, total, Instant.now()))
+            .build());
+    return id;
+}
+```
+
+Получатель — с JSON-конвертером `StringJsonMessageConverter` и десериализаторами строк Kafka:
+
+```java
+@IdempotentConsumer(name = "payment-on-order-placed")
+@KafkaListener(topics = "orders.v1", groupId = "payment-service")
+public void consume(OrderPlaced event, MessageMeta meta) {
+    jdbc.update("insert into payments(order_id, amount) values (?, ?)", event.orderId(), event.total());
+}
+```
+
+Исполняемые примеры — `demo-stand/order-service` и `demo-stand/payment-service`.
+Программное API получателя: `IdempotentExecutor.execute(consumer, messageId, action)`.
+Имя consumer — стабильная часть составного ключа inbox; изменение имени разрешает повторную обработку.
+
+Публикатор отвергает вызов без транзакции своего DataSource. Prefix `rm-` зарезервирован:
+стартер передаёт `rm-message-id`, `rm-aggregate-type`, `rm-aggregate-id`, `rm-occurred-at`.
+Пользовательские заголовки — строки UTF-8. При наличии Micrometer Tracer/Propagator текущий
+trace-контекст сохраняется в outbox и продолжается Kafka-потребителем.
+
+Миграции стартера имеют отдельную историю `reliable_messaging_schema_history`, поэтому не
+конфликтуют с `V1` приложения. Изначальная V1 не изменена; `claim_token` добавляет V2.
+При переходе со старого каркаса, где V1 стартера уже записана в общую историю Flyway, требуется
+отдельный перенос истории миграций с сохранением данных. Автоматического repair/удаления схемы
+стартер не выполняет. Локальное демо проверялось на чистых томах проекта; предыдущие базы сохранены
+SQL-дампами в `demo-stand/.run/pre-stage1-*.sql`.
+
+## Гарантии и границы
+
+| Свойство | Гарантия |
+|---|---|
+| Бизнес-изменение + outbox | Атомарны в одной транзакции PostgreSQL; откат удаляет оба |
+| Доставка | At-least-once при доступных зависимостях и оставшемся бюджете попыток; дубли ожидаемы |
+| Эффект потребителя | Один раз для того же message_id и consumer, в той же транзакции PostgreSQL и в пределах retention inbox |
+| Истёкшая аренда | Reaper возвращает строку; старый ack отсекается claim_token |
+| Порядок | Не гарантируется, даже внутри агрегата; обработчики должны быть коммутативными |
+| Внешний HTTP/письмо/другая БД | Однократность не обеспечивается; нужен ключ идемпотентности внешнего получателя |
+| DEAD | Наблюдаемая недоставка с last_error; дальнейшая доставка требует ручного разбора |
+| Replay старше inbox retention | Может повторить эффект |
+
+`MessageMeta` содержит идентификатор, время, агрегат и topic/partition/offset.
+Порядкового номера агрегата нет; время события не заменяет бизнес-версию.
+
+Продюсер релэя использует собственный KafkaTemplate с `acks=all` и producer idempotence.
+Эти настройки не превращают переход PostgreSQL → Kafka в exactly-once.
+Операторские DEAD-строки не удаляются автоматически; DLT потребителя `orders.v1.DLT` — отдельный
+путь обработки ошибок демо, а не автоматическое перемещение DEAD из outbox в Kafka.
+
+## Конфигурация
+
+| Свойство outbox.* | По умолчанию | Смысл |
+|---|---|---|
+| migrations.enabled | true | Применять миграции стартера |
+| relay.enabled | true | Запускать релэй и reaper |
+| relay.workers | 2 | Платформенные потоки воркеров |
+| relay.batch-size | 128 | Максимальная пачка claim |
+| relay.poll-interval | 200ms | Пауза при неполной пачке или ошибке |
+| relay.lease-duration | 30s | Срок аренды |
+| relay.send-timeout | 10s | Общий таймаут пачки; строго меньше аренды |
+| relay.reaper-interval | 10s | Частота возврата истёкших аренд |
+| relay.max-attempts | 12 | Попытка расходуется при claim, в том числе при падении процесса |
+| relay.backoff-base | 1s | База экспоненциальной задержки |
+| relay.backoff-max | 5m | Верхняя граница задержки; equal jitter от половины до полной экспоненты |
+| cleanup.retention | 7d | Хранение SENT после sent_at |
+| cleanup.interval | 1m | Частота очистки |
+| cleanup.batch-size | 1000 | Размер отдельного DELETE |
+| metrics.refresh-interval | 5s | Частота запроса снимка; scrape не обращается к БД |
+| inbox.retention | **нет** | Обязательный срок дедупликации |
+
+Числа и интервалы должны быть положительными; `backoff-base <= backoff-max`.
+В приложении-получателе можно выключить relay, оставив inbox и очистку.
+Диспетчер допускает замену пользовательским бином `OutboxDispatcher`.
+
+## Метрики
+
+Имена Micrometer ниже; Prometheus заменяет точки подчёркиваниями, счётчики получают `_total`,
+таймер — `_seconds_count`/`_seconds_sum`.
+
+| Метрика | Тип / метки |
+|---|---|
+| outbox.messages.pending | gauge: NEW + FAILED |
+| outbox.messages.in_flight | gauge |
+| outbox.messages.dead | gauge; алерт >0 в течение 30s |
+| outbox.oldest_pending.age | gauge, секунды |
+| outbox.relay.claimed | counter |
+| outbox.relay.published | counter, result=sent/failed/dead |
+| outbox.relay.reclaimed | counter |
+| outbox.relay.fenced | counter |
+| outbox.relay.dispatch | timer |
+| outbox.cleanup.deleted | counter, table=outbox/inbox |
+| inbox.messages | counter, consumer и result=processed/duplicate/failed |
+
+Для нескольких релэев над одной БД дашборд берёт max глубины очереди, а не сумму одинаковых
+снимков. Счётчики публикаций складываются по экземплярам.
+
+## Сценарии демо и проверки
+
+```bash
+make demo-rollback       # 100 откатов: нет заказов и событий
+make demo-kill9-naive    # 500 rps, 30s: ожидаемая потеря dual-write
+make demo-kill9          # тот же kill -9 с outbox: расхождение 0
+make demo-three-relays   # истёкшие аренды, дубли доставок, один бизнес-эффект
+make demo-replay         # после успешного сценария: доставок больше, платежей столько же
+make demo-kafka-down     # полные 5 минут без Kafka, затем дренаж
+make demo-reconcile      # exit 1 при потерях, дублях эффектов или незавершённом outbox
+scripts/repeat-tests.sh 10
+```
+
+Сценарии собирают bootJar, запускают JVM, сохраняют PID/логи в `demo-stand/.run/` и останавливают
+свои процессы после завершения. Каждый сценарий, кроме replay, сначала сбрасывает данные **только
+демо-баз проекта** и топики orders.v1/DLT. Убийство процесса намеренно вызывает HTTP-ошибки;
+сверка использует только реально закоммиченные заказы. Неизменённое состояние инфраструктуры
+сохраняется до `make infra-down`. Глобальный `docker volume prune` не используется.
+
+Для короткого репетиционного отключения: `demo-stand/scripts/scenario-kafka-down.sh 1`.
+Критерий приёмки проверяется полным пяти­минутным запуском.
 
 ## Документы
 
@@ -51,6 +207,13 @@ PostgreSQL и Grafana сохраняется в Docker volumes. Останови
   **Рабочий формат** — отсюда копируется в задачу PM.
 - [`docs/plan.html`](docs/plan.html) — тот же план, оформленный для чтения и показа.
   Опубликовано: <https://claude.ai/code/artifact/f04be4c7-0fc8-47b0-b1ee-3bc6176a0087>
+
+- [`docs/implementation-plan.md`](docs/implementation-plan.md) — задание для агента-исполнителя:
+  задачи T2.0–T4.5 от текущего каркаса до демо этапа 1, с SQL, тестами и критериями приёмки.
+- [`docs/implementation-plan-stage-2.md`](docs/implementation-plan-stage-2.md) — то же для этапа 2,
+  делается в отдельной ветке `stage-2` после тега `stage-1-demo`.
+- [`docs/guide.html`](docs/guide.html) — учебник по проекту: Kafka, PostgreSQL, outbox/inbox,
+  устройство стартера, этапы.
 
 > Две версии плана держатся синхронно вручную. При правках менять обе — `plan.md` первым
 > как источник истины, `plan.html` следом (и переопубликовывать по URL выше).
@@ -66,53 +229,21 @@ PostgreSQL и Grafana сохраняется в Docker volumes. Останови
 
 ### Статус документации
 
-Дизайн-документ доведён до **v1.1**: закрыты все семь дефектов, найденных на ревью версии 1.0
+Дизайн-документ доведён до **v1.2**: закрыты все семь дефектов, найденных на ревью версии 1.0
 (протокол claim/lease, обещание порядка, ADR‑5 про bloom-фильтр, противоречие в критериях
 готовности, `inbox.retention`, границы однократности, переобещание в `DEAD`). Список правок —
-в разделе «Что изменилось в версии 1.1» в начале документа.
+в changelog v1.1 и v1.2 в начале документа.
 
 > При обновлении документа переопубликовывать нужно **с явным указанием этого URL**.
 > Файл переехал из корня `~/git` в `docs/`, а артефакт привязан к пути публикации —
 > публикация нового пути без `url` создаст отдельный артефакт вместо обновления существующего.
 
-## Планируемая структура
+## Структура
 
-```
-reliable-messaging-kit/
-├── gradle/                    version catalog и wrapper
-├── docs/                      дизайн-документ и план
-├── outbox-spring-boot-starter/   ← API, автоконфигурация и Flyway-миграции
-├── demo-stand/
-│   ├── order-service/         каркас отправителя, порт 8081
-│   ├── payment-service/       каркас получателя, порт 8082
-│   └── docker-compose.yml     две БД Postgres, Kafka, Jaeger, Grafana
-└── perf-harness/              появится на этапе 2
-```
+- `outbox-spring-boot-starter/`: API, публикатор, релэй, inbox, метрики, очистка и изолированные миграции.
+- `demo-stand/`: два приложения, PostgreSQL, Kafka, Prometheus, Grafana, Jaeger, сценарии и сверка.
+- `docs/demo-1-runbook.md`: показ на 15 минут; `docs/demo-1-results.md`: проверенные результаты.
+- `scripts/repeat-tests.sh`: повторная проверка стартера.
+- `perf-harness/` появится на этапе 2.
 
-Релэй пока выключен в конфигурации демо-сервисов. Трёхтактный протокол claim → publish → ack
-закреплён в design v1.1 (§ 6) и реализуется следующим шагом. Каркас уже содержит индекс для
-поиска просроченных `IN_FLIGHT`, но не притворяется законченной реализацией доставки.
-
-## Ключевые решения
-
-Полностью — в §5 дизайн-документа. Коротко:
-
-- **Релэй встроен в приложение**, не вынесен в отдельный сервис: outbox-таблица принадлежит
-  базе своего сервиса, посторонний читатель означал бы shared database.
-- **`SELECT … FOR UPDATE SKIP LOCKED`** вместо выбора лидера: все поды тянут параллельно,
-  без координации. Цена — потеря глобального порядка.
-- **Порядок доставки не гарантируется** (пересмотрено в v1.1): релэй работает в нескольких
-  подах, и повтор упавшего события обгоняет следующее. Обработчики обязаны быть коммутативными.
-- **Релэй работает в три такта**: захват с коммитом → публикация вне транзакции → подтверждение.
-  Блокировка `FOR UPDATE` не переживает транзакцию, поэтому «занято» кодируется статусом
-  `IN_FLIGHT` с арендой, а зависшие строки возвращает reaper.
-- **At-least-once + идемпотентность**, а не exactly-once: транзакции Kafka атомарны только
-  в границах Kafka и не покрывают переход Postgres → Kafka.
-- **Дедупликация одним `INSERT … ON CONFLICT DO NOTHING`** в транзакции обработчика, без
-  предварительного `SELECT`. Bloom-фильтр из v1.0 удалён как ошибочный: вставка нужна при
-  любом ответе фильтра, экономить нечего.
-
-## Стек
-
-Java 21 · Spring Boot 3 · PostgreSQL 16 · Apache Kafka · Flyway · Micrometer ·
-Testcontainers · Toxiproxy · JMH · k6 · JFR / async-profiler · OpenTelemetry
+Java 21 · Spring Boot 3.5 · PostgreSQL 16 · Kafka · Flyway · Micrometer · Testcontainers · k6 · OpenTelemetry
