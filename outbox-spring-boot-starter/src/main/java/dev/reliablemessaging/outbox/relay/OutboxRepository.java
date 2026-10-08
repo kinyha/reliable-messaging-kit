@@ -9,6 +9,10 @@ import org.springframework.transaction.support.TransactionTemplate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
+import java.time.Instant;
+import java.sql.Timestamp;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.slf4j.LoggerFactory;
 import java.util.*;
 
 public final class OutboxRepository {
@@ -31,6 +35,63 @@ public final class OutboxRepository {
                        claim_token = ?, attempts = m.attempts + 1
                   from picked where m.id = picked.id returning m.*
                 """, this::read, batchSize, interval(lease), claimToken));
+    }
+    public record AckCounts(int sent, int failed, int dead, int fenced) { }
+    public record Failure(long id, UUID token, String error, Instant nextAttemptAt, boolean dead) { }
+    public int markSent(List<Long> ids, UUID token) {
+        return transaction.execute(status -> updateSent(ids, token));
+    }
+    private int updateSent(List<Long> ids, UUID token) {
+        if (ids.isEmpty()) return 0;
+        return jdbc.update((PreparedStatementCreator) connection -> {
+            var stmt = connection.prepareStatement("""
+                    update outbox_message set status='SENT', sent_at=now(), locked_until=null,
+                        claim_token=null, last_error=null
+                    where id=any(?) and claim_token=? and status='IN_FLIGHT'
+                    """);
+            stmt.setArray(1, connection.createArrayOf("bigint", ids.toArray()));
+            stmt.setObject(2, token); return stmt;
+        });
+    }
+    public int markFailed(long id, UUID token, String error, Instant nextAttemptAt, boolean dead) {
+        return transaction.execute(status -> updateFailed(List.of(new Failure(id, token, error, nextAttemptAt, dead)))[0]);
+    }
+    private int[] updateFailed(List<Failure> failures) {
+        return jdbc.batchUpdate("""
+                update outbox_message set status=?, next_attempt_at=?, last_error=?, locked_until=null, claim_token=null
+                where id=? and claim_token=? and status='IN_FLIGHT'
+                """, failures.stream().map(f -> new Object[] {f.dead() ? "DEAD" : "FAILED",
+                    Timestamp.from(f.nextAttemptAt()), truncate(f.error()), f.id(), f.token()}).toList());
+    }
+    public AckCounts acknowledge(List<OutboxRecord> batch, List<DispatchResult> results, UUID token,
+                                 int maxAttempts, RetryBackoff backoff) {
+        var byId = new HashMap<Long, DispatchResult>();
+        results.forEach(result -> byId.put(result.id(), result));
+        var sentIds = new ArrayList<Long>(); var failures = new ArrayList<Failure>();
+        for (var row : batch) {
+            var result = byId.get(row.id());
+            if (result != null && result.success()) sentIds.add(row.id());
+            else failures.add(new Failure(row.id(), token, result == null ? "dispatcher returned no result" : result.error(),
+                    Instant.now().plus(backoff.nextDelay(row.attempts())), row.attempts() >= maxAttempts));
+        }
+        return transaction.execute(status -> {
+            int sent = updateSent(sentIds, token); int failed = 0; int dead = 0;
+            int[] counts = updateFailed(failures);
+            for (int i = 0; i < counts.length; i++) {
+                if (counts[i] == 0) continue;
+                if (failures.get(i).dead()) {
+                    dead++;
+                    LoggerFactory.getLogger(OutboxRepository.class).warn("Outbox message id={} became DEAD: {}",
+                            failures.get(i).id(), truncate(failures.get(i).error()));
+                } else failed++;
+            }
+            int fenced = batch.size() - sent - failed - dead;
+            if (fenced > 0) LoggerFactory.getLogger(OutboxRepository.class).debug("Fenced {} stale acknowledgements", fenced);
+            return new AckCounts(sent, failed, dead, fenced);
+        });
+    }
+    private static String truncate(String error) {
+        return error == null ? "unknown error" : error.substring(0, Math.min(2000, error.length()));
     }
     public static String interval(Duration duration) { return duration.toMillis() + " milliseconds"; }
     private OutboxRecord read(ResultSet rs, int row) throws SQLException {
