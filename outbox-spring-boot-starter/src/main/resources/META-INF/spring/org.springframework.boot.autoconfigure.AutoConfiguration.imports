@@ -3,3 +3,4 @@ dev.reliablemessaging.outbox.config.OutboxPublisherAutoConfiguration
 dev.reliablemessaging.outbox.config.OutboxRelayAutoConfiguration
 dev.reliablemessaging.outbox.config.OutboxMetricsAutoConfiguration
 dev.reliablemessaging.outbox.config.InboxAutoConfiguration
+dev.reliablemessaging.outbox.config.OutboxCleanupAutoConfiguration

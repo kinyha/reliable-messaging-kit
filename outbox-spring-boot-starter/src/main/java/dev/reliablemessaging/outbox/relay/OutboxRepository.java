@@ -81,8 +81,9 @@ public final class OutboxRepository {
                 if (counts[i] == 0) continue;
                 if (failures.get(i).dead()) {
                     dead++;
+                    long failedId=failures.get(i).id();
                     LoggerFactory.getLogger(OutboxRepository.class).warn("Outbox message id={} became DEAD: {}",
-                            failures.get(i).id(), truncate(failures.get(i).error()));
+                            batch.stream().filter(row -> row.id()==failedId).findFirst().orElseThrow().messageId(), truncate(failures.get(i).error()));
                 } else failed++;
             }
             int fenced = batch.size() - sent - failed - dead;
