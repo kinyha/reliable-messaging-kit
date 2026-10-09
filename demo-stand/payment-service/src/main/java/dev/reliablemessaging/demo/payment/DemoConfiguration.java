@@ -36,7 +36,9 @@ public class DemoConfiguration {
                 (record,error) -> new TopicPartition("orders.v1.DLT",record.partition())),new FixedBackOff(1000,3));
     }
     @Bean @ConditionalOnProperty(prefix="demo",name="consumer-mode",havingValue="idempotent",matchIfMissing=true)
-    PaymentListeners.Idempotent idempotentListener(JdbcTemplate jdbc) { return new PaymentListeners.Idempotent(jdbc); }
+    PaymentListeners.Idempotent idempotentListener(JdbcTemplate jdbc,io.micrometer.core.instrument.MeterRegistry registry) {
+        return new PaymentListeners.Idempotent(jdbc,registry);
+    }
     @Bean @ConditionalOnProperty(prefix="demo",name="consumer-mode",havingValue="naive")
     PaymentListeners.Naive naiveListener(JdbcTemplate jdbc) { return new PaymentListeners.Naive(jdbc); }
 }
