@@ -1,0 +1,16 @@
+{
+  "created_at": "2026-10-09T13:03:40.073197+00:00",
+  "commit": "0416f6b4a7a7778033542102d42c5a08165658da",
+  "args": {
+    "rps": 500,
+    "duration": 120,
+    "runs": 3,
+    "virtual": true,
+    "name": "gha-virtual-profile"
+  },
+  "warmup_seconds": 60,
+  "image_ids": "[{\"ID\":\"sha256:81bd698b4594e751a3269e4dcd3e03a4a0ec0daf7b72e7aa1abd43cce9887542\",\"ContainerName\":\"rmk-perf-order-postgres-1\",\"Repository\":\"postgres\",\"Tag\":\"16.15-alpine\",\"Platform\":\"linux/amd64\",\"Size\":294292520,\"LastTagTime\":\"0001-01-01T00:00:00Z\"},{\"ID\":\"sha256:a8b0b738ced288f9f9b2858d69eee3b6f4277e510c596a1524b9eec32e523885\",\"ContainerName\":\"rmk-perf-payment-service-1\",\"Repository\":\"rmk-payment\",\"Tag\":\"stage-2\",\"Platform\":\"linux/amd64\",\"Size\":500180130,\"LastTagTime\":\"2026-10-09T12:16:31.324288121Z\"},{\"ID\":\"sha256:e66564ea5186e95aea32ae1de9e9bb5b9809789deee7e84e43ca17e658b902ff\",\"ContainerName\":\"rmk-perf-order-service-1\",\"Repository\":\"rmk-order\",\"Tag\":\"stage-2\",\"Platform\":\"linux/amd64\",\"Size\":502565901,\"LastTagTime\":\"2026-10-09T12:16:38.501817242Z\"},{\"ID\":\"sha256:3edf5d14625b9aa8ad71d5dd084da1f8a0eb46ee749457549ae91d29d96546aa\",\"ContainerName\":\"rmk-perf-toxiproxy-1\",\"Repository\":\"ghcr.io/shopify/toxiproxy\",\"Tag\":\"2.12.0\",\"Platform\":\"linux/amd64\",\"Size\":18747696,\"LastTagTime\":\"0001-01-01T00:00:00Z\"},{\"ID\":\"sha256:a3bc50fcb50fb1409287c32773d8fe799f6cad5511c4ba3e2e851784e7a05026\",\"ContainerName\":\"rmk-perf-prometheus-1\",\"Repository\":\"prom/prometheus\",\"Tag\":\"v3.5.0\",\"Platform\":\"linux/amd64\",\"Size\":313019686,\"LastTagTime\":\"0001-01-01T00:00:00Z\"},{\"ID\":\"sha256:ebe58770941fad8ae444fcfc5c0a777735b9cd8afd844a682c3654f27e77ce93\",\"ContainerName\":\"rmk-perf-kafka-1\",\"Repository\":\"apache/kafka\",\"Tag\":\"4.3.0\",\"Platform\":\"linux/amd64\",\"Size\":433921955,\"LastTagTime\":\"0001-01-01T00:00:00Z\"},{\"ID\":\"sha256:81bd698b4594e751a3269e4dcd3e03a4a0ec0daf7b72e7aa1abd43cce9887542\",\"ContainerName\":\"rmk-perf-payment-postgres-1\",\"Repository\":\"postgres\",\"Tag\":\"16.15-alpine\",\"Platform\":\"linux/amd64\",\"Size\":294292520,\"LastTagTime\":\"0001-01-01T00:00:00Z\"}]\n\n",
+  "script_sha256": "595bc259a531f642a04a8006db6a66dde1c00727dfe088a93987f607ad174835",
+  "status": "running",
+  "profiles": []
+}
