@@ -28,7 +28,7 @@ public class DemoConfiguration {
     @Bean("naiveKafkaTemplate") @ConditionalOnProperty(prefix="demo",name="delivery-mode",havingValue="naive")
     KafkaTemplate<String,String> naiveKafkaTemplate(DefaultKafkaProducerFactory<String,String> factory) { return new KafkaTemplate<>(factory); }
     @Bean static BeanPostProcessor delayedDispatcher(@Value("${demo.chaos.publish-delay:0ms}") String configuredDelay) {
-        var delay=DurationStyle.detectAndParse(configuredDelay);
+        var delay=DurationStyle.detectAndParse(configuredDelay).plusSeconds(2);
         return new BeanPostProcessor() {
             @Override public Object postProcessAfterInitialization(Object bean,String name) {
                 if(!(bean instanceof OutboxDispatcher dispatcher) || delay.isZero()) return bean;
