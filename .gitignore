@@ -18,3 +18,10 @@ private/
 
 # Demo processes, logs and reconciliation snapshots
 demo-stand/.run/
+
+# Python cache and temporary perf locks
+__pycache__/
+perf-harness/results/.perf.lock
+perf-harness/results/*-warmup.*
+perf-harness/results/*.log
+perf-harness/.run/

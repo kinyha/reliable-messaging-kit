@@ -43,7 +43,7 @@ services:
     image: rmk-order:stage-2
     cpus: 2
     mem_limit: 1024m
-    ports: ["18081:8081"]
+    ports: ["18081:8081", "18091:8091"]
     volumes:
       - ../perf-harness/results:/results
     environment:
@@ -51,7 +51,7 @@ services:
       ORDER_DB_URL: jdbc:postgresql://toxiproxy:15432/orders?socketTimeout=15&connectTimeout=5
       KAFKA_BOOTSTRAP_SERVERS: toxiproxy:29092
       SPRING_APPLICATION_JSON: >-
-        {"outbox.relay.enabled":${PERF_RELAY_ENABLED:-true},
+        {"management.server.port":8091,"outbox.relay.enabled":${PERF_RELAY_ENABLED:-true},
          "outbox.relay.virtual-threads":${PERF_VIRTUAL_THREADS:-false},
          "outbox.relay.batch-size":${PERF_BATCH_SIZE:-128},
          "outbox.relay.poll-interval":"${PERF_POLL_INTERVAL:-200ms}",
@@ -75,13 +75,13 @@ services:
     image: rmk-payment:stage-2
     cpus: 2
     mem_limit: 1024m
-    ports: ["18082:8082"]
+    ports: ["18082:8082", "18092:8092"]
     environment:
       JAVA_TOOL_OPTIONS: -Xms256m -Xmx512m
       PAYMENT_DB_URL: jdbc:postgresql://toxiproxy:15433/payments?socketTimeout=15&connectTimeout=5
       KAFKA_BOOTSTRAP_SERVERS: toxiproxy:29092
       SPRING_APPLICATION_JSON: >-
-        {"management.tracing.enabled":false,"spring.kafka.listener.observation-enabled":false,
+        {"management.server.port":8092,"management.tracing.enabled":false,"spring.kafka.listener.observation-enabled":false,
          "spring.kafka.template.observation-enabled":false}
     depends_on:
       payment-postgres: {condition: service_healthy}
