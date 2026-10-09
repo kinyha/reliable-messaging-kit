@@ -133,7 +133,9 @@ SQL-дампами в `demo-stand/.run/pre-stage1-*.sql`.
 |---|---|---|
 | migrations.enabled | true | Применять миграции стартера |
 | relay.enabled | true | Запускать релэй и reaper |
-| relay.workers | 2 | Платформенные потоки воркеров |
+| relay.workers | 2 | Число долгоживущих воркеров в обоих режимах |
+| relay.virtual-threads | false | Виртуальная фабрика потоков с тем же claim/send/ack protocol |
+| relay.fast-empty-headers | false | Обход JSON parser только для точного пустого JSONB объекта `{}` |
 | relay.batch-size | 128 | Максимальная пачка claim |
 | relay.poll-interval | 200ms | Пауза при неполной пачке или ошибке |
 | relay.lease-duration | 30s | Срок аренды |
@@ -147,6 +149,20 @@ SQL-дампами в `demo-stand/.run/pre-stage1-*.sql`.
 | cleanup.batch-size | 1000 | Размер отдельного DELETE |
 | metrics.refresh-interval | 5s | Частота запроса снимка; scrape не обращается к БД |
 | inbox.retention | **нет** | Обязательный срок дедупликации |
+
+Дефолты этапа 2 сохраняют `workers=2`, `batch-size=128`, `poll-interval=200ms` и
+`virtual-threads=false`. Полная сетка H3 на300rps даёт для128/200 e2e p99 median253ms и
+18,7 claim/ack SQL/s; ускорение poll до50ms уменьшает задержку ценой примерно3,65× SQL.
+Batch512 при200ms не снижает SQL. В H2 virtual не дал устойчивого выигрыша: e2e median
+−3,13% при Hikari10 и +1,54% при20, с сохранённым выбросом5,7s. Увеличение Hikari не
+обосновано средним L≈0,6 занятого соединения. Три двухчасовых H5 прогона не показали
+неограниченного роста таблицы на100rps: дополнительная миграция V3 не нужна для этого режима.
+Полные данные и границы выводов — [`docs/perf/tuning.md`](docs/perf/tuning.md).
+
+`fast-empty-headers` — единственная внутренняя оптимизация, выбранная по alloc flamegraph.
+Флаг остаётся выключенным, пока сравнительные прогоны не оценят эффект; headers с trace
+контекстом проходят обычный decoder. Протокол доставки и старые программные конструкторы
+сохраняются. Предсказание и результаты — [`docs/perf/optimization.md`](docs/perf/optimization.md).
 
 Числа и интервалы должны быть положительными; `backoff-base <= backoff-max`.
 В приложении-получателе можно выключить relay, оставив inbox и очистку.
