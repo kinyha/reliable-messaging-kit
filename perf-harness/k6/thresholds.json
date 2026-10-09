@@ -1,0 +1,10 @@
+{
+  "profile": "100-rps / 60s JVM warmup / 60s measured, CPU quota order=2 payment=2 postgres=1 Kafka=2",
+  "http_p99_ms": 100,
+  "e2e_p99_ms": 1500,
+  "max_http_error_rate": 0.01,
+  "max_dropped_iterations": 0,
+  "max_pending_after_drain": 0,
+  "max_missing_payments": 0,
+  "max_duplicate_payments": 0
+}
