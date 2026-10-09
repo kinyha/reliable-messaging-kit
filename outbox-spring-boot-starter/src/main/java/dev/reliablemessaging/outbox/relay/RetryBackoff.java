@@ -1,13 +1,19 @@
 package dev.reliablemessaging.outbox.relay;
+
 import java.time.Duration;
 import java.util.random.RandomGenerator;
+
 public final class RetryBackoff {
     private final Duration base;
     private final Duration max;
     private final RandomGenerator random;
+
     public RetryBackoff(Duration base, Duration max, RandomGenerator random) {
-        this.base = base; this.max = max; this.random = random;
+        this.base = base;
+        this.max = max;
+        this.random = random;
     }
+
     public Duration nextDelay(int attempts) {
         long ceiling = base.toMillis();
         for (int i = 1; i < attempts && ceiling < max.toMillis(); i++)

@@ -1,9 +1,11 @@
 package dev.reliablemessaging.outbox.publisher;
 
-import dev.reliablemessaging.outbox.api.*;
+import dev.reliablemessaging.outbox.api.OutboxMessage;
+import dev.reliablemessaging.outbox.api.OutboxPublisher;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.IllegalTransactionStateException;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
+
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
@@ -11,10 +13,15 @@ public final class JdbcOutboxPublisher implements OutboxPublisher {
     private final JdbcTemplate jdbc;
     private final PayloadSerializer serializer;
     private final TraceHeadersSupplier traces;
+
     public JdbcOutboxPublisher(JdbcTemplate jdbc, PayloadSerializer serializer, TraceHeadersSupplier traces) {
-        this.jdbc = jdbc; this.serializer = serializer; this.traces = traces;
+        this.jdbc = jdbc;
+        this.serializer = serializer;
+        this.traces = traces;
     }
-    @Override public UUID publish(OutboxMessage message) {
+
+    @Override
+    public UUID publish(OutboxMessage message) {
         if (!TransactionSynchronizationManager.isActualTransactionActive())
             throw new IllegalTransactionStateException("OutboxPublisher.publish must be called inside an active transaction");
         // An unrelated transaction manager must not silently turn this insert into an autocommit.
@@ -28,7 +35,7 @@ public final class JdbcOutboxPublisher implements OutboxPublisher {
                   (message_id, aggregate_type, aggregate_id, topic, partition_key, payload, headers)
                 values (?, ?, ?, ?, ?, ?::jsonb, ?::jsonb)
                 """, id, message.aggregate().type(), message.aggregate().id(), message.topic(),
-                message.partitionKey(), serializer.toJson(message.payload()), serializer.toJson(headers));
+            message.partitionKey(), serializer.toJson(message.payload()), serializer.toJson(headers));
         return id;
     }
 }

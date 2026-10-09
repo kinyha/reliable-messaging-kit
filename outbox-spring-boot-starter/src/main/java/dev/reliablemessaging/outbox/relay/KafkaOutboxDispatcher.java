@@ -1,39 +1,48 @@
 package dev.reliablemessaging.outbox.relay;
 
 import dev.reliablemessaging.outbox.api.MessageHeaders;
-import org.apache.kafka.clients.producer.*;
+import org.apache.kafka.clients.CommonClientConfigs;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.autoconfigure.kafka.KafkaConnectionDetails;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.autoconfigure.kafka.SslBundleSslEngineFactory;
 import org.springframework.boot.ssl.SslBundle;
-import org.apache.kafka.common.config.SslConfigs;
-import org.apache.kafka.clients.CommonClientConfigs;
 import org.springframework.boot.ssl.SslBundles;
-import org.springframework.kafka.core.*;
+import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
+
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.concurrent.*;
 
 public final class KafkaOutboxDispatcher implements OutboxDispatcher, DisposableBean {
     private final DefaultKafkaProducerFactory<String, String> factory;
     private final KafkaTemplate<String, String> template;
     private final Duration timeout;
+
     public KafkaOutboxDispatcher(KafkaProperties properties, SslBundles bundles, Duration timeout) {
-        this(properties,bundles,timeout,null);
+        this(properties, bundles, timeout, null);
     }
-    public KafkaOutboxDispatcher(KafkaProperties properties,SslBundles bundles,Duration timeout,KafkaConnectionDetails details) {
+
+    public KafkaOutboxDispatcher(KafkaProperties properties, SslBundles bundles, Duration timeout, KafkaConnectionDetails details) {
         this.timeout = timeout;
         var config = new HashMap<>(properties.buildProducerProperties(bundles));
-        if(details!=null) {
-            var producer=details.getProducer();
-            config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,producer.getBootstrapServers());
-            if(producer.getSecurityProtocol()!=null) config.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG,producer.getSecurityProtocol());
-            if(producer.getSslBundle()!=null) {
-                config.put(SslConfigs.SSL_ENGINE_FACTORY_CLASS_CONFIG,SslBundleSslEngineFactory.class);
-                config.put(SslBundle.class.getName(),producer.getSslBundle());
+        if (details != null) {
+            var producer = details.getProducer();
+            config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, producer.getBootstrapServers());
+            if (producer.getSecurityProtocol() != null)
+                config.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, producer.getSecurityProtocol());
+            if (producer.getSslBundle() != null) {
+                config.put(SslConfigs.SSL_ENGINE_FACTORY_CLASS_CONFIG, SslBundleSslEngineFactory.class);
+                config.put(SslBundle.class.getName(), producer.getSslBundle());
             }
         }
         int millis = Math.toIntExact(timeout.toMillis());
@@ -51,7 +60,14 @@ public final class KafkaOutboxDispatcher implements OutboxDispatcher, Disposable
         factory = new DefaultKafkaProducerFactory<>(config);
         template = new KafkaTemplate<>(factory);
     }
-    @Override public List<DispatchResult> dispatch(List<OutboxRecord> batch) {
+
+    private static void header(ProducerRecord<?, ?> record, String name, String value) {
+        record.headers().remove(name);
+        record.headers().add(name, value.getBytes(StandardCharsets.UTF_8));
+    }
+
+    @Override
+    public List<DispatchResult> dispatch(List<OutboxRecord> batch) {
         long deadline = System.nanoTime() + timeout.toNanos();
         var futures = new LinkedHashMap<Long, CompletableFuture<?>>();
         for (var row : batch) {
@@ -65,27 +81,38 @@ public final class KafkaOutboxDispatcher implements OutboxDispatcher, Disposable
             header(record, MessageHeaders.AGGREGATE_TYPE, row.aggregateType());
             header(record, MessageHeaders.AGGREGATE_ID, row.aggregateId());
             header(record, MessageHeaders.OCCURRED_AT, row.createdAt().toString());
-            try { futures.put(row.id(), template.send(record)); }
-            catch (Exception ex) { futures.put(row.id(), CompletableFuture.failedFuture(ex)); }
+            try {
+                futures.put(row.id(), template.send(record));
+            } catch (Exception ex) {
+                futures.put(row.id(), CompletableFuture.failedFuture(ex));
+            }
         }
         try {
             long left = deadline - System.nanoTime();
-            if (left > 0) CompletableFuture.allOf(futures.values().toArray(CompletableFuture[]::new)).get(left, TimeUnit.NANOSECONDS);
-        } catch (InterruptedException ex) { Thread.currentThread().interrupt(); }
-        catch (ExecutionException | TimeoutException ex) { /* Resolve each record independently below. */ }
+            if (left > 0)
+                CompletableFuture.allOf(futures.values().toArray(CompletableFuture[]::new)).get(left, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException | TimeoutException ex) { /* Resolve each record independently below. */ }
         var results = new ArrayList<DispatchResult>(batch.size());
         futures.forEach((id, future) -> {
-            if (!future.isDone()) { results.add(new DispatchResult(id, false, "send timeout")); return; }
-            try { future.join(); results.add(new DispatchResult(id, true, null)); }
-            catch (CompletionException | CancellationException ex) {
+            if (!future.isDone()) {
+                results.add(new DispatchResult(id, false, "send timeout"));
+                return;
+            }
+            try {
+                future.join();
+                results.add(new DispatchResult(id, true, null));
+            } catch (CompletionException | CancellationException ex) {
                 var cause = ex.getCause() == null ? ex : ex.getCause();
                 results.add(new DispatchResult(id, false, cause instanceof TimeoutException ? "send timeout" : cause.toString()));
             }
         });
         return results;
     }
-    private static void header(ProducerRecord<?, ?> record, String name, String value) {
-        record.headers().remove(name); record.headers().add(name, value.getBytes(StandardCharsets.UTF_8));
+
+    @Override
+    public void destroy() {
+        factory.destroy();
     }
-    @Override public void destroy() { factory.destroy(); }
 }

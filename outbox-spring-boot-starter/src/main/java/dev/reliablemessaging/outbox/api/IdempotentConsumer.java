@@ -1,4 +1,5 @@
 package dev.reliablemessaging.outbox.api;
+
 import java.lang.annotation.*;
 
 /**
@@ -9,6 +10,8 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface IdempotentConsumer {
-    /** Stable logical consumer name; changing it permits old messages to be processed again. */
+    /**
+     * Stable logical consumer name; changing it permits old messages to be processed again.
+     */
     String name();
 }

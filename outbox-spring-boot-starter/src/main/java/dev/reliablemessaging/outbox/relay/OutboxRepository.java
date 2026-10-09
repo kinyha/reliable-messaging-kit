@@ -43,7 +43,7 @@ public final class OutboxRepository {
     }
     private int updateSent(List<Long> ids, UUID token) {
         if (ids.isEmpty()) return 0;
-        return jdbc.update((PreparedStatementCreator) connection -> {
+        return jdbc.update(connection -> {
             var stmt = connection.prepareStatement("""
                     update outbox_message set status='SENT', sent_at=now(), locked_until=null,
                         claim_token=null, last_error=null

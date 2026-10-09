@@ -10,6 +10,8 @@ import java.util.UUID;
  */
 @FunctionalInterface
 public interface OutboxPublisher {
-    /** Returns the identity recorded durably with the business transaction. */
+    /**
+     * Returns the identity recorded durably with the business transaction.
+     */
     UUID publish(OutboxMessage message);
 }
