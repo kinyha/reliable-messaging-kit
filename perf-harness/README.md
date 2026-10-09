@@ -103,3 +103,19 @@ perf-harness/.run/plot-env/bin/python perf-harness/scripts/plot-results.py soak
 Workflow запускается при push файла кампании или самого workflow в `stage-2`. Публикация в origin
 и запуск GitHub-кампании требуют разрешённой работы с удалённым репозиторием. Локальный `run-soak.sh`
 по-прежнему последовательно выполняет все три двухчасовых прогона на одном стенде.
+
+`stage-2-experiments.yml` запускается push файла кампании или workflow в `stage-2` и выделяет
+по одной независимой VM на H2 и H3. Это также работает, пока файл workflow отсутствует в `main`.
+Все четыре конфигурации H2 и все двенадцать конфигураций H3 проходят на своей VM последовательно:
+это сохраняет одинаковое окружение внутри сравнения. Для виртуальных воркеров дополнительно
+снимаются полные CPU/alloc/wall/JFR профили. Группы `gha-virtual` и `gha-matrix` учитываются отдельно
+от локального baseline; архитектура и реальные ресурсы runner записываются в manifest.
+
+```bash
+gh run download RUN_ID --dir perf-harness/.run/experiment-artifacts
+python3 perf-harness/scripts/collect-experiment.py perf-harness/.run/experiment-artifacts --suite virtual
+python3 perf-harness/scripts/collect-experiment.py perf-harness/.run/experiment-artifacts --suite matrix
+```
+
+Коллектор требует целую сетку и три полных окна для каждой конфигурации, завершённый manifest,
+сырые k6 summaries, непрерывные часы, отсутствие пропусков и повторных бизнес-эффектов.

@@ -1,0 +1,9 @@
+{
+  "revision": "first-complete-h2-h3",
+  "suites": ["virtual", "matrix"],
+  "runs_per_configuration": 3,
+  "measurement_seconds": 180,
+  "warmup_seconds": 60,
+  "runner": "ubuntu-24.04",
+  "purpose": "One isolated VM per hypothesis; all its configurations run sequentially"
+}

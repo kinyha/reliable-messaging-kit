@@ -1,0 +1,37 @@
+name: Virtual thread CPU allocation wall and JFR profiles
+on:
+  push:
+    branches: [stage-2]
+    paths:
+      - .github/workflows/stage-2-profiles.yml
+permissions:
+  contents: read
+jobs:
+  virtual-profile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Build constrained profiling images
+        run: |
+          ./gradlew :demo-stand:order-service:bootJar :demo-stand:payment-service:bootJar
+          docker compose -p rmk-perf -f demo-stand/docker-compose.yml -f perf-harness/compose.perf.yml build order-service payment-service
+      - name: Three full captures per profiling mode
+        run: python3 perf-harness/scripts/profile.py --virtual --name gha-virtual-profile-fixed
+      - name: Upload real profiles and JFR recordings
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: virtual-profile-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: error
+          path: perf-harness/results/
+      - name: Stop this VM's isolated project
+        if: always()
+        run: docker compose -p rmk-perf -f demo-stand/docker-compose.yml -f perf-harness/compose.perf.yml down --volumes

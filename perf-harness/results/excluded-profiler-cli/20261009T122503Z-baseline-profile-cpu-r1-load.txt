@@ -1,0 +1,29 @@
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+     execution: local
+        script: /scripts/place-orders.js
+        output: -
+
+     scenarios: (100.00%) 1 scenario, 1000 max VUs, 2m30s max duration (incl. graceful stop):
+              * rate_500: 500.00 iterations/s for 2m15s (maxVUs: 200-1000, gracefulStop: 15s)
+
+
+running (0m01.0s), 0001/0200 VUs, 494 complete and 0 interrupted iterations
+rate_500   [   1% ] 0000/0200 VUs  0m01.0s/2m15s  500.00 iters/s
+
+running (0m02.0s), 0000/0200 VUs, 995 complete and 0 interrupted iterations
+rate_500   [   1% ] 0000/0200 VUs  0m02.0s/2m15s  500.00 iters/s
+
+running (0m03.0s), 0001/0200 VUs, 1494 complete and 0 interrupted iterations
+rate_500   [   2% ] 0000/0200 VUs  0m03.0s/2m15s  500.00 iters/s
+
+running (0m04.0s), 0000/0200 VUs, 1995 complete and 0 interrupted iterations
+rate_500   [   3% ] 0000/0200 VUs  0m04.0s/2m15s  500.00 iters/s
+
+running (0m05.0s), 0000/0200 VUs, 2495 complete and 0 interrupted iterations
+rate_500   [   4% ] 0000/0200 VUs  0m05.0s/2m15s  500.00 iters/s

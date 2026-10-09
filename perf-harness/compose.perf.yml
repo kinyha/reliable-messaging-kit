@@ -53,6 +53,7 @@ services:
       SPRING_APPLICATION_JSON: >-
         {"management.server.port":8091,"outbox.relay.enabled":${PERF_RELAY_ENABLED:-true},
          "outbox.relay.virtual-threads":${PERF_VIRTUAL_THREADS:-false},
+         "outbox.relay.fast-empty-headers":${PERF_FAST_EMPTY_HEADERS:-false},
          "outbox.relay.batch-size":${PERF_BATCH_SIZE:-128},
          "outbox.relay.poll-interval":"${PERF_POLL_INTERVAL:-200ms}",
          "outbox.relay.workers":${PERF_WORKERS:-2},

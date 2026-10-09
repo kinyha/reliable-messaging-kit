@@ -1,0 +1,278 @@
+experiment (virtual)	UNKNOWN STEP	﻿2026-10-09T12:15:10.3738454Z Current runner version: '2.337.0'
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3766285Z ##[group]Runner Image Provisioner
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3767287Z Hosted Compute Agent
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3767893Z Version: 20261002.596
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3768515Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3769597Z Build Date: 2026-10-02T22:28:27Z
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3770289Z Worker ID: {44244ecd-9aaa-409d-bb22-6d85fc231b23}
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3771023Z Region: westus2
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3771594Z Cloud: Azure
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3772149Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3773892Z ##[group]Operating System
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3774538Z Ubuntu
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3775125Z 24.04.5
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3775720Z LTS
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3776275Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3776891Z ##[group]Runner Image
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3777509Z Image: ubuntu-24.04
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3778068Z Version: 20261004.327.1
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3779669Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3781692Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3782674Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3783848Z ##[group]GITHUB_TOKEN Permissions
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3785961Z Contents: read
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3786601Z Metadata: read
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3787276Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3789845Z Secret source: Actions
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3790874Z Cache mode: write
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.3791604Z Prepare workflow directory
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.4132494Z Prepare all required actions
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.4181579Z Getting action download info
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.8240529Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:10.9385030Z Download action repository 'actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3' (SHA:cf277c60eb25467037889841efdb72551f06f6c3)
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.2744897Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.5410138Z Complete job name: experiment (virtual)
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.6208386Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.6209712Z with:
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.6210168Z   persist-credentials: false
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.6210723Z   repository: kinyha/reliable-messaging-kit
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.6214706Z   token: ***
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.6215137Z   ssh-strict: true
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.6215568Z   ssh-user: git
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.6215984Z   clean: true
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.6216421Z   sparse-checkout-cone-mode: true
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.6216935Z   fetch-depth: 1
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.6217369Z   fetch-tags: false
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.6217810Z   show-progress: true
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.6218304Z   lfs: false
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.6218955Z   submodules: false
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.6219410Z   set-safe-directory: true
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.6219949Z   allow-unsafe-pr-checkout: false
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.6220752Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7252593Z Syncing repository: kinyha/reliable-messaging-kit
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7255357Z ##[group]Getting Git version info
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7256827Z Working directory is '/home/runner/work/reliable-messaging-kit/reliable-messaging-kit'
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7258273Z [command]/usr/bin/git version
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7383253Z git version 2.55.0
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7408104Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7426696Z Temporarily overriding HOME='/home/runner/work/_temp/376d5a2d-9331-4833-8cd8-6f6c947df89d' before making global git config changes
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7428805Z Adding repository directory to the temporary git global config as a safe directory
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7433333Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/reliable-messaging-kit/reliable-messaging-kit
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7500716Z Deleting the contents of '/home/runner/work/reliable-messaging-kit/reliable-messaging-kit'
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7506800Z ##[group]Initializing the repository
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7512455Z [command]/usr/bin/git init /home/runner/work/reliable-messaging-kit/reliable-messaging-kit
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7652999Z hint: Using 'master' as the name for the initial branch. This default branch name
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7654714Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7656277Z hint: to use in all of your new repositories, which will suppress this warning,
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7657907Z hint: call:
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7659026Z hint:
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7668481Z hint: 	git config --global init.defaultBranch <name>
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7670247Z hint:
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7671347Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7673075Z hint: 'development'. The just-created branch can be renamed via this command:
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7674460Z hint:
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7675216Z hint: 	git branch -m <name>
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7676458Z hint:
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7679952Z hint: Disable this message with "git config set advice.defaultBranchName false"
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7682135Z Initialized empty Git repository in /home/runner/work/reliable-messaging-kit/reliable-messaging-kit/.git/
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7687887Z [command]/usr/bin/git remote add origin https://github.com/kinyha/reliable-messaging-kit
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7724940Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7726299Z ##[group]Disabling automatic garbage collection
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7729218Z [command]/usr/bin/git config --local gc.auto 0
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7764092Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7765464Z ##[group]Setting up auth
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7771985Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.7810494Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.8226396Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.8267108Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.8491153Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.8526564Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.8754683Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.8795836Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.8796927Z ##[group]Fetching the repository
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:11.8806786Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +0416f6b4a7a7778033542102d42c5a08165658da:refs/remotes/origin/stage-2
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.2650194Z From https://github.com/kinyha/reliable-messaging-kit
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.2652736Z  * [new ref]         0416f6b4a7a7778033542102d42c5a08165658da -> origin/stage-2
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.2657628Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.2659913Z ##[group]Determining the checkout info
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.2662030Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.2676866Z [command]/usr/bin/git sparse-checkout disable
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.2754154Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.2794920Z ##[group]Checking out the ref
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.2810319Z [command]/usr/bin/git checkout --progress --force -B stage-2 refs/remotes/origin/stage-2
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.3438972Z Switched to a new branch 'stage-2'
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.3446718Z branch 'stage-2' set up to track 'origin/stage-2'.
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.3456734Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.3503254Z [command]/usr/bin/git log -1 --format=%H
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.3531320Z 0416f6b4a7a7778033542102d42c5a08165658da
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.3541580Z ##[group]Removing auth
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.3545465Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.3580129Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.3805202Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.3832419Z http.https://github.com/.extraheader
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.3841781Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.3882786Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.4105450Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.4138199Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.4362167Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.4881039Z ##[group]Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.4882653Z with:
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.4883427Z   distribution: temurin
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.4884346Z   java-version: 21
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.4885216Z   java-package: jdk
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.4886111Z   check-latest: false
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.4887038Z   server-id: github
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.4887933Z   server-username: GITHUB_ACTOR
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.4889303Z   server-password: GITHUB_TOKEN
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.4890352Z   overwrite-settings: true
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.4891318Z   job-status: success
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.4902178Z   token: ***
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.4902997Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.6667975Z ##[warning]setup-java v4 is deprecated and will no longer receive updates. Please migrate to actions/setup-java@v5.
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.6683730Z ##[group]Installed distributions
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.6786342Z Resolved Java 21.0.12+1 from tool-cache
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.6799330Z (node:2391) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.6803220Z Setting Java 21.0.12+1 as the default
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.6805793Z (Use `node --trace-deprecation ...` to show where the warning was created)
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.6809099Z Creating toolchains.xml for JDK version 21 from temurin
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.6882537Z Writing to /home/runner/.m2/toolchains.xml
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.6884019Z 
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.6884671Z Java configuration:
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.6886219Z   Distribution: temurin
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.6887897Z   Version: 21.0.12+1
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.6890153Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.6891365Z 
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.6892421Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.6910945Z Creating settings.xml with server-id: github
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.6950774Z Writing to /home/runner/.m2/settings.xml
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.7249564Z ##[group]Run python3 perf-harness/scripts/benchmark.py --suite virtual --name gha-virtual
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.7253664Z ^[[36;1mpython3 perf-harness/scripts/benchmark.py --suite virtual --name gha-virtual^[[0m
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.7595822Z shell: /usr/bin/bash -e {0}
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.7597021Z env:
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.7598423Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.7601016Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:15:12.7602725Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:21:55.1143673Z 20261009T121704Z-gha-virtual-virtual-False-pool-10-r1: HTTP p99=9.61ms e2e p99=446.18599895693933ms rps=500.0 pending_peak=101.0
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:25:07.4857636Z 20261009T121704Z-gha-virtual-virtual-False-pool-10-r2: HTTP p99=9.59ms e2e p99=463.4174130557622ms rps=500.0 pending_peak=100.0
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:28:18.8486530Z 20261009T121704Z-gha-virtual-virtual-False-pool-10-r3: HTTP p99=8.24ms e2e p99=428.9956077528762ms rps=500.0 pending_peak=104.0
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:33:04.7111298Z 20261009T121704Z-gha-virtual-virtual-False-pool-20-r1: HTTP p99=10.03ms e2e p99=458.2151548201918ms rps=500.0 pending_peak=87.0
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:36:17.0721221Z 20261009T121704Z-gha-virtual-virtual-False-pool-20-r2: HTTP p99=8.03ms e2e p99=422.1239609962464ms rps=500.0 pending_peak=103.0
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:39:29.3149725Z 20261009T121704Z-gha-virtual-virtual-False-pool-20-r3: HTTP p99=7.22ms e2e p99=415.2564981916669ms rps=500.0 pending_peak=104.0
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:44:15.9169465Z 20261009T121704Z-gha-virtual-virtual-True-pool-10-r1: HTTP p99=8.44ms e2e p99=432.233633031349ms rps=500.0 pending_peak=92.0
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:47:28.7597088Z 20261009T121704Z-gha-virtual-virtual-True-pool-10-r2: HTTP p99=47.22ms e2e p99=5702.690681725055ms rps=500.0 pending_peak=1771.0
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:50:41.5283838Z 20261009T121704Z-gha-virtual-virtual-True-pool-10-r3: HTTP p99=7.55ms e2e p99=414.5285158311537ms rps=500.0 pending_peak=105.0
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:55:30.4791990Z 20261009T121704Z-gha-virtual-virtual-True-pool-20-r1: HTTP p99=8.56ms e2e p99=430.7890412413295ms rps=500.0 pending_peak=100.0
+experiment (virtual)	UNKNOWN STEP	2026-10-09T12:58:42.9295200Z 20261009T121704Z-gha-virtual-virtual-True-pool-20-r2: HTTP p99=8.33ms e2e p99=421.23171631290523ms rps=500.0 pending_peak=105.0
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:01:55.2161278Z 20261009T121704Z-gha-virtual-virtual-True-pool-20-r3: HTTP p99=10.55ms e2e p99=428.6341434067349ms rps=500.0 pending_peak=104.0
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:01:56.0999166Z ##[group]Run python3 perf-harness/scripts/profile.py --virtual --name gha-virtual-profile
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:01:56.1000137Z ^[[36;1mpython3 perf-harness/scripts/profile.py --virtual --name gha-virtual-profile^[[0m
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:01:56.1066213Z shell: /usr/bin/bash -e {0}
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:01:56.1066592Z env:
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:01:56.1067029Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:01:56.1067778Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:01:56.1068349Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.7682947Z Traceback (most recent call last):
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.7687261Z   File "/home/runner/work/reliable-messaging-kit/reliable-messaging-kit/perf-harness/scripts/profile.py", line 100, in <module>
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.7690113Z     if __name__=='__main__':main()
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.7719826Z                             ^^^^^^
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.7744595Z   File "/home/runner/work/reliable-messaging-kit/reliable-messaging-kit/perf-harness/scripts/profile.py", line 65, in main
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.7746440Z     profile_log=compose('exec','-T','order-service','/opt/async-profiler/bin/asprof',*options,'1')
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.7768373Z                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.7770381Z   File "/home/runner/work/reliable-messaging-kit/reliable-messaging-kit/perf-harness/scripts/benchmark.py", line 37, in compose
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.7779763Z     def compose(*args,env=None): return command(COMPOSE+list(args),env=env)
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.7781302Z                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.7795442Z   File "/home/runner/work/reliable-messaging-kit/reliable-messaging-kit/perf-harness/scripts/benchmark.py", line 34, in command
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.7797555Z     if result.returncode: raise RuntimeError(f'Command failed ({result.returncode}): {args}\n{result.stderr}')
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.7830182Z                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.7846522Z RuntimeError: Command failed (1): ['docker', 'compose', '-p', 'rmk-perf', '-f', '/home/runner/work/reliable-messaging-kit/reliable-messaging-kit/demo-stand/docker-compose.yml', '-f', '/home/runner/work/reliable-messaging-kit/reliable-messaging-kit/perf-harness/compose.perf.yml', 'exec', '-T', 'order-service', '/opt/async-profiler/bin/asprof', '-e', 'cpu', '-t', '--dot', '-d', '120', '-f', '/results/20261009T130233Z-gha-virtual-profile-cpu-r1.html', '1']
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.7850993Z Unrecognized option: --dot
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.7851465Z 
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.7923845Z ##[error]Process completed with exit code 1.
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.8004552Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.8004988Z with:
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.8005204Z   name: experiment-37928804145-virtual
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.8005480Z   retention-days: 7
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.8005695Z   if-no-files-found: error
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.8005938Z   path: perf-harness/results/
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.8006180Z   compression-level: 6
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.8006393Z   overwrite: false
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.8006613Z   include-hidden-files: false
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.8006857Z env:
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.8007154Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.8007652Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:55.8008447Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:56.0121443Z (node:238096) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:56.0122975Z (Use `node --trace-deprecation ...` to show where the warning was created)
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:56.0333255Z With the provided path, there will be 84 files uploaded
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:56.0341020Z Artifact name is valid!
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:56.0341950Z Root directory input is valid!
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:56.4297089Z Beginning upload of artifact content to blob storage
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:56.5927836Z (node:238096) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.2440505Z Uploaded bytes 487440
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.3258963Z Finished uploading artifact content to blob storage!
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.3260494Z SHA256 digest of uploaded artifact zip is f290f701508776cd034aa18e820b2c497de9975ddb6d9c1cb8543ae8af1dc552
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.3261908Z Finalizing artifact upload
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.5972073Z Artifact experiment-37928804145-virtual.zip successfully finalized. Artifact ID 11617536233
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.5974410Z Artifact experiment-37928804145-virtual has been successfully uploaded! Final size is 487440 bytes. Artifact ID is 11617536233
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.5982206Z Artifact download URL: https://github.com/kinyha/reliable-messaging-kit/actions/runs/37928804145/artifacts/11617536233
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.6144410Z ##[group]Run docker compose -p rmk-perf -f demo-stand/docker-compose.yml -f perf-harness/compose.perf.yml down --volumes
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.6145417Z ^[[36;1mdocker compose -p rmk-perf -f demo-stand/docker-compose.yml -f perf-harness/compose.perf.yml down --volumes^[[0m
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.6211789Z shell: /usr/bin/bash -e {0}
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.6212115Z env:
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.6212535Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.6213204Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.6213719Z ##[endgroup]
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.7156102Z  Container rmk-perf-prometheus-1  Stopping
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.7160595Z  Container rmk-perf-order-service-1  Stopping
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.7161306Z  Container rmk-perf-payment-service-1  Stopping
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.7162050Z  Container rmk-perf-order-service-1  Stopped
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.7167951Z  Container rmk-perf-payment-service-1  Stopped
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.7169916Z  Container rmk-perf-payment-service-1  Removing
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.7171299Z  Container rmk-perf-order-service-1  Removing
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.7232956Z  Container rmk-perf-order-service-1  Removed
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.7234123Z  Container rmk-perf-order-postgres-1  Stopping
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.7240213Z  Container rmk-perf-payment-service-1  Removed
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.7242781Z  Container rmk-perf-kafka-1  Stopping
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.7251114Z  Container rmk-perf-toxiproxy-1  Stopping
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.7252031Z  Container rmk-perf-payment-postgres-1  Stopping
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.9412811Z  Container rmk-perf-prometheus-1  Stopped
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.9413586Z  Container rmk-perf-prometheus-1  Removing
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.9550748Z  Container rmk-perf-toxiproxy-1  Stopped
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.9551949Z  Container rmk-perf-toxiproxy-1  Removing
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.9641431Z  Container rmk-perf-prometheus-1  Removed
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:57.9722466Z  Container rmk-perf-toxiproxy-1  Removed
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.0124773Z  Container rmk-perf-order-postgres-1  Stopped
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.0139689Z  Container rmk-perf-order-postgres-1  Removing
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.0151785Z  Container rmk-perf-payment-postgres-1  Stopped
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.0152446Z  Container rmk-perf-payment-postgres-1  Removing
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.0316037Z  Container rmk-perf-order-postgres-1  Removed
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.0351917Z  Container rmk-perf-payment-postgres-1  Removed
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.6377167Z  Container rmk-perf-kafka-1  Stopped
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.6378470Z  Container rmk-perf-kafka-1  Removing
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.6717967Z  Container rmk-perf-kafka-1  Removed
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.6729654Z  Volume rmk-perf_order-postgres-data  Removing
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.6731515Z  Volume rmk-perf_payment-postgres-data  Removing
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.6732759Z  Volume rmk-perf_prometheus-data  Removing
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.6733737Z  Network rmk-perf_default  Removing
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.7498465Z  Network rmk-perf_default  Removed
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.8293160Z  Volume rmk-perf_order-postgres-data  Removed
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.9408004Z  Volume rmk-perf_payment-postgres-data  Removed
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.9442709Z  Volume rmk-perf_prometheus-data  Removed
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:58.9605721Z Post job cleanup.
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:59.1181612Z (node:238463) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:59.1182847Z (Use `node --trace-deprecation ...` to show where the warning was created)
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:59.1430379Z Post job cleanup.
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:59.2679644Z [command]/usr/bin/git version
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:59.2726207Z git version 2.55.0
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:59.2791062Z Temporarily overriding HOME='/home/runner/work/_temp/24f37a2d-0cee-4797-bc5a-df57bf286c47' before making global git config changes
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:59.2792674Z Adding repository directory to the temporary git global config as a safe directory
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:59.2802003Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/reliable-messaging-kit/reliable-messaging-kit
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:59.2865363Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:59.2921253Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:59.3251481Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:59.3340557Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:59.3621154Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:59.3668366Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:59.4089223Z Cleaning up orphan processes
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:59.4343808Z Terminate orphan process: pid (2451) (java)
+experiment (virtual)	UNKNOWN STEP	2026-10-09T13:03:59.4579590Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

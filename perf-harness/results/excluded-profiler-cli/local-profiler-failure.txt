@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/Users/kinyhaha/.codex/worktrees/stage-2/reliable-messaging-kit/perf-harness/scripts/profile.py", line 100, in <module>
+    if __name__=='__main__':main()
+  File "/Users/kinyhaha/.codex/worktrees/stage-2/reliable-messaging-kit/perf-harness/scripts/profile.py", line 65, in main
+    profile_log=compose('exec','-T','order-service','/opt/async-profiler/bin/asprof',*options,'1')
+  File "/Users/kinyhaha/.codex/worktrees/stage-2/reliable-messaging-kit/perf-harness/scripts/benchmark.py", line 37, in compose
+    def compose(*args,env=None): return command(COMPOSE+list(args),env=env)
+  File "/Users/kinyhaha/.codex/worktrees/stage-2/reliable-messaging-kit/perf-harness/scripts/benchmark.py", line 34, in command
+    if result.returncode: raise RuntimeError(f'Command failed ({result.returncode}): {args}\n{result.stderr}')
+RuntimeError: Command failed (1): ['docker', 'compose', '-p', 'rmk-perf', '-f', '/Users/kinyhaha/.codex/worktrees/stage-2/reliable-messaging-kit/demo-stand/docker-compose.yml', '-f', '/Users/kinyhaha/.codex/worktrees/stage-2/reliable-messaging-kit/perf-harness/compose.perf.yml', 'exec', '-T', 'order-service', '/opt/async-profiler/bin/asprof', '-e', 'cpu', '-t', '--dot', '-d', '120', '-f', '/results/20261009T122503Z-baseline-profile-cpu-r1.html', '1']
+Unrecognized option: --dot
+

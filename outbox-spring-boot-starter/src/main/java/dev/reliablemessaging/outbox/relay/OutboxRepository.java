@@ -19,7 +19,12 @@ public final class OutboxRepository {
     private final JdbcTemplate jdbc;
     private final TransactionTemplate transaction;
     private final ObjectMapper mapper = new ObjectMapper();
+    private final boolean fastEmptyHeaders;
     public OutboxRepository(JdbcTemplate jdbc, PlatformTransactionManager tm) {
+        this(jdbc, tm, false);
+    }
+    public OutboxRepository(JdbcTemplate jdbc, PlatformTransactionManager tm, boolean fastEmptyHeaders) {
+        this.fastEmptyHeaders = fastEmptyHeaders;
         this.jdbc = jdbc; transaction = new TransactionTemplate(tm);
         transaction.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
     }
@@ -121,7 +126,9 @@ public final class OutboxRepository {
     public static String interval(Duration duration) { return duration.toMillis() + " milliseconds"; }
     private OutboxRecord read(ResultSet rs, int row) throws SQLException {
         try {
-            Map<String, String> headers = mapper.readValue(rs.getString("headers"), new TypeReference<>() { });
+            String encodedHeaders = rs.getString("headers");
+            Map<String, String> headers = fastEmptyHeaders && "{}".equals(encodedHeaders)
+                    ? Map.of() : mapper.readValue(encodedHeaders, new TypeReference<>() { });
             return new OutboxRecord(rs.getLong("id"), rs.getObject("message_id", UUID.class),
                     rs.getString("aggregate_type"), rs.getString("aggregate_id"), rs.getString("topic"),
                     rs.getString("partition_key"), rs.getString("payload"), Map.copyOf(headers),

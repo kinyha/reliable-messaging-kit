@@ -143,6 +143,8 @@ def configure(config):
         log=compose('logs','--no-color','--tail','100','order-service')
         expected_virtual=config.get('VIRTUAL_THREADS','false')
         if f'virtualThreads={expected_virtual}' not in log: raise RuntimeError('Image does not expose the requested relay thread mode; rebuild before measuring')
+        if 'FAST_EMPTY_HEADERS' in config and f'fastEmptyHeaders={config["FAST_EMPTY_HEADERS"]}' not in log:
+            raise RuntimeError('Image did not apply the requested empty-header optimization; rebuild before measuring')
     if total(metrics(18091),'hikaricp_connections_max')!=int(config.get('POOL_SIZE',10)): raise RuntimeError('Requested Hikari pool was not applied')
 
 def run_case(prefix,rps,seconds,relay,soak=False,strict=False):
@@ -214,13 +216,14 @@ def suite_configs(suite):
     if suite=='saturation': return [(f'saturation-{r}',{},r) for r in [1500,3000,4500]]
     if suite=='matrix': return [(f'batch-{b}-poll-{p}',{'BATCH_SIZE':b,'POLL_INTERVAL':f'{p}ms'},300) for b in [16,64,128,512] for p in [50,200,1000]]
     if suite=='virtual': return [(f'virtual-{v}-pool-{pool}',{'VIRTUAL_THREADS':str(v).lower(),'POOL_SIZE':pool},500) for v in [False,True] for pool in [10,20]]
+    if suite=='optimization': return [(f'fast-headers-{v}',{'FAST_EMPTY_HEADERS':str(v).lower()},500) for v in [False,True]]
     if suite=='soak': return [('soak',{'RETENTION':'30s','CLEANUP_INTERVAL':'5s'},100)]
     if suite=='ci': return [('ci',{},100)]
     if suite=='validation': return [('smoke',{},100)]
     raise ValueError(suite)
 
 def main():
-    p=argparse.ArgumentParser(); p.add_argument('--suite',choices=['baseline','overhead','saturation','matrix','virtual','soak','ci','validation'],required=True)
+    p=argparse.ArgumentParser(); p.add_argument('--suite',choices=['baseline','overhead','saturation','matrix','virtual','optimization','soak','ci','validation'],required=True)
     p.add_argument('--duration',type=int); p.add_argument('--warmup',type=int,default=60); p.add_argument('--runs',type=int,default=3)
     p.add_argument('--name',default=''); p.add_argument('--chaos-delay',default='0ms'); p.add_argument('--skip-build',action='store_true')
     p.add_argument('--only-rps',help='Resume a baseline configuration, e.g. 300,500,1000; complete repetitions remain mandatory')
