@@ -1,0 +1,40 @@
+name: Isolated H2 and H3 experiments
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: stage-2-experiments-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  experiment:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [virtual, matrix]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Three full measurements of every configuration on this VM
+        run: python3 perf-harness/scripts/benchmark.py --suite ${{ matrix.suite }} --name gha-${{ matrix.suite }}
+      - name: Three CPU, allocation, wall and JFR captures of virtual workers
+        if: matrix.suite == 'virtual'
+        run: python3 perf-harness/scripts/profile.py --virtual --name gha-virtual-profile
+      - name: Upload measurements, images and profiles
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: experiment-${{ github.run_id }}-${{ matrix.suite }}
+          retention-days: 7
+          if-no-files-found: error
+          path: perf-harness/results/
+      - name: Stop this VM's isolated project
+        if: always()
+        run: docker compose -p rmk-perf -f demo-stand/docker-compose.yml -f perf-harness/compose.perf.yml down --volumes
