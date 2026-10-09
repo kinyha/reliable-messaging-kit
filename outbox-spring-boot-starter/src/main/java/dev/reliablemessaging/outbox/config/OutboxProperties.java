@@ -16,11 +16,18 @@ public record OutboxProperties(
             @DefaultValue("30s") Duration leaseDuration, @DefaultValue("10s") Duration sendTimeout,
             @DefaultValue("10s") Duration reaperInterval, @DefaultValue("12") int maxAttempts,
             @DefaultValue("1s") Duration backoffBase, @DefaultValue("5m") Duration backoffMax,
-            @DefaultValue("false") boolean virtualThreads) {
+            @DefaultValue("false") boolean virtualThreads,
+            @DefaultValue("false") boolean fastEmptyHeaders) {
         /** Preserve the stage 1 constructor for programmatic configuration. */
         public Relay(boolean enabled,int workers,int batchSize,Duration pollInterval,Duration leaseDuration,
                      Duration sendTimeout,Duration reaperInterval,int maxAttempts,Duration backoffBase,Duration backoffMax) {
-            this(enabled,workers,batchSize,pollInterval,leaseDuration,sendTimeout,reaperInterval,maxAttempts,backoffBase,backoffMax,false);
+            this(enabled,workers,batchSize,pollInterval,leaseDuration,sendTimeout,reaperInterval,maxAttempts,backoffBase,backoffMax,false,false);
+        }
+        /** Preserve the constructor that introduced the virtual-thread switch. */
+        public Relay(boolean enabled,int workers,int batchSize,Duration pollInterval,Duration leaseDuration,
+                     Duration sendTimeout,Duration reaperInterval,int maxAttempts,Duration backoffBase,Duration backoffMax,
+                     boolean virtualThreads) {
+            this(enabled,workers,batchSize,pollInterval,leaseDuration,sendTimeout,reaperInterval,maxAttempts,backoffBase,backoffMax,virtualThreads,false);
         }
         @org.springframework.boot.context.properties.bind.ConstructorBinding
         public Relay {

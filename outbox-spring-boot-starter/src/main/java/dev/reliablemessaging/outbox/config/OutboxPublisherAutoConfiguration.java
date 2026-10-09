@@ -19,10 +19,10 @@ import java.util.*;
 @ConditionalOnBean(DataSource.class)
 public class OutboxPublisherAutoConfiguration {
     @Bean @ConditionalOnMissingBean
-    OutboxRepository outboxRepository(DataSource ds, PlatformTransactionManager tm,
+    OutboxRepository outboxRepository(DataSource ds, PlatformTransactionManager tm, OutboxProperties properties,
                                      ObjectProvider<ReliableMessagingSchemaMigrator> migration) {
         migration.getIfAvailable();
-        return new OutboxRepository(new JdbcTemplate(ds), tm);
+        return new OutboxRepository(new JdbcTemplate(ds), tm, properties.relay().fastEmptyHeaders());
     }
     @Bean @ConditionalOnMissingBean
     PayloadSerializer payloadSerializer(ObjectProvider<ObjectMapper> mapper) {

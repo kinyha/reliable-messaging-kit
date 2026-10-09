@@ -1,0 +1,37 @@
+name: One empty-header optimization with full off-on comparison
+on:
+  push:
+    branches: [stage-2]
+    paths:
+      - .github/workflows/stage-2-optimization.yml
+permissions:
+  contents: read
+jobs:
+  optimization:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Three full load windows per flag in the same images
+        run: python3 perf-harness/scripts/benchmark.py --suite optimization --name gha-optimization
+      - name: Three normalized allocation captures with the flag off
+        run: python3 perf-harness/scripts/profile.py --events alloc --fast-empty-headers false --name gha-optimization-off
+      - name: Three normalized allocation captures with the flag on
+        run: python3 perf-harness/scripts/profile.py --events alloc --fast-empty-headers true --name gha-optimization-on
+      - name: Upload complete and partial raw evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: optimization-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: error
+          path: perf-harness/results/
+      - name: Stop this VM's isolated project
+        if: always()
+        run: docker compose -p rmk-perf -f demo-stand/docker-compose.yml -f perf-harness/compose.perf.yml down --volumes

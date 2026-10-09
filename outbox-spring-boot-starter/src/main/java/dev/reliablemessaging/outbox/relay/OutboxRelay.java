@@ -27,8 +27,8 @@ public final class OutboxRelay implements SmartLifecycle {
         if(running) return;
         running=true;
         executor=Executors.newFixedThreadPool(settings.workers(),namedFactory(settings.virtualThreads()));
-        LoggerFactory.getLogger(OutboxRelay.class).info("Starting relay: workers={}, virtualThreads={}, batchSize={}, pollInterval={}",
-                settings.workers(),settings.virtualThreads(),settings.batchSize(),settings.pollInterval());
+        LoggerFactory.getLogger(OutboxRelay.class).info("Starting relay: workers={}, virtualThreads={}, batchSize={}, pollInterval={}, fastEmptyHeaders={}",
+                settings.workers(),settings.virtualThreads(),settings.batchSize(),settings.pollInterval(),settings.fastEmptyHeaders());
         for(int i=0;i<settings.workers();i++) executor.submit(this::work);
     }
     static ThreadFactory namedFactory(boolean virtual) {

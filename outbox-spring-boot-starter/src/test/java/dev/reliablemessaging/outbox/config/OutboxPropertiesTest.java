@@ -21,8 +21,18 @@ class OutboxPropertiesTest {
             var properties = context.getBean(OutboxProperties.class);
 
             assertThat(properties.relay().batchSize()).isEqualTo(128);
+            assertThat(properties.relay().fastEmptyHeaders()).isFalse();
+            assertThat(properties.relay().virtualThreads()).isFalse();
             assertThat(properties.relay().leaseDuration()).isEqualTo(Duration.ofSeconds(30));
             assertThat(properties.inbox().retention()).isEqualTo(Duration.ofDays(30));
+        });
+    }
+
+    @Test
+    void bindsTheIndependentOptimizationSwitch() {
+        contextRunner.withPropertyValues("outbox.relay.fast-empty-headers=true").run(context -> {
+            assertThat(context.getBean(OutboxProperties.class).relay().fastEmptyHeaders()).isTrue();
+            assertThat(context.getBean(OutboxProperties.class).relay().virtualThreads()).isFalse();
         });
     }
 
