@@ -1,9 +1,17 @@
 #!/usr/bin/env python3
 """CPU, allocation, wall and JFR captures on the same constrained service."""
-import argparse, collections, fcntl, gzip, hashlib, json, os, re, shutil, time
+import argparse, collections, contextlib, fcntl, gzip, hashlib, json, os, re, shutil, subprocess, time
 from datetime import datetime,timezone
 from pathlib import Path
-from benchmark import ROOT,RESULTS,command,compose,configure,health,init,k6,reset,wait_drain
+from benchmark import ROOT,RESULTS,COMPOSE,command,compose,configure,health,init,k6,reset,wait_drain
+
+def cleanup_load(prefix,load):
+    if load.poll() is None:
+        subprocess.run(['docker','rm','-f','rmk-perf-load-'+prefix],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=30)
+        load.wait(timeout=30)
+
+def cleanup_apps():
+    subprocess.run(COMPOSE+['stop','order-service','payment-service'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=60)
 
 def analyze_collapsed(path):
     worker=collections.Counter(); totals=collections.Counter(); worker_stacks=collections.Counter()
@@ -34,10 +42,15 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--rps',type=int,default=500);p.add_argument('--duration',type=int,default=120)
     p.add_argument('--runs',type=int,default=3);p.add_argument('--virtual',action='store_true');p.add_argument('--name',default='profile'); args=p.parse_args()
     if args.duration<120 or args.runs<3:p.error('profiling requires three captures of at least 120 seconds')
-    with open(RESULTS/'.perf.lock','w') as lock:
+    RESULTS.mkdir(parents=True,exist_ok=True)
+    with open(RESULTS/'.perf.lock','w') as lock, contextlib.ExitStack() as resources:
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        resources.callback(cleanup_apps)
         init();configure({'VIRTUAL_THREADS':str(args.virtual).lower()}); identity=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
-        warm=k6(f'{identity}-{args.name}-warmup',args.rps,60);assert warm.wait()==0;wait_drain()
+        warm_prefix=f'{identity}-{args.name}-warmup';warm=k6(warm_prefix,args.rps,60)
+        resources.callback(cleanup_load,warm_prefix,warm)
+        if warm.wait()!=0:raise RuntimeError('JVM warmup load failed')
+        wait_drain()
         reports=[]
         manifest=dict(created_at=datetime.now(timezone.utc).isoformat(),commit=command(['git','rev-parse','HEAD']).strip(),
                       args=vars(args),warmup_seconds=60,image_ids=compose('images','--format','json'),
@@ -47,6 +60,7 @@ def main():
         for event in ['cpu','alloc','wall']:
             for run in range(1,args.runs+1):
                 reset();prefix=f'{identity}-{args.name}-{event}-r{run}'; load=k6(prefix+'-load',args.rps,args.duration+15)
+                resources.callback(cleanup_load,prefix+'-load',load)
                 time.sleep(5)
                 options=['-e',event,'-t','--dot','-d',str(args.duration),'-f',f'/results/{prefix}.html']
                 if event=='alloc':options+=['--total']
@@ -82,7 +96,6 @@ def main():
                 manifest['profiles']=[r['profile'] for r in reports];manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
                 print(f'{prefix}: {stats["relay_active_share"]}',flush=True)
         (RESULTS/f'{identity}-{args.name}-pinning.txt').write_text(compose('logs','--no-color','order-service'))
-        compose('stop','order-service','payment-service')
         (RESULTS/f'{identity}-{args.name}.profiles.json').write_text(json.dumps(reports,indent=2)+'\n')
         manifest['status']='complete';manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
 
