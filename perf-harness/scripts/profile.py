@@ -5,6 +5,12 @@ from datetime import datetime,timezone
 from pathlib import Path
 from benchmark import ROOT,RESULTS,awake_host,cleanup_apps,cleanup_load,command,compose,configure,health,init,k6,reset,valid_clock_window,wait_drain
 
+def close_manifest(manifest,path):
+    if manifest['status']=='running':
+        manifest['status']='failed'
+        manifest['failure']='Capture campaign exited before all required profiles were completed'
+        path.write_text(json.dumps(manifest,indent=2)+'\n')
+
 def analyze_collapsed(path):
     worker=collections.Counter(); totals=collections.Counter(); worker_stacks=collections.Counter()
     for line in path.read_text().splitlines():
@@ -50,12 +56,13 @@ def main():
                       script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),status='running',profiles=[])
         manifest_path=RESULTS/f'{identity}-{args.name}.profile-manifest.json'
         manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
+        resources.callback(close_manifest,manifest,manifest_path)
         for event in ['cpu','alloc','wall']:
             for run in range(1,args.runs+1):
                 reset();prefix=f'{identity}-{args.name}-{event}-r{run}'; load=k6(prefix+'-load',args.rps,args.duration+15)
                 resources.callback(cleanup_load,prefix+'-load',load)
                 time.sleep(5)
-                options=['-e',event,'-t','--dot','-d',str(args.duration),'-f',f'/results/{prefix}.html']
+                options=['-e',event,'-t','-d',str(args.duration),'-f',f'/results/{prefix}.html']
                 if event=='alloc':options+=['--total']
                 if event=='cpu':
                     compose('exec','-T','order-service','jcmd','1','JFR.start',f'name={args.name}{run}','settings=profile',
@@ -64,7 +71,7 @@ def main():
                 wall_start=time.time();monotonic_start=time.monotonic()
                 profile_log=compose('exec','-T','order-service','/opt/async-profiler/bin/asprof',*options,'1')
                 wall_duration=time.time()-wall_start;monotonic_duration=time.monotonic()-monotonic_start
-                dump_options=['dump','-t','--dot','-o','collapsed']+(['--total'] if event=='alloc' else [])
+                dump_options=['dump','-t','-o','collapsed']+(['--total'] if event=='alloc' else [])
                 compose('exec','-T','order-service','/opt/async-profiler/bin/asprof',*dump_options,
                         '-f',f'/results/{prefix}.collapsed','1')
                 if load.wait()!=0: raise RuntimeError('load process failed during profile')
@@ -87,6 +94,8 @@ def main():
                     with gzip.open(RESULTS/f'{prefix}.jfr.gz','wb') as out:out.write((RESULTS/f'{prefix}.jfr').read_bytes())
                     (RESULTS/f'{prefix}.jfr').unlink()
                 report=dict(profile=prefix,event=event,virtual=args.virtual,commit=command(['git','rev-parse','HEAD']).strip(),statistics=stats,profiler_output=profile_log)
+                if args.virtual:
+                    report['attribution_note']='async-profiler CPU/wall stacks may stop at virtual continuation barriers; relay shares only cover attributable stacks. JFR is used for pinning.'
                 report['wall_seconds']=wall_duration;report['monotonic_seconds']=monotonic_duration
                 if not valid_clock_window(wall_duration,monotonic_duration,args.duration):report['excluded_reason']='Invalid profiler clock window'
                 (RESULTS/f'{prefix}.profile.json').write_text(json.dumps(report,indent=2)+'\n');reports.append(report)
