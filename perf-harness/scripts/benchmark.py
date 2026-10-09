@@ -1,12 +1,33 @@
 #!/usr/bin/env python3
 """Real measurements only. No synthetic fallback and no overlapping perf suites."""
-import argparse, contextlib, csv, fcntl, hashlib, json, math, os, re, statistics, subprocess, time
+import argparse, contextlib, csv, fcntl, hashlib, json, math, os, re, shutil, statistics, subprocess, sys, time
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.request import urlopen
 ROOT=Path(__file__).resolve().parents[2]
 RESULTS=ROOT/'perf-harness/results'
 COMPOSE=['docker','compose','-p','rmk-perf','-f',str(ROOT/'demo-stand/docker-compose.yml'),'-f',str(ROOT/'perf-harness/compose.perf.yml')]
+
+@contextlib.contextmanager
+def awake_host():
+    assertion=None
+    if sys.platform=='darwin' and shutil.which('caffeinate'):
+        assertion=subprocess.Popen(['caffeinate','-i','-s','-w',str(os.getpid())])
+    try:yield
+    finally:
+        if assertion is not None:
+            assertion.terminate();assertion.wait(timeout=5)
+
+def valid_clock_window(wall,monotonic,requested,max_gap=0):
+    return wall>=requested and wall<=requested+60 and max(abs(wall-monotonic),max_gap)<1
+
+def cleanup_load(prefix,load):
+    if load.poll() is None:
+        subprocess.run(['docker','rm','-f','rmk-perf-load-'+prefix],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=30)
+        load.wait(timeout=30)
+
+def cleanup_apps():
+    subprocess.run(COMPOSE+['stop','order-service','payment-service'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=60)
 
 def command(args,**kw):
     result=subprocess.run(args,cwd=ROOT,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,**kw)
@@ -98,6 +119,7 @@ def db_snapshot():
 
 def k6(run_id,rps,duration,strict=False):
     return subprocess.Popen(['docker','run','--rm','--name','rmk-perf-load-'+run_id,'--network','rmk-perf_default','--cpus','2','--memory','1g',
+        '--user',f'{os.getuid()}:{os.getgid()}',
         '-e',f'RPS={rps}','-e',f'DURATION={duration}','-e',f'RUN_ID={run_id}','-e',f'STRICT={str(strict).lower()}',
         '-v',f'{ROOT}/perf-harness/k6:/scripts:ro','-v',f'{RESULTS}:/results','grafana/k6:1.3.0','run','/scripts/place-orders.js'],
         stdout=open(RESULTS/f'{run_id}.log','w'),stderr=subprocess.STDOUT,cwd=ROOT)
@@ -126,7 +148,7 @@ def configure(config):
 def run_case(prefix,rps,seconds,relay,soak=False,strict=False):
     before_o=metrics(18091); before_p=metrics(18092); before_db=db_snapshot()
     container_ids=compose('ps','-q','order-service','payment-service','order-postgres','payment-postgres','kafka','toxiproxy').split()
-    start=time.time(); process=k6(prefix,rps,seconds,strict)
+    start=time.time(); monotonic_start=time.monotonic(); max_clock_gap=0;process=k6(prefix,rps,seconds,strict)
     try:
         samples=[]; cpu=[]; previous_p=before_p
         while process.poll() is None:
@@ -134,13 +156,15 @@ def run_case(prefix,rps,seconds,relay,soak=False,strict=False):
             sample=dict(elapsed=time.time()-start,pending=total(m,'outbox_messages_pending'),in_flight=total(m,'outbox_messages_in_flight'),
                         dead=total(m,'outbox_messages_dead'),processed=total(p,'demo_e2e_latency_seconds_count'),
                         hikari_active=total(m,'hikaricp_connections_active'))
+            sample['monotonic_elapsed']=time.monotonic()-monotonic_start
+            max_clock_gap=max(max_clock_gap,abs(sample['elapsed']-sample['monotonic_elapsed']))
             sample['e2e_window_p99_ms']=quantile(previous_p,p,'demo_e2e_latency_seconds_bucket',.99);previous_p=p
             sample.update(db_snapshot())
             samples.append(sample)
             stats=command(['docker','stats','--no-stream','--format','{{json .}}']+container_ids)
             cpu.extend([dict(elapsed=sample['elapsed'],**json.loads(line)) for line in stats.splitlines() if line.strip()])
             time.sleep(8 if not soak else 30)
-        end=time.time(); exit_code=process.wait()
+        end=time.time(); monotonic_duration=time.monotonic()-monotonic_start;exit_code=process.wait()
         if not (RESULTS/f'{prefix}.json').exists(): raise RuntimeError(f'k6 failed: {prefix}; exit={exit_code}')
         measured_o=metrics(18091); measured_p=metrics(18092); measured_db=db_snapshot()
         pending=wait_drain(relay=relay)
@@ -154,6 +178,7 @@ def run_case(prefix,rps,seconds,relay,soak=False,strict=False):
                    e2e_p95_ms=quantile(before_p,after_p,'demo_e2e_latency_seconds_bucket',.95),
                    e2e_p99_ms=quantile(before_p,after_p,'demo_e2e_latency_seconds_bucket',.99),
                    requested_rps=rps,duration_seconds=seconds,wall_seconds=end-start,committed=committed,http_failed=failed,
+                   monotonic_seconds=monotonic_duration,clock_max_gap_seconds=max(max_clock_gap,abs(end-start-monotonic_duration)),
                    http_error_rate=failed/(failed+committed) if committed+failed else 1,dropped_iterations=counters('dropped_iterations'),
                    committed_rps=committed/seconds,
                    relay_sent_rps=(total(measured_o,'outbox_relay_published_total',result='sent')-total(before_o,'outbox_relay_published_total',result='sent'))/seconds,
@@ -168,6 +193,8 @@ def run_case(prefix,rps,seconds,relay,soak=False,strict=False):
         stats['cpu_percent_mean']={name:statistics.mean(float(s['CPUPerc'].rstrip('%')) for s in cpu if s.get('Name')==name) for name in {s.get('Name') for s in cpu}}
         doc=dict(run_id=prefix,started_at=datetime.fromtimestamp(start,timezone.utc).isoformat(),finished_at=datetime.fromtimestamp(end,timezone.utc).isoformat(),
                  statistics=stats,samples=samples,cpu_samples=cpu)
+        if not valid_clock_window(end-start,monotonic_duration,seconds,max_clock_gap):
+            doc['excluded_reason']='System sleep, clock discontinuity, or load window overran its fixed duration'
         (RESULTS/f'{prefix}.measurement.json').write_text(json.dumps(doc,indent=2)+'\n')
         print(f'{prefix}: HTTP p99={stats["http_p99_ms"]:.2f}ms e2e p99={stats["e2e_p99_ms"]}ms rps={stats["committed_rps"]:.1f} pending_peak={stats["max_pending"]}',flush=True)
         return doc
@@ -196,13 +223,21 @@ def main():
     p=argparse.ArgumentParser(); p.add_argument('--suite',choices=['baseline','overhead','saturation','matrix','virtual','soak','ci','validation'],required=True)
     p.add_argument('--duration',type=int); p.add_argument('--warmup',type=int,default=60); p.add_argument('--runs',type=int,default=3)
     p.add_argument('--name',default=''); p.add_argument('--chaos-delay',default='0ms'); p.add_argument('--skip-build',action='store_true')
+    p.add_argument('--only-rps',help='Resume a baseline configuration, e.g. 300,500,1000; complete repetitions remain mandatory')
     args=p.parse_args(); seconds=args.duration or (7200 if args.suite=='soak' else 60 if args.suite=='ci' else 180)
+    selected=suite_configs(args.suite)
+    if args.only_rps:
+        if args.suite!='baseline':p.error('--only-rps is only for baseline')
+        rates={int(rate) for rate in args.only_rps.split(',')}
+        if not rates or not rates<={100,300,500,1000}:p.error('unsupported baseline rate')
+        selected=[c for c in selected if c[2] in rates]
     if not re.fullmatch(r'[A-Za-z0-9_-]*',args.name): p.error('name must be an ASCII slug')
     if min(seconds,args.warmup,args.runs)<1: p.error('durations and count must be positive')
     if args.suite not in ['ci','validation'] and (args.runs<3 or args.warmup<60 or seconds<180): p.error('real performance suites need 3 runs, 60s warmup and at least 180s measurement')
     RESULTS.mkdir(parents=True,exist_ok=True)
-    with open(RESULTS/'.perf.lock','w') as lock:
+    with awake_host(), open(RESULTS/'.perf.lock','w') as lock, contextlib.ExitStack() as resources:
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        resources.callback(cleanup_apps)
         if not args.skip_build:
             command(['./gradlew',':demo-stand:order-service:bootJar',':demo-stand:payment-service:bootJar'])
             compose('build','order-service','payment-service')
@@ -217,11 +252,13 @@ def main():
         manifest['status']='running'; manifest['measurements']=[]
         manifest_path=RESULTS/f'{identity}-{args.suite}.manifest.json'
         manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
-        for label,config,rps in suite_configs(args.suite):
+        for label,config,rps in selected:
             config['CHAOS_DELAY']=args.chaos_delay; configure(config)
             relay=config.get('RELAY_ENABLED','true')=='true'
             prefix=f'{identity}-{args.name+"-" if args.name else ""}{label}'
-            warm=k6(prefix+'-warmup',rps,args.warmup); warm.wait()
+            warm_wall=time.time();warm_monotonic=time.monotonic()
+            warm=k6(prefix+'-warmup',rps,args.warmup);resources.callback(cleanup_load,prefix+'-warmup',warm)
+            if warm.wait()!=0 or not valid_clock_window(time.time()-warm_wall,time.monotonic()-warm_monotonic,args.warmup):raise RuntimeError('Invalid JVM warmup window')
             wait_drain(relay=relay)
             for run in range(1,args.runs+1):
                 if not relay:
@@ -232,9 +269,12 @@ def main():
                 doc['config']=config.copy(); doc['suite']=args.suite;doc['campaign']=args.name; doc['validation_only']=args.suite=='validation'; documents.append(doc)
                 manifest['measurements']=[d['run_id'] for d in documents];manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
                 (RESULTS/f'{doc["run_id"]}.measurement.json').write_text(json.dumps(doc,indent=2)+'\n')
+                if doc.get('excluded_reason'):
+                    manifest['status']='invalid-clock-window';manifest['invalid_measurement']=doc['run_id']
+                    manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
+                    raise RuntimeError('Invalid measurement window: '+doc['run_id'])
         manifest['measurements']=[d['run_id'] for d in documents];manifest['status']='complete'
         (RESULTS/f'{identity}-{args.suite}.manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
-        compose('stop','order-service','payment-service')
         command(['python3',str(ROOT/'perf-harness/scripts/summarize.py')])
 
 if __name__=='__main__': main()

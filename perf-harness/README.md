@@ -28,6 +28,9 @@ python3 perf-harness/scripts/run-live-restart.py
 Одновременно допустима только одна perf-команда: файловая блокировка останавливает второй запуск.
 Во время измерений не следует выполнять другие нагрузочные тесты или сборки на том же Docker host.
 Время прогрева и короткие проверки инфраструктуры не попадают в таблицу результатов.
+На macOS команда временно удерживает assertion `caffeinate -i -s`; по завершении она снимается.
+Сон/скачок часов ≥1 s и выход за длительность k6 более чем на 60 s исключают окно. После прерывания
+можно повторить целые недостающие конфигурации: `run-baseline.sh --name first --only-rps 300,500,1000 --skip-build`.
 
 HTTP p99 берётся из настоящего open-model k6 Trend, без усреднения отдельных перцентилей.
 E2e — разность cumulative histogram buckets до нагрузки и после дренажа, с линейной интерполяцией
@@ -82,3 +85,21 @@ perf-harness/.run/plot-env/bin/python perf-harness/scripts/plot-results.py all
 
 SVG и PNG сохраняются в `docs/perf/figures/`. Неполная матрица или укороченный soak останавливают
 построение соответствующего графика; отсутствующие данные не заменяются искусственными точками.
+
+Длительный H5 также можно выполнить workflow `autovacuum-soak.yml`: три **отдельные VM Ubuntu 24.04**
+по 7200 s каждая, с теми же лимитами контейнеров, 60 s прогрева и 100 rps. Параллельные прогоны не делят
+Docker host ([GitHub-hosted runners](https://docs.github.com/en/actions/reference/runners/github-hosted-runners)).
+Это отдельная группа `gha-h5`: её CPU и latency не смешиваются с локальной macOS/ARM64
+базовой линией. Каждый manifest фиксирует архитектуру, kernel, image IDs и commit. Итоговое наблюдение
+H5 принимается только при наличии всех трёх полных реплик с одинаковыми commit/config/architecture:
+
+```bash
+gh run download RUN_ID --dir perf-harness/.run/h5-artifacts
+python3 perf-harness/scripts/collect-h5.py perf-harness/.run/h5-artifacts
+python3 perf-harness/scripts/summarize.py
+perf-harness/.run/plot-env/bin/python perf-harness/scripts/plot-results.py soak
+```
+
+Workflow запускается при push файла кампании или самого workflow в `stage-2`. Публикация в origin
+и запуск GitHub-кампании требуют разрешённой работы с удалённым репозиторием. Локальный `run-soak.sh`
+по-прежнему последовательно выполняет все три двухчасовых прогона на одном стенде.

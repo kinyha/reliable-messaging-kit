@@ -2,7 +2,10 @@
 import argparse,json,sys
 from pathlib import Path
 p=argparse.ArgumentParser();p.add_argument('measurement',type=Path);p.add_argument('--thresholds',type=Path,default=Path(__file__).resolve().parents[1]/'k6/thresholds.json');args=p.parse_args()
-stats=json.loads(args.measurement.read_text())['statistics'];limits=json.loads(args.thresholds.read_text())
+document=json.loads(args.measurement.read_text())
+if document.get('excluded_reason'):
+ print('FAIL: invalid measurement window: '+document['excluded_reason']);sys.exit(1)
+stats=document['statistics'];limits=json.loads(args.thresholds.read_text())
 checks={
  'HTTP p99':(stats.get('http_p99_ms'),limits['http_p99_ms']),
  'e2e p99':(stats.get('e2e_p99_ms'),limits['e2e_p99_ms']),

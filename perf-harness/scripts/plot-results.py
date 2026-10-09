@@ -12,7 +12,7 @@ plt.rcParams.update({'font.family':'DejaVu Sans','font.size':10,'axes.spines.top
 
 def measurements(suite):
     docs=[json.loads(p.read_text()) for p in (ROOT/'perf-harness/results').glob('*.measurement.json')]
-    return [d for d in docs if d.get('suite')==suite and not d.get('validation_only')]
+    return [d for d in docs if d.get('suite')==suite and not d.get('validation_only') and not d.get('excluded_reason')]
 
 
 def interval(docs,key):

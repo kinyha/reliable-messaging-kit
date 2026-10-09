@@ -1,0 +1,42 @@
+name: Three isolated autovacuum observations
+on:
+  push:
+    branches: [stage-2]
+    paths:
+      - .github/workflows/autovacuum-soak.yml
+      - perf-harness/soak-campaign.json
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: autovacuum-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  h5:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        repeat: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Fixed warmup and a full two-hour observation
+        run: python3 perf-harness/scripts/h5-replica.py --repeat ${{ matrix.repeat }}
+      - name: Upload each independent replica
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: h5-${{ github.run_id }}-${{ matrix.repeat }}
+          retention-days: 7
+          if-no-files-found: error
+          path: perf-harness/results/
+      - name: Stop only the replica's perf project
+        if: always()
+        run: docker compose -p rmk-perf -f demo-stand/docker-compose.yml -f perf-harness/compose.perf.yml down --volumes

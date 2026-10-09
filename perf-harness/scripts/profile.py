@@ -3,15 +3,7 @@
 import argparse, collections, contextlib, fcntl, gzip, hashlib, json, os, re, shutil, subprocess, time
 from datetime import datetime,timezone
 from pathlib import Path
-from benchmark import ROOT,RESULTS,COMPOSE,command,compose,configure,health,init,k6,reset,wait_drain
-
-def cleanup_load(prefix,load):
-    if load.poll() is None:
-        subprocess.run(['docker','rm','-f','rmk-perf-load-'+prefix],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=30)
-        load.wait(timeout=30)
-
-def cleanup_apps():
-    subprocess.run(COMPOSE+['stop','order-service','payment-service'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=60)
+from benchmark import ROOT,RESULTS,awake_host,cleanup_apps,cleanup_load,command,compose,configure,health,init,k6,reset,valid_clock_window,wait_drain
 
 def analyze_collapsed(path):
     worker=collections.Counter(); totals=collections.Counter(); worker_stacks=collections.Counter()
@@ -43,13 +35,14 @@ def main():
     p.add_argument('--runs',type=int,default=3);p.add_argument('--virtual',action='store_true');p.add_argument('--name',default='profile'); args=p.parse_args()
     if args.duration<120 or args.runs<3:p.error('profiling requires three captures of at least 120 seconds')
     RESULTS.mkdir(parents=True,exist_ok=True)
-    with open(RESULTS/'.perf.lock','w') as lock, contextlib.ExitStack() as resources:
+    with awake_host(),open(RESULTS/'.perf.lock','w') as lock, contextlib.ExitStack() as resources:
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         resources.callback(cleanup_apps)
         init();configure({'VIRTUAL_THREADS':str(args.virtual).lower()}); identity=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+        warm_wall=time.time();warm_monotonic=time.monotonic()
         warm_prefix=f'{identity}-{args.name}-warmup';warm=k6(warm_prefix,args.rps,60)
         resources.callback(cleanup_load,warm_prefix,warm)
-        if warm.wait()!=0:raise RuntimeError('JVM warmup load failed')
+        if warm.wait()!=0 or not valid_clock_window(time.time()-warm_wall,time.monotonic()-warm_monotonic,60):raise RuntimeError('Invalid JVM warmup window')
         wait_drain()
         reports=[]
         manifest=dict(created_at=datetime.now(timezone.utc).isoformat(),commit=command(['git','rev-parse','HEAD']).strip(),
@@ -68,7 +61,9 @@ def main():
                     compose('exec','-T','order-service','jcmd','1','JFR.start',f'name={args.name}{run}','settings=profile',
                         f'duration={args.duration}s',f'filename=/results/{prefix}.jfr','jdk.VirtualThreadPinned#enabled=true',
                         'jdk.VirtualThreadPinned#threshold=1ms','jdk.JavaMonitorEnter#threshold=1ms','jdk.ThreadPark#threshold=1ms')
+                wall_start=time.time();monotonic_start=time.monotonic()
                 profile_log=compose('exec','-T','order-service','/opt/async-profiler/bin/asprof',*options,'1')
+                wall_duration=time.time()-wall_start;monotonic_duration=time.monotonic()-monotonic_start
                 dump_options=['dump','-t','--dot','-o','collapsed']+(['--total'] if event=='alloc' else [])
                 compose('exec','-T','order-service','/opt/async-profiler/bin/asprof',*dump_options,
                         '-f',f'/results/{prefix}.collapsed','1')
@@ -92,7 +87,10 @@ def main():
                     with gzip.open(RESULTS/f'{prefix}.jfr.gz','wb') as out:out.write((RESULTS/f'{prefix}.jfr').read_bytes())
                     (RESULTS/f'{prefix}.jfr').unlink()
                 report=dict(profile=prefix,event=event,virtual=args.virtual,commit=command(['git','rev-parse','HEAD']).strip(),statistics=stats,profiler_output=profile_log)
+                report['wall_seconds']=wall_duration;report['monotonic_seconds']=monotonic_duration
+                if not valid_clock_window(wall_duration,monotonic_duration,args.duration):report['excluded_reason']='Invalid profiler clock window'
                 (RESULTS/f'{prefix}.profile.json').write_text(json.dumps(report,indent=2)+'\n');reports.append(report)
+                if report.get('excluded_reason'):raise RuntimeError('System sleep or clock discontinuity during profiling')
                 manifest['profiles']=[r['profile'] for r in reports];manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
                 print(f'{prefix}: {stats["relay_active_share"]}',flush=True)
         (RESULTS/f'{identity}-{args.name}-pinning.txt').write_text(compose('logs','--no-color','order-service'))
