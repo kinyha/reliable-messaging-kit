@@ -93,7 +93,7 @@ def main():
                     stats['jfr_wait_top_frames']=dict(frames.most_common(30))
                     with gzip.open(RESULTS/f'{prefix}.jfr.gz','wb') as out:out.write((RESULTS/f'{prefix}.jfr').read_bytes())
                     (RESULTS/f'{prefix}.jfr').unlink()
-                report=dict(profile=prefix,event=event,virtual=args.virtual,commit=command(['git','rev-parse','HEAD']).strip(),statistics=stats,profiler_output=profile_log)
+                report=dict(profile=prefix,event=event,virtual=args.virtual,commit=manifest['commit'],statistics=stats,profiler_output=profile_log)
                 if args.virtual:
                     report['attribution_note']='async-profiler CPU/wall stacks may stop at virtual continuation barriers; relay shares only cover attributable stacks. JFR is used for pinning.'
                 report['wall_seconds']=wall_duration;report['monotonic_seconds']=monotonic_duration

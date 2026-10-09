@@ -1,0 +1,39 @@
+name: Complete baseline repeat overhead and capacity on one VM
+on:
+  push:
+    branches: [stage-2]
+    paths:
+      - .github/workflows/stage-2-baseline.yml
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: First full baseline
+        run: perf-harness/scripts/run-baseline.sh --name gha-baseline-first
+      - name: Repeat the full baseline on the same VM and images
+        run: perf-harness/scripts/run-baseline.sh --name gha-baseline-repeat --skip-build
+      - name: Background relay HTTP overhead
+        run: python3 perf-harness/scripts/benchmark.py --suite overhead --name gha-capacity --skip-build
+      - name: Saturation ladder
+        run: python3 perf-harness/scripts/benchmark.py --suite saturation --name gha-capacity --skip-build
+      - name: Upload complete and partial raw evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: baseline-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: error
+          path: perf-harness/results/
+      - name: Stop this VM's isolated project
+        if: always()
+        run: docker compose -p rmk-perf -f demo-stand/docker-compose.yml -f perf-harness/compose.perf.yml down --volumes
