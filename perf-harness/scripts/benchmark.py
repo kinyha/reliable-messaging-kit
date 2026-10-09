@@ -125,7 +125,7 @@ def configure(config):
 
 def run_case(prefix,rps,seconds,relay,soak=False,strict=False):
     before_o=metrics(18091); before_p=metrics(18092); before_db=db_snapshot()
-    container_ids=compose('ps','-q','order-service','payment-service','order-postgres','payment-postgres','kafka').split()
+    container_ids=compose('ps','-q','order-service','payment-service','order-postgres','payment-postgres','kafka','toxiproxy').split()
     start=time.time(); process=k6(prefix,rps,seconds,strict)
     try:
         samples=[]; cpu=[]; previous_p=before_p

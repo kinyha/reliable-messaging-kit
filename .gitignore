@@ -24,4 +24,6 @@ __pycache__/
 perf-harness/results/.perf.lock
 perf-harness/results/*-warmup.*
 perf-harness/results/*.log
+perf-harness/results/**/*.log
+perf-harness/results/**/*-warmup.*
 perf-harness/.run/

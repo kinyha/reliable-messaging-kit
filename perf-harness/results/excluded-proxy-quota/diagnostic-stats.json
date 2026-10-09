@@ -1,0 +1,68 @@
+[
+  {
+    "BlockIO": "754kB / 206MB",
+    "CPUPerc": "82.40%",
+    "Container": "22cc4108df21242c0003db1fa207c2203af5abcaed1a380e633cfb4cb0ec38fe",
+    "ID": "22cc4108df21",
+    "MemPerc": "45.88%",
+    "MemUsage": "704.7MiB / 1.5GiB",
+    "Name": "rmk-perf-kafka-1",
+    "NetIO": "140MB / 140MB",
+    "PIDs": "128"
+  },
+  {
+    "BlockIO": "647kB / 3.93GB",
+    "CPUPerc": "1.38%",
+    "Container": "c2995ac050b4e8467573253404775692bc52dbb371fa9f6d5cffdd6b374ee802",
+    "ID": "c2995ac050b4",
+    "MemPerc": "24.13%",
+    "MemUsage": "123.5MiB / 512MiB",
+    "Name": "rmk-perf-order-postgres-1",
+    "NetIO": "276MB / 270MB",
+    "PIDs": "16"
+  },
+  {
+    "BlockIO": "23.4MB / 188kB",
+    "CPUPerc": "0.22%",
+    "Container": "8a2fa7dfae7be6ff176531a865f155c2257b903633cd7272af405260828576ca",
+    "ID": "8a2fa7dfae7b",
+    "MemPerc": "41.13%",
+    "MemUsage": "421.2MiB / 1GiB",
+    "Name": "rmk-perf-order-service-1",
+    "NetIO": "118MB / 156MB",
+    "PIDs": "245"
+  },
+  {
+    "BlockIO": "479kB / 6.14GB",
+    "CPUPerc": "14.94%",
+    "Container": "70111612f4556a62c870c4f5ad4195968a706b64e172feea2da2ded4168cdab3",
+    "ID": "70111612f455",
+    "MemPerc": "15.80%",
+    "MemUsage": "80.89MiB / 512MiB",
+    "Name": "rmk-perf-payment-postgres-1",
+    "NetIO": "200MB / 154MB",
+    "PIDs": "18"
+  },
+  {
+    "BlockIO": "10.7MB / 168kB",
+    "CPUPerc": "9.93%",
+    "Container": "4460b3d2d7ee84698c987ffd7d3666c565466e04c080745086fc1e09a9077b21",
+    "ID": "4460b3d2d7ee",
+    "MemPerc": "33.21%",
+    "MemUsage": "340.1MiB / 1GiB",
+    "Name": "rmk-perf-payment-service-1",
+    "NetIO": "86.3MB / 60.9MB",
+    "PIDs": "54"
+  },
+  {
+    "BlockIO": "0B / 0B",
+    "CPUPerc": "25.02%",
+    "Container": "b76d8acf71497990b8bf1c549d51add56f43677d749544590c1dc5322b5fbebf",
+    "ID": "b76d8acf7149",
+    "MemPerc": "23.38%",
+    "MemUsage": "29.92MiB / 128MiB",
+    "Name": "rmk-perf-toxiproxy-1",
+    "NetIO": "1.21GB / 1.21GB",
+    "PIDs": "28"
+  }
+]
