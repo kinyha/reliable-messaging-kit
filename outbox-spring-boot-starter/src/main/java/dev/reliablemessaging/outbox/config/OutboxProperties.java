@@ -15,7 +15,14 @@ public record OutboxProperties(
             @DefaultValue("128") int batchSize, @DefaultValue("200ms") Duration pollInterval,
             @DefaultValue("30s") Duration leaseDuration, @DefaultValue("10s") Duration sendTimeout,
             @DefaultValue("10s") Duration reaperInterval, @DefaultValue("12") int maxAttempts,
-            @DefaultValue("1s") Duration backoffBase, @DefaultValue("5m") Duration backoffMax) {
+            @DefaultValue("1s") Duration backoffBase, @DefaultValue("5m") Duration backoffMax,
+            @DefaultValue("false") boolean virtualThreads) {
+        /** Preserve the stage 1 constructor for programmatic configuration. */
+        public Relay(boolean enabled,int workers,int batchSize,Duration pollInterval,Duration leaseDuration,
+                     Duration sendTimeout,Duration reaperInterval,int maxAttempts,Duration backoffBase,Duration backoffMax) {
+            this(enabled,workers,batchSize,pollInterval,leaseDuration,sendTimeout,reaperInterval,maxAttempts,backoffBase,backoffMax,false);
+        }
+        @org.springframework.boot.context.properties.bind.ConstructorBinding
         public Relay {
             positive(pollInterval, "relay.poll-interval"); positive(leaseDuration, "relay.lease-duration");
             positive(sendTimeout, "relay.send-timeout"); positive(reaperInterval, "relay.reaper-interval");

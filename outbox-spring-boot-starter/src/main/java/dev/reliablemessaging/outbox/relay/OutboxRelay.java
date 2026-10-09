@@ -26,10 +26,13 @@ public final class OutboxRelay implements SmartLifecycle {
     @Override public synchronized void start() {
         if(running) return;
         running=true;
-        executor=Executors.newFixedThreadPool(settings.workers(),namedFactory());
+        executor=Executors.newFixedThreadPool(settings.workers(),namedFactory(settings.virtualThreads()));
+        LoggerFactory.getLogger(OutboxRelay.class).info("Starting relay: workers={}, virtualThreads={}, batchSize={}, pollInterval={}",
+                settings.workers(),settings.virtualThreads(),settings.batchSize(),settings.pollInterval());
         for(int i=0;i<settings.workers();i++) executor.submit(this::work);
     }
-    private static ThreadFactory namedFactory() {
+    static ThreadFactory namedFactory(boolean virtual) {
+        if(virtual) return Thread.ofVirtual().name("outbox-relay-",1).factory();
         var number=new AtomicInteger();
         return action -> new Thread(action,"outbox-relay-" + number.incrementAndGet());
     }
