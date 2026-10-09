@@ -1,6 +1,10 @@
 name: Isolated H2 and H3 experiments
 on:
-  workflow_dispatch:
+  push:
+    branches: [stage-2]
+    paths:
+      - .github/workflows/stage-2-experiments.yml
+      - perf-harness/experiment-campaign.json
 permissions:
   contents: read
 concurrency:
