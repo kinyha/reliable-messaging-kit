@@ -5,7 +5,7 @@ ROOT=Path(__file__).resolve().parents[2]
 groups=collections.defaultdict(list)
 for file in sorted((ROOT/'perf-harness/results').glob('*.measurement.json')):
     doc=json.loads(file.read_text())
-    if doc.get('validation_only') or 'suite' not in doc: continue
+    if doc.get('validation_only') or doc.get('excluded_reason') or 'suite' not in doc: continue
     key=(doc['suite']+' '+doc.get('campaign',''),json.dumps(doc['config'],sort_keys=True),doc['statistics']['requested_rps'])
     groups[key].append(doc)
 lines=['# Измерения этапа 2','','Медиана и min/max по настоящим прогонам; миллисекунды. Пустой e2e — нет измеренного эффекта либо квантиль попал в +Inf bucket.','',
