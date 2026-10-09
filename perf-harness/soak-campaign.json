@@ -3,6 +3,7 @@
   "seconds_per_replica": 7200,
   "warmup_seconds": 60,
   "requested_rps": 100,
+  "revision": "k6-output-directory-uid",
   "runner": "ubuntu-24.04",
   "purpose": "Three isolated H5 observations; do not combine their CPU or latency with macOS baseline comparisons"
 }

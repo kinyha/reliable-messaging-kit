@@ -119,6 +119,7 @@ def db_snapshot():
 
 def k6(run_id,rps,duration,strict=False):
     return subprocess.Popen(['docker','run','--rm','--name','rmk-perf-load-'+run_id,'--network','rmk-perf_default','--cpus','2','--memory','1g',
+        '--user',f'{os.getuid()}:{os.getgid()}',
         '-e',f'RPS={rps}','-e',f'DURATION={duration}','-e',f'RUN_ID={run_id}','-e',f'STRICT={str(strict).lower()}',
         '-v',f'{ROOT}/perf-harness/k6:/scripts:ro','-v',f'{RESULTS}:/results','grafana/k6:1.3.0','run','/scripts/place-orders.js'],
         stdout=open(RESULTS/f'{run_id}.log','w'),stderr=subprocess.STDOUT,cwd=ROOT)

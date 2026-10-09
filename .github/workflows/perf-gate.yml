@@ -1,5 +1,14 @@
 name: Performance gate
 on:
+  push:
+    branches: [stage-2]
+    paths:
+      - .github/workflows/perf-gate.yml
+      - outbox-spring-boot-starter/src/**
+      - demo-stand/**
+      - perf-harness/scripts/**
+      - perf-harness/k6/**
+      - perf-harness/compose.perf.yml
   pull_request:
     branches: [main, stage-2]
   workflow_dispatch:
@@ -22,6 +31,8 @@ jobs:
           java-version: '21'
       - name: Build and real PostgreSQL/Kafka/Toxiproxy tests
         run: ./gradlew clean build --no-build-cache
+      - name: Histogram, clock and H5 artifact acceptance checks
+        run: python3 -m unittest discover -s perf-harness/scripts/tests
       - name: Short open-model load and p99/identity checks
         run: perf-harness/scripts/run-ci.sh
       - name: Upload raw measurements and reports
