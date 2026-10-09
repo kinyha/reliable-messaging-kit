@@ -1,0 +1,8 @@
+.git
+.gradle
+private
+**/.run
+perf-harness/results
+**/build/classes
+**/build/reports
+**/build/test-results

@@ -1,0 +1,102 @@
+# Invoke with the demo compose as the first file and -p rmk-perf.
+services:
+  order-postgres:
+    cpus: 1
+    mem_limit: 512m
+    ports: !override ["15433:5432"]
+    command: ["postgres", "-c", "shared_preload_libraries=pg_stat_statements", "-c", "track_io_timing=on"]
+  payment-postgres:
+    cpus: 1
+    mem_limit: 512m
+    ports: !override ["15434:5432"]
+  kafka:
+    cpus: 2
+    mem_limit: 1536m
+    ports: !override ["19092:9092"]
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:29092 --list"]
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: INTERNAL://:29092,EXTERNAL://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://toxiproxy:29092,EXTERNAL://localhost:19092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_HEAP_OPTS: -Xms512m -Xmx768m
+  toxiproxy:
+    image: ghcr.io/shopify/toxiproxy:2.12.0
+    cpus: 0.25
+    mem_limit: 128m
+    ports: ["18474:8474"]
+    command: ["-host=0.0.0.0", "-config=/config/proxies.json"]
+    volumes:
+      - ../perf-harness/toxiproxy/proxies.json:/config/proxies.json:ro
+  order-service:
+    build:
+      context: ..
+      dockerfile: demo-stand/order-service/Dockerfile
+    image: rmk-order:stage-2
+    cpus: 2
+    mem_limit: 1024m
+    ports: ["18081:8081"]
+    volumes:
+      - ../perf-harness/results:/results
+    environment:
+      JAVA_TOOL_OPTIONS: -Xms256m -Xmx512m -Djdk.tracePinnedThreads=full
+      ORDER_DB_URL: jdbc:postgresql://toxiproxy:15432/orders?socketTimeout=15&connectTimeout=5
+      KAFKA_BOOTSTRAP_SERVERS: toxiproxy:29092
+      SPRING_APPLICATION_JSON: >-
+        {"outbox.relay.enabled":${PERF_RELAY_ENABLED:-true},
+         "outbox.relay.virtual-threads":${PERF_VIRTUAL_THREADS:-false},
+         "outbox.relay.batch-size":${PERF_BATCH_SIZE:-128},
+         "outbox.relay.poll-interval":"${PERF_POLL_INTERVAL:-200ms}",
+         "outbox.relay.workers":${PERF_WORKERS:-2},
+         "spring.datasource.hikari.maximum-pool-size":${PERF_POOL_SIZE:-10},
+         "outbox.cleanup.retention":"${PERF_RETENTION:-7d}",
+         "outbox.cleanup.interval":"${PERF_CLEANUP_INTERVAL:-1m}",
+         "demo.chaos.publish-delay":"${PERF_CHAOS_DELAY:-0ms}",
+         "management.tracing.enabled":false,
+         "spring.kafka.listener.observation-enabled":false,
+         "spring.kafka.template.observation-enabled":false,
+         "management.metrics.distribution.percentiles-histogram.http.server.requests":true}
+    depends_on:
+      order-postgres: {condition: service_healthy}
+      kafka: {condition: service_healthy}
+      toxiproxy: {condition: service_started}
+  payment-service:
+    build:
+      context: ..
+      dockerfile: demo-stand/payment-service/Dockerfile
+    image: rmk-payment:stage-2
+    cpus: 2
+    mem_limit: 1024m
+    ports: ["18082:8082"]
+    environment:
+      JAVA_TOOL_OPTIONS: -Xms256m -Xmx512m
+      PAYMENT_DB_URL: jdbc:postgresql://toxiproxy:15433/payments?socketTimeout=15&connectTimeout=5
+      KAFKA_BOOTSTRAP_SERVERS: toxiproxy:29092
+      SPRING_APPLICATION_JSON: >-
+        {"management.tracing.enabled":false,"spring.kafka.listener.observation-enabled":false,
+         "spring.kafka.template.observation-enabled":false}
+    depends_on:
+      payment-postgres: {condition: service_healthy}
+      kafka: {condition: service_healthy}
+      toxiproxy: {condition: service_started}
+  prometheus:
+    cpus: 0.25
+    mem_limit: 256m
+    ports: !override ["19090:9090"]
+    volumes: !override
+      - ../perf-harness/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+  grafana:
+    profiles: ["ui"]
+    ports: !override ["13000:3000"]
+  jaeger:
+    profiles: ["ui"]
+    ports: !override ["26686:16686", "24317:4317", "24318:4318"]
