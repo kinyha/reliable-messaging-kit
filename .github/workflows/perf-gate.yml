@@ -1,0 +1,39 @@
+name: Performance gate
+on:
+  pull_request:
+    branches: [main, stage-2]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: perf-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  perf-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Build and real PostgreSQL/Kafka/Toxiproxy tests
+        run: ./gradlew clean build --no-build-cache
+      - name: Short open-model load and p99/identity checks
+        run: perf-harness/scripts/run-ci.sh
+      - name: Upload raw measurements and reports
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: perf-gate-${{ github.run_id }}
+          if-no-files-found: error
+          path: |
+            perf-harness/results/
+            docs/perf/measurements.md
+            **/build/reports/tests/test/
+      - name: Stop only the CI perf project
+        if: always()
+        run: docker compose -p rmk-perf -f demo-stand/docker-compose.yml -f perf-harness/compose.perf.yml down --volumes
