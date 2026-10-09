@@ -18,6 +18,8 @@ import java.time.Duration;
 import java.util.UUID;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
+// ЧТО ПРОВЕРЯЕМ: аннотацию @IdempotentConsumer на настоящем @KafkaListener с настоящей Kafka.
+// Это ровно то, что пишет пользователь стартера на стороне получателя.
 @IntegrationTest
 @Import(IdempotentConsumerIT.Listeners.class)
 @TestPropertySource(properties={"outbox.relay.enabled=false","spring.kafka.consumer.auto-offset-reset=earliest",
@@ -28,6 +30,8 @@ class IdempotentConsumerIT {
     @Autowired JdbcTemplate jdbc;
     @Autowired KafkaTemplate<Object,Object> kafka;
     @Autowired MeterRegistry registry;
+    // Сценарий: одно и то же сообщение (одинаковый rm-message-id) отправляем в топик 3 раза. Это имитация повторной доставки.
+    // Ожидаем: эффект в базе один, метрика inbox.messages показывает processed = 1 и duplicate = 2.
     @Test void realKafkaRedeliveryAppliesOnceAndCountsTwoDuplicates() throws Exception {
         var id=UUID.randomUUID();
         for(int i=0;i<3;i++) {
@@ -48,6 +52,9 @@ class IdempotentConsumerIT {
         @Bean MeterRegistry registry() { return new SimpleMeterRegistry(); }
         @Bean Listener listener(JdbcTemplate jdbc) { return new Listener(jdbc); }
     }
+    // Слушатель написан как в приложении: аннотация, обычный @KafkaListener и параметр MessageMeta.
+    // MessageMeta стартер собирает из заголовков записи (id, агрегат) и координат Kafka (топик, партиция, оффсет).
+    // Аспект сначала пишет message_id в inbox. Если такой id там уже был, метод не вызывается вовсе.
     public static class Listener {
         private final JdbcTemplate jdbc;
         public Listener(JdbcTemplate jdbc) { this.jdbc=jdbc; }

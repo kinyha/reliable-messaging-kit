@@ -7,7 +7,10 @@ import java.util.LinkedHashMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+// ЧТО ПРОВЕРЯЕМ: объект события OutboxMessage. Юнит-тесты без базы.
 class OutboxMessageTest {
+    // Ключ партиции Kafka всегда равен id агрегата. Вызывающий код не может задать другой,
+    // поэтому все события одного заказа попадут в одну партицию.
     @Test
     void usesAggregateIdAsPartitionKey() {
         var message = OutboxMessage.builder()
@@ -21,6 +24,8 @@ class OutboxMessageTest {
         assertThat(message.headers()).containsEntry("trace-id", "trace-7");
     }
 
+    // Заголовки копируются в момент build(): изменение исходной Map потом ни на что не влияет,
+    // а Map внутри сообщения неизменяемая.
     @Test
     void snapshotsHeadersWhenBuilt() {
         var headers = new LinkedHashMap<String, String>();
@@ -40,6 +45,7 @@ class OutboxMessageTest {
                 .isInstanceOf(UnsupportedOperationException.class);
     }
 
+    // Обязательные поля (topic, aggregate, payload) проверяются сразу при сборке.
     @Test
     void rejectsMissingRequiredFields() {
         assertThatThrownBy(() -> OutboxMessage.builder()
@@ -52,6 +58,8 @@ class OutboxMessageTest {
 
     private record TestEvent(String orderId) {
     }
+    // Префикс rm- зарезервирован под служебные заголовки стартера (rm-message-id и другие).
+    // Пользователь не может их подменить ни через header(), ни через headers().
     @org.junit.jupiter.api.Test
     void rejectsReservedHeadersThroughBothBuilderMethods() {
         org.assertj.core.api.Assertions.assertThatThrownBy(() -> OutboxMessage.builder().header("rm-message-id", "x"))

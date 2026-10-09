@@ -6,7 +6,9 @@ import org.testcontainers.kafka.KafkaContainer;
 import java.time.Duration;
 import java.util.*;
 import static org.awaitility.Awaitility.await;
+// Хелперы для работы с Kafka в тестах.
 public final class KafkaTestSupport {
+    // Каждый тест создаёт свой уникальный топик на 3 партиции, поэтому тесты не видят сообщения друг друга.
     public static String topic(KafkaContainer kafka) throws Exception {
         var topic = "test-" + UUID.randomUUID();
         try (var admin = Admin.create(Map.of("bootstrap.servers", kafka.getBootstrapServers()))) {
@@ -14,9 +16,13 @@ public final class KafkaTestSupport {
         }
         return topic;
     }
+    // Читает топик с начала новым потребителем (случайный group.id), пока не наберёт count СЫРЫХ записей.
     public static List<ConsumerRecord<String, String>> read(KafkaContainer kafka, String topic, int count) {
         return readRecords(kafka,topic,count,false);
     }
+    // Ждёт count УНИКАЛЬНЫХ rm-message-id. Нужен там, где дубли допустимы (at-least-once):
+    // если считать сырые записи, первые N штук могут оказаться с повторами, и тест ошибочно решит,
+    // что часть событий потерялась.
     public static List<ConsumerRecord<String,String>> readUnique(KafkaContainer kafka,String topic,int count) {
         return readRecords(kafka,topic,count,true);
     }

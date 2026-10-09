@@ -18,6 +18,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
+// ЧТО ПРОВЕРЯЕМ: отправляющее звено целиком, как в приложении. Живой фоновый OutboxRelay
+// (включён через outbox.relay.enabled=true) сам крутит цикл claim, send, ack.
+// @DirtiesContext: после теста контекст выбрасывается, чтобы работающий релэй не мешал другим тестам.
 @IntegrationTest
 @TestPropertySource(properties={"outbox.relay.enabled=true","outbox.relay.poll-interval=20ms"})
 @Import(RelayEndToEndIT.Meters.class)
@@ -28,6 +31,9 @@ class RelayEndToEndIT {
     @Autowired PlatformTransactionManager tm;
     @Autowired KafkaContainer kafka;
     @Autowired MeterRegistry registry;
+    // Сценарий: одной транзакцией кладём 500 событий и больше ничего не делаем.
+    // Ожидаем: релэй сам всё отправил. 500 строк SENT, метрика published{result=sent} = 500,
+    // в Kafka ровно 500 разных message_id: в штатном режиме нет ни потерь, ни дублей.
     @Test void relaysFiveHundredCommittedEvents() throws Exception {
         var topic=KafkaTestSupport.topic(kafka);
         new TransactionTemplate(tm).executeWithoutResult(s -> {

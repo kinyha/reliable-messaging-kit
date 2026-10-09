@@ -5,6 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.UUID;
 import static org.assertj.core.api.Assertions.*;
+// ЧТО ПРОВЕРЯЕМ: фоновую очистку (RetentionCleaner).
+// Данные: 1500 SENT старше 8 дней (по умолчанию cleanup.retention = 7d), 1 DEAD и 1 NEW той же давности,
+// 1 свежий SENT; в inbox 1500 записей старше 31 дня (retention 30d) и 1 свежая.
+// Ожидаем: старые SENT удалены (батчами по 1000, на 1500 нужно два прохода), старый inbox удалён.
+// Остаются DEAD (ручной разбор, автоматически не удаляется никогда), NEW (ещё не отправлен) и свежий SENT.
 @IntegrationTest
 class RetentionCleanerIT {
     @Autowired RetentionCleaner cleaner;

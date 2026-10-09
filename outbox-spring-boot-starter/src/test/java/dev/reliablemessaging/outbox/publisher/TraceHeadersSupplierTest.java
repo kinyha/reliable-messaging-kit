@@ -10,7 +10,12 @@ import javax.sql.DataSource;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
+// ЧТО ПРОВЕРЯЕМ: проброс трейсинга через outbox.
+// Publisher кладёт текущий traceparent в заголовки события, релэй отправляет его в Kafka, и в Jaeger
+// один трейс тянется от HTTP-запроса до потребителя, хотя доставка асинхронная.
+// Это юнит-тест автоконфигурации (ApplicationContextRunner): без базы и Kafka, всё на моках.
 class TraceHeadersSupplierTest {
+    // В приложении есть Micrometer Tracing (бины Tracer и Propagator): заголовок traceparent появляется.
     @Test void propagatesCurrentContextWhenOptionalTracingBeansExist() {
         var tracer=mock(Tracer.class); var span=mock(Span.class); var context=mock(TraceContext.class);
         when(tracer.currentSpan()).thenReturn(span); when(span.context()).thenReturn(context);
@@ -28,6 +33,8 @@ class TraceHeadersSupplierTest {
             .withBean(Tracer.class,() -> tracer).withBean(Propagator.class,() -> propagator)
             .run(c -> assertThat(c.getBean(TraceHeadersSupplier.class).get()).containsKey("traceparent"));
     }
+    // Библиотеки трейсинга на classpath нет совсем (FilteredClassLoader прячет пакет io.micrometer.tracing):
+    // стартер не падает, просто не добавляет заголовков. Трейсинг для стартера опционален.
     @Test void optionalTracingCanBeAbsentFromClasspath() {
         new ApplicationContextRunner().withClassLoader(new org.springframework.boot.test.context.FilteredClassLoader("io.micrometer.tracing"))
             .withConfiguration(AutoConfigurations.of(ReliableMessagingAutoConfiguration.class,OutboxPublisherAutoConfiguration.class))

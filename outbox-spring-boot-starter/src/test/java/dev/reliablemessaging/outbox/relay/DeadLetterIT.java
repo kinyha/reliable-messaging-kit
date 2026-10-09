@@ -16,6 +16,9 @@ import java.time.Duration;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
+// ЧТО ПРОВЕРЯЕМ: судьбу сообщения, которое доставить невозможно.
+// Диспетчер подменён на «всегда ошибка boom»: стартер позволяет заменить OutboxDispatcher своим бином.
+// max-attempts=3 и крошечные задержки повторов, чтобы тест шёл миллисекунды, а не минуты.
 @IntegrationTest
 @Import(DeadLetterIT.Failing.class)
 @TestPropertySource(properties={"outbox.relay.enabled=true","outbox.relay.max-attempts=3",
@@ -26,6 +29,9 @@ class DeadLetterIT {
     @Autowired PlatformTransactionManager tm;
     @Autowired JdbcTemplate jdbc;
     @Autowired MeterRegistry registry;
+    // Ожидаем: ровно 3 попытки, затем статус DEAD, last_error = "boom" (видно, почему не доставлено),
+    // гейдж outbox.messages.dead = 1 и счётчик published{result=dead} = 1. На этот гейдж повешен алерт.
+    // DEAD-строка не удаляется: это «наблюдаемая недоставка», дальше её разбирает человек.
     @Test void exhaustsExactlyThreeAttemptsAndKeepsDiagnostic() {
         new TransactionTemplate(tm).executeWithoutResult(s -> publisher.publish(OutboxMessage.builder().topic("events")
             .aggregate(new Aggregate("test","a")).payload(Map.of("v",1)).build()));
@@ -36,6 +42,7 @@ class DeadLetterIT {
             assertThat(registry.get("outbox.relay.published").tag("result","dead").counter().count()).isEqualTo(1);
         });
     }
+    // Тестовая конфигурация: свой MeterRegistry, чтобы читать метрики, и диспетчер, который всегда падает.
     @TestConfiguration(proxyBeanMethods=false)
     static class Failing {
         @Bean MeterRegistry registry() { return new SimpleMeterRegistry(); }

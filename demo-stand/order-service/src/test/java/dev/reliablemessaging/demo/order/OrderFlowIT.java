@@ -9,11 +9,16 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.testcontainers.containers.PostgreSQLContainer;
 import java.math.BigDecimal;
 import static org.assertj.core.api.Assertions.*;
+// ЧТО ПРОВЕРЯЕМ (демо-стенд): настоящий сервис заказов на стартере, написанный так, как его пишет пользователь библиотеки.
+// Релэй выключен, Kafka не нужна: проверяем только запись в базу.
 @SpringBootTest(properties={"outbox.relay.enabled=false","spring.kafka.admin.auto-create=false","management.tracing.enabled=false"})
 @Import(OrderFlowIT.Database.class)
 class OrderFlowIT {
     @Autowired Orders orders;
     @Autowired JdbcTemplate jdbc;
+    // 1) Заказ размещён: в orders есть строка, в outbox есть событие NEW с тем же orderId.
+    // 2) place(..., fail=true) бросает исключение ПОСЛЕ publish: откатываются и заказ, и событие
+    //    (число заказов и число событий не изменилось).
     @Test void committedOrderAndEventShareTheSameTransaction() {
         var id=orders.place("c-1",new BigDecimal("42.50"),false);
         assertThat(jdbc.queryForObject("select count(*) from orders where id=?",Integer.class,id)).isEqualTo(1);

@@ -4,6 +4,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import static org.assertj.core.api.Assertions.*;
+// ЧТО ПРОВЕРЯЕМ: Postgres действительно использует частичные индексы для горячих запросов, а не сканирует таблицу.
+// Данные: 20 000 SENT (история), 50 NEW и 50 просроченных IN_FLIGHT, затем ANALYZE (свежая статистика).
+// Ожидаем: в плане запроса захвата есть outbox_pending_idx, в плане запроса reaper есть outbox_expired_lease_idx.
+// Важно: enable_seqscan НЕ выключается, планировщик выбирает индекс честно. Индекс маленький,
+// потому что в нём только ожидающие строки, сколько бы SENT ни накопилось.
+// Условие WHERE в запросе должно буквально совпадать с условием индекса, иначе Postgres его не возьмёт.
 @IntegrationTest
 class IndexUsageIT {
     @Autowired JdbcTemplate jdbc;

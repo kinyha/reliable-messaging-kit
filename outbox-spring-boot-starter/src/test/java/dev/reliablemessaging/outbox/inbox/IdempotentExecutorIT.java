@@ -7,11 +7,18 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import static org.assertj.core.api.Assertions.*;
+// ЧТО ПРОВЕРЯЕМ: ядро дедупликации на стороне получателя (IdempotentExecutor), без Kafka.
+// execute(consumer, messageId, action) в одной транзакции делает INSERT в inbox (ON CONFLICT DO NOTHING),
+// затем action, затем коммит. Возвращает true, если action выполнен, и false, если это дубль.
+// Аннотация @IdempotentConsumer работает поверх этого же класса.
 @IntegrationTest
 class IdempotentExecutorIT {
     @Autowired IdempotentExecutor executor;
     @Autowired JdbcTemplate jdbc;
     @BeforeEach void clean() { jdbc.execute("truncate inbox_message,effects"); }
+    // Один и тот же id: первый вызов выполняет action, второй нет (дубль).
+    // Тот же id, но ДРУГОЙ consumer: action снова выполняется. У каждого обработчика свой учёт,
+    // ключ inbox = (message_id, consumer).
     @Test void sameIdIsDeduplicatedPerConsumer() {
         var id=UUID.randomUUID(); var effects=new AtomicInteger();
         assertThat(executor.execute("one",id,effects::incrementAndGet)).isTrue();
@@ -19,6 +26,9 @@ class IdempotentExecutorIT {
         assertThat(executor.execute("two",id,effects::incrementAndGet)).isTrue();
         assertThat(effects.get()).isEqualTo(2);
     }
+    // action пишет эффект и падает: откатывается ВСЁ, и эффект, и запись в inbox.
+    // Поэтому повторная доставка обработает сообщение заново, а не примет его за дубль.
+    // Если бы inbox писался отдельно от эффекта, сообщение потерялось бы: отмечено как обработанное, но не сделано.
     @Test void failedActionRollsBackInboxAndDatabaseEffect() {
         var id=UUID.randomUUID();
         assertThatThrownBy(() -> executor.execute("one",id,() -> {
@@ -28,6 +38,10 @@ class IdempotentExecutorIT {
         assertThat(jdbc.queryForObject("select count(*) from effects",Integer.class)).isZero();
         assertThat(executor.execute("one",id,() -> jdbc.update("insert into effects values (?)",id))).isTrue();
     }
+    // 8 потоков одновременно обрабатывают ОДНО сообщение (параллельная доставка, ребаланс).
+    // Ожидаем: action выполнен ровно один раз. Механизм: вторая вставка того же ключа в inbox ждёт,
+    // пока первая транзакция закончится, и получает конфликт, то есть 0 строк, то есть дубль.
+    // Гонке негде случиться: проверка и захват — одна операция INSERT, без отдельного SELECT.
     @Test void eightConcurrentDeliveriesApplyOneDatabaseEffect() throws Exception {
         var id=UUID.randomUUID(); var barrier=new CyclicBarrier(8);
         try(var pool=Executors.newFixedThreadPool(8)) {

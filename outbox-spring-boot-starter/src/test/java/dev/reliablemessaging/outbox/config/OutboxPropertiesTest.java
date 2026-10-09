@@ -10,11 +10,14 @@ import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// ЧТО ПРОВЕРЯЕМ: настройки стартера и защиту от опасной конфигурации.
+// Принцип: ошибка в настройках должна ронять старт приложения, а не всплывать потом в проде.
 class OutboxPropertiesTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(ReliableMessagingAutoConfiguration.class))
             .withPropertyValues("outbox.inbox.retention=30d");
 
+    // Значения по умолчанию: пачка 128 строк, аренда 30 с.
     @Test
     void defaultsAreExplicitAndConservative() {
         contextRunner.run(context -> {
@@ -26,6 +29,8 @@ class OutboxPropertiesTest {
         });
     }
 
+    // Без outbox.inbox.retention приложение НЕ стартует. Слишком короткий срок сломал бы дедупликацию
+    // при replay топика, а безопасного универсального значения нет. Поэтому стартер требует задать его явно.
     @Test
     void refusesToStartWithoutInboxRetention() {
         new ApplicationContextRunner()
@@ -39,11 +44,14 @@ class OutboxPropertiesTest {
                 });
     }
 
+    // Нет DataSource, значит нет и мигратора схемы: стартер ничего не делает там, где нет базы.
     @Test
     void doesNotModifyApplicationFlywayWithoutDataSource() {
         contextRunner.run(context -> assertThat(context).doesNotHaveBean(ReliableMessagingSchemaMigrator.class));
     }
 
+    // send-timeout >= lease-duration запрещён. Иначе аренда истечёт прямо во время отправки, reaper отдаст
+    // строку другому поду, и получится лишний дубль. Проверяется при старте.
     @Test
     void rejectsSendTimeoutAtLeaseBoundary() {
         contextRunner.withPropertyValues("outbox.relay.send-timeout=30s").run(context -> {
