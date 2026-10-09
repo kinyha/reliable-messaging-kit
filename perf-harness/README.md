@@ -16,6 +16,7 @@ perf-harness/scripts/run-profile.sh --virtual --name virtual-profile
 perf-harness/scripts/run-matrix.sh --skip-build
 perf-harness/scripts/run-soak.sh --skip-build
 perf-harness/scripts/run-ci.sh --skip-build
+python3 perf-harness/scripts/run-live-restart.py
 ```
 
 Стандартный короткий замер: **60 s прогрева и 3 × 180 s измерения**. Базовая линия повторяет
@@ -59,3 +60,25 @@ perf-harness/scripts/run-ci.sh --chaos-delay 2s --skip-build
 Это настоящий `Thread.sleep` перед первой отправкой через существующий demo-флаг. Ожидается exit 1
 из-за e2e p99, при сохранении однократных платежей. Пороги не пересчитываются автоматически после
 неудачного прогона. Workflow публикует сырые результаты независимо от успеха проверки.
+
+Для настоящего отрицательного PR подготовлен `ci/intentional-slowdown.patch`: он добавляет две секунды
+к существующему `Thread.sleep` demo-обёртки relay. В рабочую ветку этот патч не применяется.
+Интеграционные тесты стартера продолжают проверять обычный протокол, а CI perf-gate должен отвергнуть
+изменение по сквозному p99. Для публикации такого PR нужны отправленные в origin ветки.
+
+`run-live-restart.py` дополняет Testcontainers-тесты настоящим `docker compose kill --signal SIGKILL`.
+Fixture-триггер задерживает SQL ack после Kafka send; скрипт проверяет exit 137, перезапускает тот же
+сервис, сравнивает полный набор HTTP orderId и платежей, требует настоящих повторных доставок без
+повторного бизнес-эффекта. Оба режима потоков проверяются отдельно. Это correctness-проверка,
+поэтому её время не смешивается с обычными latency-замерами.
+
+Графики строятся по полным группам из трёх прогонов стандартным matplotlib:
+
+```bash
+python3 -m venv perf-harness/.run/plot-env
+perf-harness/.run/plot-env/bin/pip install -r perf-harness/requirements-plot.txt
+perf-harness/.run/plot-env/bin/python perf-harness/scripts/plot-results.py all
+```
+
+SVG и PNG сохраняются в `docs/perf/figures/`. Неполная матрица или укороченный soak останавливают
+построение соответствующего графика; отсутствующие данные не заменяются искусственными точками.
