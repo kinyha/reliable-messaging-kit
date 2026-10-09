@@ -1,0 +1,9 @@
+{
+  "name": "bandwidth",
+  "type": "bandwidth",
+  "stream": "downstream",
+  "toxicity": 1,
+  "attributes": {
+    "rate": 100
+  }
+}

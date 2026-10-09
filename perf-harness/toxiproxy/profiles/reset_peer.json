@@ -1,0 +1,9 @@
+{
+  "name": "reset",
+  "type": "reset_peer",
+  "stream": "downstream",
+  "toxicity": 1,
+  "attributes": {
+    "timeout": 0
+  }
+}

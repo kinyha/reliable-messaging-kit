@@ -1,0 +1,10 @@
+{
+  "name": "latency-2s",
+  "type": "latency",
+  "stream": "downstream",
+  "toxicity": 1,
+  "attributes": {
+    "latency": 2000,
+    "jitter": 0
+  }
+}

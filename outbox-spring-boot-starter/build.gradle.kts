@@ -24,6 +24,7 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
     testImplementation("org.testcontainers:kafka")
+    testImplementation("org.testcontainers:toxiproxy")
     testImplementation("org.awaitility:awaitility")
     testImplementation("io.micrometer:micrometer-tracing")
     testRuntimeOnly("org.postgresql:postgresql")
