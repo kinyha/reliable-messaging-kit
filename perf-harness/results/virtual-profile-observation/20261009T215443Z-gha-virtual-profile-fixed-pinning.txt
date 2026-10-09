@@ -1,0 +1,232 @@
+order-service-1  | Picked up JAVA_TOOL_OPTIONS: -Xms256m -Xmx512m -Djdk.tracePinnedThreads=full
+order-service-1  | 
+order-service-1  |   .   ____          _            __ _ _
+order-service-1  |  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+order-service-1  | ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+order-service-1  |  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+order-service-1  |   '  |____| .__|_| |_|_| |_\__, | / / / /
+order-service-1  |  =========|_|==============|___/=/_/_/_/
+order-service-1  | 
+order-service-1  |  :: Spring Boot ::               (v3.5.16)
+order-service-1  | 
+order-service-1  | 2026-10-09T21:54:35.978Z  INFO 1 --- [order-service] [           main] d.r.demo.order.OrderServiceApplication   : Starting OrderServiceApplication v0.1.0-SNAPSHOT using Java 21.0.12 with PID 1 (/application/application.jar started by root in /application)
+order-service-1  | 2026-10-09T21:54:35.981Z  INFO 1 --- [order-service] [           main] d.r.demo.order.OrderServiceApplication   : No active profile set, falling back to 1 default profile: "default"
+order-service-1  | 2026-10-09T21:54:38.505Z  INFO 1 --- [order-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+order-service-1  | 2026-10-09T21:54:38.523Z  INFO 1 --- [order-service] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+order-service-1  | 2026-10-09T21:54:38.524Z  INFO 1 --- [order-service] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.55]
+order-service-1  | 2026-10-09T21:54:38.562Z  INFO 1 --- [order-service] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+order-service-1  | 2026-10-09T21:54:38.563Z  INFO 1 --- [order-service] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2501 ms
+order-service-1  | 2026-10-09T21:54:39.242Z  INFO 1 --- [order-service] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+order-service-1  | 2026-10-09T21:54:39.600Z  INFO 1 --- [order-service] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@433d93e7
+order-service-1  | 2026-10-09T21:54:39.602Z  INFO 1 --- [order-service] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+order-service-1  | 2026-10-09T21:54:39.676Z  INFO 1 --- [order-service] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://toxiproxy:15432/orders?socketTimeout=15&connectTimeout=5 (PostgreSQL 16.15)
+order-service-1  | 2026-10-09T21:54:39.764Z  INFO 1 --- [order-service] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 1 migration (execution time 00:00.055s)
+order-service-1  | 2026-10-09T21:54:39.813Z  INFO 1 --- [order-service] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 1
+order-service-1  | 2026-10-09T21:54:39.816Z  INFO 1 --- [order-service] [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+order-service-1  | 2026-10-09T21:54:39.988Z  INFO 1 --- [order-service] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://toxiproxy:15432/orders?socketTimeout=15&connectTimeout=5 (PostgreSQL 16.15)
+order-service-1  | 2026-10-09T21:54:40.014Z  INFO 1 --- [order-service] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.015s)
+order-service-1  | 2026-10-09T21:54:40.027Z  INFO 1 --- [order-service] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 2
+order-service-1  | 2026-10-09T21:54:40.029Z  INFO 1 --- [order-service] [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+order-service-1  | 2026-10-09T21:54:41.234Z  INFO 1 --- [order-service] [           main] o.a.k.clients.admin.AdminClientConfig    : AdminClientConfig values: 
+order-service-1  | 	auto.include.jmx.reporter = true
+order-service-1  | 	bootstrap.controllers = []
+order-service-1  | 	bootstrap.servers = [toxiproxy:29092]
+order-service-1  | 	client.dns.lookup = use_all_dns_ips
+order-service-1  | 	client.id = order-service-admin-0
+order-service-1  | 	connections.max.idle.ms = 300000
+order-service-1  | 	default.api.timeout.ms = 60000
+order-service-1  | 	enable.metrics.push = true
+order-service-1  | 	metadata.max.age.ms = 300000
+order-service-1  | 	metadata.recovery.strategy = none
+order-service-1  | 	metric.reporters = []
+order-service-1  | 	metrics.num.samples = 2
+order-service-1  | 	metrics.recording.level = INFO
+order-service-1  | 	metrics.sample.window.ms = 30000
+order-service-1  | 	receive.buffer.bytes = 65536
+order-service-1  | 	reconnect.backoff.max.ms = 1000
+order-service-1  | 	reconnect.backoff.ms = 50
+order-service-1  | 	request.timeout.ms = 30000
+order-service-1  | 	retries = 2147483647
+order-service-1  | 	retry.backoff.max.ms = 1000
+order-service-1  | 	retry.backoff.ms = 100
+order-service-1  | 	sasl.client.callback.handler.class = null
+order-service-1  | 	sasl.jaas.config = null
+order-service-1  | 	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+order-service-1  | 	sasl.kerberos.min.time.before.relogin = 60000
+order-service-1  | 	sasl.kerberos.service.name = null
+order-service-1  | 	sasl.kerberos.ticket.renew.jitter = 0.05
+order-service-1  | 	sasl.kerberos.ticket.renew.window.factor = 0.8
+order-service-1  | 	sasl.login.callback.handler.class = null
+order-service-1  | 	sasl.login.class = null
+order-service-1  | 	sasl.login.connect.timeout.ms = null
+order-service-1  | 	sasl.login.read.timeout.ms = null
+order-service-1  | 	sasl.login.refresh.buffer.seconds = 300
+order-service-1  | 	sasl.login.refresh.min.period.seconds = 60
+order-service-1  | 	sasl.login.refresh.window.factor = 0.8
+order-service-1  | 	sasl.login.refresh.window.jitter = 0.05
+order-service-1  | 	sasl.login.retry.backoff.max.ms = 10000
+order-service-1  | 	sasl.login.retry.backoff.ms = 100
+order-service-1  | 	sasl.mechanism = GSSAPI
+order-service-1  | 	sasl.oauthbearer.clock.skew.seconds = 30
+order-service-1  | 	sasl.oauthbearer.expected.audience = null
+order-service-1  | 	sasl.oauthbearer.expected.issuer = null
+order-service-1  | 	sasl.oauthbearer.header.urlencode = false
+order-service-1  | 	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+order-service-1  | 	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+order-service-1  | 	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+order-service-1  | 	sasl.oauthbearer.jwks.endpoint.url = null
+order-service-1  | 	sasl.oauthbearer.scope.claim.name = scope
+order-service-1  | 	sasl.oauthbearer.sub.claim.name = sub
+order-service-1  | 	sasl.oauthbearer.token.endpoint.url = null
+order-service-1  | 	security.protocol = PLAINTEXT
+order-service-1  | 	security.providers = null
+order-service-1  | 	send.buffer.bytes = 131072
+order-service-1  | 	socket.connection.setup.timeout.max.ms = 30000
+order-service-1  | 	socket.connection.setup.timeout.ms = 10000
+order-service-1  | 	ssl.cipher.suites = null
+order-service-1  | 	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+order-service-1  | 	ssl.endpoint.identification.algorithm = https
+order-service-1  | 	ssl.engine.factory.class = null
+order-service-1  | 	ssl.key.password = null
+order-service-1  | 	ssl.keymanager.algorithm = SunX509
+order-service-1  | 	ssl.keystore.certificate.chain = null
+order-service-1  | 	ssl.keystore.key = null
+order-service-1  | 	ssl.keystore.location = null
+order-service-1  | 	ssl.keystore.password = null
+order-service-1  | 	ssl.keystore.type = JKS
+order-service-1  | 	ssl.protocol = TLSv1.3
+order-service-1  | 	ssl.provider = null
+order-service-1  | 	ssl.secure.random.implementation = null
+order-service-1  | 	ssl.trustmanager.algorithm = PKIX
+order-service-1  | 	ssl.truststore.certificates = null
+order-service-1  | 	ssl.truststore.location = null
+order-service-1  | 	ssl.truststore.password = null
+order-service-1  | 	ssl.truststore.type = JKS
+order-service-1  | 
+order-service-1  | 2026-10-09T21:54:41.406Z  INFO 1 --- [order-service] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.9.2
+order-service-1  | 2026-10-09T21:54:41.407Z  INFO 1 --- [order-service] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: 5e9866f43ab8e7e4
+order-service-1  | 2026-10-09T21:54:41.407Z  INFO 1 --- [order-service] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1791582881405
+order-service-1  | 2026-10-09T21:54:41.858Z  INFO 1 --- [order-service] [service-admin-0] o.a.kafka.common.utils.AppInfoParser     : App info kafka.admin.client for order-service-admin-0 unregistered
+order-service-1  | 2026-10-09T21:54:41.867Z  INFO 1 --- [order-service] [service-admin-0] o.apache.kafka.common.metrics.Metrics    : Metrics scheduler closed
+order-service-1  | 2026-10-09T21:54:41.868Z  INFO 1 --- [order-service] [service-admin-0] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.metrics.JmxReporter
+order-service-1  | 2026-10-09T21:54:41.869Z  INFO 1 --- [order-service] [service-admin-0] o.apache.kafka.common.metrics.Metrics    : Metrics reporters closed
+order-service-1  | 2026-10-09T21:54:41.895Z  INFO 1 --- [order-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+order-service-1  | 2026-10-09T21:54:42.018Z  INFO 1 --- [order-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+order-service-1  | 2026-10-09T21:54:42.019Z  INFO 1 --- [order-service] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+order-service-1  | 2026-10-09T21:54:42.020Z  INFO 1 --- [order-service] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.55]
+order-service-1  | 2026-10-09T21:54:42.022Z  INFO 1 --- [order-service] [           main] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+order-service-1  | 2026-10-09T21:54:42.022Z  INFO 1 --- [order-service] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 122 ms
+order-service-1  | 2026-10-09T21:54:42.040Z  INFO 1 --- [order-service] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 4 endpoints beneath base path '/actuator'
+order-service-1  | 2026-10-09T21:54:42.094Z  INFO 1 --- [order-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+order-service-1  | 2026-10-09T21:54:42.105Z  INFO 1 --- [order-service] [           main] d.r.outbox.relay.OutboxRelay             : Starting relay: workers=2, virtualThreads=true, batchSize=128, pollInterval=PT0.2S
+order-service-1  | 2026-10-09T21:54:42.145Z  INFO 1 --- [order-service] [           main] d.r.demo.order.OrderServiceApplication   : Started OrderServiceApplication in 6.948 seconds (process running for 7.353)
+order-service-1  | 2026-10-09T21:54:42.464Z  INFO 1 --- [order-service] [nio-8091-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServletRegistration'
+order-service-1  | 2026-10-09T21:54:42.464Z  INFO 1 --- [order-service] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServletRegistration'
+order-service-1  | 2026-10-09T21:54:42.464Z  INFO 1 --- [order-service] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+order-service-1  | 2026-10-09T21:54:44.290Z  INFO 1 --- [order-service] [nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+order-service-1  | 2026-10-09T21:54:44.291Z  INFO 1 --- [order-service] [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+order-service-1  | 2026-10-09T21:54:44.293Z  INFO 1 --- [order-service] [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+order-service-1  | 2026-10-09T21:54:44.994Z  INFO 1 --- [order-service] [ outbox-relay-2] o.a.k.clients.producer.ProducerConfig    : ProducerConfig values: 
+order-service-1  | 	acks = -1
+order-service-1  | 	auto.include.jmx.reporter = true
+order-service-1  | 	batch.size = 16384
+order-service-1  | 	bootstrap.servers = [toxiproxy:29092]
+order-service-1  | 	buffer.memory = 33554432
+order-service-1  | 	client.dns.lookup = use_all_dns_ips
+order-service-1  | 	client.id = producer-1
+order-service-1  | 	compression.gzip.level = -1
+order-service-1  | 	compression.lz4.level = 9
+order-service-1  | 	compression.type = none
+order-service-1  | 	compression.zstd.level = 3
+order-service-1  | 	connections.max.idle.ms = 540000
+order-service-1  | 	delivery.timeout.ms = 10000
+order-service-1  | 	enable.idempotence = true
+order-service-1  | 	enable.metrics.push = true
+order-service-1  | 	interceptor.classes = []
+order-service-1  | 	key.serializer = class org.apache.kafka.common.serialization.StringSerializer
+order-service-1  | 	linger.ms = 5
+order-service-1  | 	max.block.ms = 10000
+order-service-1  | 	max.in.flight.requests.per.connection = 5
+order-service-1  | 	max.request.size = 1048576
+order-service-1  | 	metadata.max.age.ms = 300000
+order-service-1  | 	metadata.max.idle.ms = 300000
+order-service-1  | 	metadata.recovery.strategy = none
+order-service-1  | 	metric.reporters = []
+order-service-1  | 	metrics.num.samples = 2
+order-service-1  | 	metrics.recording.level = INFO
+order-service-1  | 	metrics.sample.window.ms = 30000
+order-service-1  | 	partitioner.adaptive.partitioning.enable = true
+order-service-1  | 	partitioner.availability.timeout.ms = 0
+order-service-1  | 	partitioner.class = null
+order-service-1  | 	partitioner.ignore.keys = false
+order-service-1  | 	receive.buffer.bytes = 32768
+order-service-1  | 	reconnect.backoff.max.ms = 1000
+order-service-1  | 	reconnect.backoff.ms = 50
+order-service-1  | 	request.timeout.ms = 9995
+order-service-1  | 	retries = 2147483647
+order-service-1  | 	retry.backoff.max.ms = 1000
+order-service-1  | 	retry.backoff.ms = 100
+order-service-1  | 	sasl.client.callback.handler.class = null
+order-service-1  | 	sasl.jaas.config = null
+order-service-1  | 	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+order-service-1  | 	sasl.kerberos.min.time.before.relogin = 60000
+order-service-1  | 	sasl.kerberos.service.name = null
+order-service-1  | 	sasl.kerberos.ticket.renew.jitter = 0.05
+order-service-1  | 	sasl.kerberos.ticket.renew.window.factor = 0.8
+order-service-1  | 	sasl.login.callback.handler.class = null
+order-service-1  | 	sasl.login.class = null
+order-service-1  | 	sasl.login.connect.timeout.ms = null
+order-service-1  | 	sasl.login.read.timeout.ms = null
+order-service-1  | 	sasl.login.refresh.buffer.seconds = 300
+order-service-1  | 	sasl.login.refresh.min.period.seconds = 60
+order-service-1  | 	sasl.login.refresh.window.factor = 0.8
+order-service-1  | 	sasl.login.refresh.window.jitter = 0.05
+order-service-1  | 	sasl.login.retry.backoff.max.ms = 10000
+order-service-1  | 	sasl.login.retry.backoff.ms = 100
+order-service-1  | 	sasl.mechanism = GSSAPI
+order-service-1  | 	sasl.oauthbearer.clock.skew.seconds = 30
+order-service-1  | 	sasl.oauthbearer.expected.audience = null
+order-service-1  | 	sasl.oauthbearer.expected.issuer = null
+order-service-1  | 	sasl.oauthbearer.header.urlencode = false
+order-service-1  | 	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+order-service-1  | 	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+order-service-1  | 	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+order-service-1  | 	sasl.oauthbearer.jwks.endpoint.url = null
+order-service-1  | 	sasl.oauthbearer.scope.claim.name = scope
+order-service-1  | 	sasl.oauthbearer.sub.claim.name = sub
+order-service-1  | 	sasl.oauthbearer.token.endpoint.url = null
+order-service-1  | 	security.protocol = PLAINTEXT
+order-service-1  | 	security.providers = null
+order-service-1  | 	send.buffer.bytes = 131072
+order-service-1  | 	socket.connection.setup.timeout.max.ms = 30000
+order-service-1  | 	socket.connection.setup.timeout.ms = 10000
+order-service-1  | 	ssl.cipher.suites = null
+order-service-1  | 	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+order-service-1  | 	ssl.endpoint.identification.algorithm = https
+order-service-1  | 	ssl.engine.factory.class = null
+order-service-1  | 	ssl.key.password = null
+order-service-1  | 	ssl.keymanager.algorithm = SunX509
+order-service-1  | 	ssl.keystore.certificate.chain = null
+order-service-1  | 	ssl.keystore.key = null
+order-service-1  | 	ssl.keystore.location = null
+order-service-1  | 	ssl.keystore.password = null
+order-service-1  | 	ssl.keystore.type = JKS
+order-service-1  | 	ssl.protocol = TLSv1.3
+order-service-1  | 	ssl.provider = null
+order-service-1  | 	ssl.secure.random.implementation = null
+order-service-1  | 	ssl.trustmanager.algorithm = PKIX
+order-service-1  | 	ssl.truststore.certificates = null
+order-service-1  | 	ssl.truststore.location = null
+order-service-1  | 	ssl.truststore.password = null
+order-service-1  | 	ssl.truststore.type = JKS
+order-service-1  | 	transaction.timeout.ms = 60000
+order-service-1  | 	transactional.id = null
+order-service-1  | 	value.serializer = class org.apache.kafka.common.serialization.StringSerializer
+order-service-1  | 
+order-service-1  | 2026-10-09T21:54:45.272Z  INFO 1 --- [order-service] [ outbox-relay-2] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+order-service-1  | 2026-10-09T21:54:45.325Z  INFO 1 --- [order-service] [ outbox-relay-2] o.a.k.clients.producer.KafkaProducer     : [Producer clientId=producer-1] Instantiated an idempotent producer.
+order-service-1  | 2026-10-09T21:54:45.501Z  INFO 1 --- [order-service] [ outbox-relay-2] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.9.2
+order-service-1  | 2026-10-09T21:54:45.506Z  INFO 1 --- [order-service] [ outbox-relay-2] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: 5e9866f43ab8e7e4
+order-service-1  | 2026-10-09T21:54:45.506Z  INFO 1 --- [order-service] [ outbox-relay-2] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1791582885499
+order-service-1  | 2026-10-09T21:54:45.616Z  INFO 1 --- [order-service] [ad | producer-1] org.apache.kafka.clients.Metadata        : [Producer clientId=producer-1] Cluster ID: 5L6g3nShT-eMCtK--X86sw
+order-service-1  | 2026-10-09T21:54:45.814Z  INFO 1 --- [order-service] [ad | producer-1] o.a.k.c.p.internals.TransactionManager   : [Producer clientId=producer-1] ProducerId set to 0 with epoch 0

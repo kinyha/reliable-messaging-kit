@@ -1,0 +1,4486 @@
+{
+  "profile": "20261009T215443Z-gha-virtual-profile-fixed-cpu-r1",
+  "event": "cpu",
+  "virtual": true,
+  "commit": "8091865c5eb8c6fa71d05b211299f73055e4dfb4",
+  "statistics": {
+    "all": {
+      "jdbc": 1485,
+      "other": 8142,
+      "kafka": 223,
+      "jackson": 533
+    },
+    "relay": {
+      "kafka": 123,
+      "jdbc": 17,
+      "other": 4,
+      "jackson": 1
+    },
+    "relay_active": 145,
+    "relay_active_share": {
+      "kafka": 84.82758620689656,
+      "jdbc": 11.724137931034482,
+      "other": 2.7586206896551726,
+      "jackson": 0.6896551724137931
+    },
+    "relay_top_active_stacks": [
+      {
+        "stack": "[ForkJoinPool-1-worker-1 tid=61];Cont thaw return barrier;dev/reliablemessaging/outbox/relay/OutboxRelay.work;dev/reliablemessaging/outbox/metrics/OutboxMetrics.dispatch;io/micrometer/core/instrument/AbstractTimer.record;dev/reliablemessaging/outbox/relay/OutboxRelay$$Lambda.0x00007fd0fc8afba8.get;dev/reliablemessaging/outbox/relay/OutboxRelay.lambda$work$1;dev/reliablemessaging/outbox/relay/KafkaOutboxDispatcher.dispatch;org/springframework/kafka/core/KafkaTemplate.send;org/springframework/kafka/core/KafkaTemplate.observeSend;org/springframework/kafka/core/KafkaTemplate.doSend;org/springframework/kafka/core/DefaultKafkaProducerFactory$CloseSafeProducer.send;org/apache/kafka/clients/producer/KafkaProducer.send;org/apache/kafka/clients/producer/KafkaProducer.doSend",
+        "weight": 5
+      },
+      {
+        "stack": "[ForkJoinPool-1-worker-1 tid=61];Cont thaw return barrier;dev/reliablemessaging/outbox/relay/OutboxRelay.work;dev/reliablemessaging/outbox/metrics/OutboxMetrics.dispatch;io/micrometer/core/instrument/AbstractTimer.record;dev/reliablemessaging/outbox/relay/OutboxRelay$$Lambda.0x00007fd0fc8afba8.get;dev/reliablemessaging/outbox/relay/OutboxRelay.lambda$work$1;dev/reliablemessaging/outbox/relay/KafkaOutboxDispatcher.dispatch;org/springframework/kafka/core/KafkaTemplate.send;org/springframework/kafka/core/KafkaTemplate.observeSend;org/springframework/kafka/core/KafkaTemplate.doSend;org/springframework/kafka/core/DefaultKafkaProducerFactory$CloseSafeProducer.send;org/apache/kafka/clients/producer/KafkaProducer.send;org/apache/kafka/clients/producer/KafkaProducer.doSend;org/apache/kafka/clients/producer/internals/Sender.wakeup;org/apache/kafka/clients/NetworkClient.wakeup;org/apache/kafka/common/network/Selector.wakeup;sun/nio/ch/EPollSelectorImpl.wakeup;sun/nio/ch/EventFD.set;sun/nio/ch/EventFD.set0;Java_sun_nio_ch_EventFD_set0;__write",
+        "weight": 3
+      },
+      {
+        "stack": "[ForkJoinPool-1-worker-1 tid=61];Cont thaw return barrier;dev/reliablemessaging/outbox/relay/OutboxRelay.work;dev/reliablemessaging/outbox/metrics/OutboxMetrics.dispatch;io/micrometer/core/instrument/AbstractTimer.record;dev/reliablemessaging/outbox/relay/OutboxRelay$$Lambda.0x00007fd0fc8afba8.get;dev/reliablemessaging/outbox/relay/OutboxRelay.lambda$work$1;dev/reliablemessaging/outbox/relay/KafkaOutboxDispatcher.dispatch;org/springframework/kafka/core/KafkaTemplate.send;org/springframework/kafka/core/KafkaTemplate.observeSend;org/springframework/kafka/core/KafkaTemplate.doSend;org/springframework/kafka/core/DefaultKafkaProducerFactory$CloseSafeProducer.send;org/apache/kafka/clients/producer/KafkaProducer.send;org/apache/kafka/clients/producer/KafkaProducer.doSend;org/apache/kafka/clients/producer/internals/RecordAccumulator.append;org/apache/kafka/clients/producer/internals/RecordAccumulator.tryAppend;org/apache/kafka/clients/producer/internals/ProducerBatch.tryAppend;org/apache/kafka/common/record/MemoryRecordsBuilder.append;org/apache/kafka/common/record/MemoryRecordsBuilder.append;org/apache/kafka/common/record/MemoryRecordsBuilder.appendWithOffset;org/apache/kafka/common/record/MemoryRecordsBuilder.appendWithOffset",
+        "weight": 3
+      },
+      {
+        "stack": "[ForkJoinPool-1-worker-3 tid=259];Cont thaw return barrier;dev/reliablemessaging/outbox/relay/OutboxRelay.work;dev/reliablemessaging/outbox/relay/OutboxRepository.acknowledge;org/springframework/transaction/support/TransactionTemplate.execute;dev/reliablemessaging/outbox/relay/OutboxRepository$$Lambda.0x00007fd0fc8db668.doInTransaction;dev/reliablemessaging/outbox/relay/OutboxRepository.lambda$acknowledge$7;dev/reliablemessaging/outbox/relay/OutboxRepository.updateSent;org/springframework/jdbc/core/JdbcTemplate.update;org/springframework/jdbc/core/JdbcTemplate.update;org/springframework/jdbc/core/JdbcTemplate.execute;org/springframework/jdbc/core/JdbcTemplate$$Lambda.0x00007fd0fc822b08.doInPreparedStatement;org/springframework/jdbc/core/JdbcTemplate.lambda$update$2;com/zaxxer/hikari/pool/HikariProxyPreparedStatement.executeUpdate;com/zaxxer/hikari/pool/ProxyPreparedStatement.executeUpdate;org/postgresql/jdbc/PgPreparedStatement.executeUpdate;org/postgresql/jdbc/PgPreparedStatement.executeWithFlags;org/postgresql/jdbc/PgStatement.execute;org/postgresql/jdbc/PgStatement.executeInternal;org/postgresql/core/v3/QueryExecutorImpl.execute;org/postgresql/core/v3/QueryExecutorImpl.sendQueryPreamble;org/postgresql/core/v3/QueryExecutorImpl.sendOneQuery;org/postgresql/core/v3/QueryExecutorImpl.sendSimpleQuery;org/postgresql/core/PGStream.flush;org/postgresql/util/internal/PgBufferedOutputStream.flush;org/postgresql/util/internal/PgBufferedOutputStream.flushBuffer;java/net/Socket$SocketOutputStream.write;sun/nio/ch/NioSocketImpl$2.write;sun/nio/ch/NioSocketImpl.write;sun/nio/ch/NioSocketImpl.implWrite;sun/nio/ch/NioSocketImpl.tryWrite;sun/nio/ch/SocketDispatcher.write;sun/nio/ch/SocketDispatcher.write0;Java_sun_nio_ch_SocketDispatcher_write0;__write",
+        "weight": 3
+      },
+      {
+        "stack": "[ForkJoinPool-1-worker-3 tid=259];Cont thaw return barrier;dev/reliablemessaging/outbox/relay/OutboxRelay.work;dev/reliablemessaging/outbox/metrics/OutboxMetrics.dispatch;io/micrometer/core/instrument/AbstractTimer.record;dev/reliablemessaging/outbox/relay/OutboxRelay$$Lambda.0x00007fd0fc8afba8.get;dev/reliablemessaging/outbox/relay/OutboxRelay.lambda$work$1;dev/reliablemessaging/outbox/relay/KafkaOutboxDispatcher.dispatch;org/springframework/kafka/core/KafkaTemplate.send;org/springframework/kafka/core/KafkaTemplate.observeSend;org/springframework/kafka/core/KafkaTemplate.doSend;org/springframework/kafka/core/DefaultKafkaProducerFactory$CloseSafeProducer.send;org/apache/kafka/clients/producer/KafkaProducer.send;org/apache/kafka/clients/producer/KafkaProducer.doSend;org/apache/kafka/clients/producer/internals/RecordAccumulator.append;org/apache/kafka/clients/producer/internals/RecordAccumulator.appendNewBatch;org/apache/kafka/clients/producer/internals/ProducerBatch.tryAppend;org/apache/kafka/common/record/MemoryRecordsBuilder.append;org/apache/kafka/common/record/MemoryRecordsBuilder.append;org/apache/kafka/common/record/MemoryRecordsBuilder.appendWithOffset;org/apache/kafka/common/record/MemoryRecordsBuilder.appendWithOffset;org/apache/kafka/common/record/MemoryRecordsBuilder.appendDefaultRecord;org/apache/kafka/common/record/DefaultRecord.writeTo;org/apache/kafka/common/record/DefaultRecord.sizeOfBodyInBytes;org/apache/kafka/common/record/DefaultRecord.sizeOfBodyInBytes",
+        "weight": 2
+      },
+      {
+        "stack": "[ForkJoinPool-1-worker-3 tid=259];Cont thaw return barrier;dev/reliablemessaging/outbox/relay/OutboxRelay.work;dev/reliablemessaging/outbox/metrics/OutboxMetrics.dispatch;io/micrometer/core/instrument/AbstractTimer.record;dev/reliablemessaging/outbox/relay/OutboxRelay$$Lambda.0x00007fd0fc8afba8.get;dev/reliablemessaging/outbox/relay/OutboxRelay.lambda$work$1;dev/reliablemessaging/outbox/relay/KafkaOutboxDispatcher.dispatch;java/time/Instant.toString;java/time/format/DateTimeFormatter.format;java/time/format/DateTimeFormatter.formatTo;java/time/format/DateTimeFormatterBuilder$CompositePrinterParser.format;java/time/format/DateTimeFormatterBuilder$InstantPrinterParser.format;java/time/format/DateTimePrintContext.getValue",
+        "weight": 2
+      },
+      {
+        "stack": "[ForkJoinPool-1-worker-1 tid=61];Cont thaw return barrier;dev/reliablemessaging/outbox/relay/OutboxRelay.work;dev/reliablemessaging/outbox/relay/OutboxRepository.claim;org/springframework/transaction/support/TransactionTemplate.execute;dev/reliablemessaging/outbox/relay/OutboxRepository$$Lambda.0x00007fd0fc825c00.doInTransaction;dev/reliablemessaging/outbox/relay/OutboxRepository.lambda$claim$0;org/springframework/jdbc/core/JdbcTemplate.query;org/springframework/jdbc/core/JdbcTemplate.query;org/springframework/jdbc/core/JdbcTemplate.query;org/springframework/jdbc/core/JdbcTemplate.query;org/springframework/jdbc/core/JdbcTemplate.execute;org/springframework/jdbc/core/JdbcTemplate$1.doInPreparedStatement;com/zaxxer/hikari/pool/HikariProxyPreparedStatement.executeQuery;com/zaxxer/hikari/pool/ProxyPreparedStatement.executeQuery;org/postgresql/jdbc/PgPreparedStatement.executeQuery;org/postgresql/jdbc/PgPreparedStatement.executeWithFlags;org/postgresql/jdbc/PgStatement.execute;org/postgresql/jdbc/PgStatement.executeInternal;org/postgresql/core/v3/QueryExecutorImpl.execute;org/postgresql/core/v3/QueryExecutorImpl.sendQueryPreamble;org/postgresql/core/v3/QueryExecutorImpl.sendOneQuery;org/postgresql/core/v3/QueryExecutorImpl.sendSimpleQuery;org/postgresql/core/PGStream.flush;org/postgresql/util/internal/PgBufferedOutputStream.flush;org/postgresql/util/internal/PgBufferedOutputStream.flushBuffer;java/net/Socket$SocketOutputStream.write;sun/nio/ch/NioSocketImpl$2.write;sun/nio/ch/NioSocketImpl.write;sun/nio/ch/NioSocketImpl.implWrite;sun/nio/ch/NioSocketImpl.tryWrite;sun/nio/ch/SocketDispatcher.write;sun/nio/ch/SocketDispatcher.write0;Java_sun_nio_ch_SocketDispatcher_write0;__write",
+        "weight": 2
+      },
+      {
+        "stack": "[ForkJoinPool-1-worker-3 tid=259];Cont thaw return barrier;dev/reliablemessaging/outbox/relay/OutboxRelay.work;dev/reliablemessaging/outbox/metrics/OutboxMetrics.dispatch;io/micrometer/core/instrument/AbstractTimer.record;dev/reliablemessaging/outbox/relay/OutboxRelay$$Lambda.0x00007fd0fc8afba8.get;dev/reliablemessaging/outbox/relay/OutboxRelay.lambda$work$1;dev/reliablemessaging/outbox/relay/KafkaOutboxDispatcher.dispatch;java/util/ArrayList$Itr.next",
+        "weight": 2
+      },
+      {
+        "stack": "[ForkJoinPool-1-worker-3 tid=259];Cont thaw return barrier;dev/reliablemessaging/outbox/relay/OutboxRelay.work;dev/reliablemessaging/outbox/metrics/OutboxMetrics.dispatch;io/micrometer/core/instrument/AbstractTimer.record;dev/reliablemessaging/outbox/relay/OutboxRelay$$Lambda.0x00007fd0fc8afba8.get;dev/reliablemessaging/outbox/relay/OutboxRelay.lambda$work$1;dev/reliablemessaging/outbox/relay/KafkaOutboxDispatcher.dispatch;org/springframework/kafka/core/KafkaTemplate.send;org/springframework/kafka/core/KafkaTemplate.observeSend;org/springframework/kafka/core/KafkaTemplate.doSend;org/springframework/kafka/core/DefaultKafkaProducerFactory$CloseSafeProducer.send;org/apache/kafka/clients/producer/KafkaProducer.send;org/apache/kafka/clients/producer/KafkaProducer.doSend;org/apache/kafka/clients/producer/internals/RecordAccumulator.append",
+        "weight": 2
+      },
+      {
+        "stack": "[ForkJoinPool-1-worker-3 tid=259];Cont thaw return barrier;dev/reliablemessaging/outbox/relay/OutboxRelay.work;dev/reliablemessaging/outbox/metrics/OutboxMetrics.dispatch;io/micrometer/core/instrument/AbstractTimer.record;dev/reliablemessaging/outbox/relay/OutboxRelay$$Lambda.0x00007fd0fc8afba8.get;dev/reliablemessaging/outbox/relay/OutboxRelay.lambda$work$1;dev/reliablemessaging/outbox/relay/KafkaOutboxDispatcher.dispatch;org/springframework/kafka/core/KafkaTemplate.send;org/springframework/kafka/core/KafkaTemplate.observeSend;org/springframework/kafka/core/KafkaTemplate.doSend;org/springframework/kafka/core/DefaultKafkaProducerFactory$CloseSafeProducer.send;org/apache/kafka/clients/producer/KafkaProducer.send;org/apache/kafka/clients/producer/KafkaProducer.doSend;org/apache/kafka/clients/producer/internals/RecordAccumulator.append;org/apache/kafka/clients/producer/internals/RecordAccumulator.tryAppend;org/apache/kafka/clients/producer/internals/ProducerBatch.tryAppend;org/apache/kafka/common/record/MemoryRecordsBuilder.hasRoomFor;org/apache/kafka/common/record/MemoryRecordsBuilder.hasRoomFor;org/apache/kafka/common/record/DefaultRecord.sizeInBytes;org/apache/kafka/common/record/DefaultRecord.sizeOfBodyInBytes;org/apache/kafka/common/record/DefaultRecord.sizeOfBodyInBytes;org/apache/kafka/common/record/DefaultRecord.sizeOf;org/apache/kafka/common/utils/Utils.utf8Length;java/lang/String.charAt",
+        "weight": 2
+      },
+      {
+        "stack": "[ForkJoinPool-1-worker-1 tid=61];Cont thaw return barrier;dev/reliablemessaging/outbox/relay/OutboxRelay.work;dev/reliablemessaging/outbox/relay/OutboxRepository.acknowledge;org/springframework/transaction/support/TransactionTemplate.execute;dev/reliablemessaging/outbox/relay/OutboxRepository$$Lambda.0x00007fd0fc8db668.doInTransaction;dev/reliablemessaging/outbox/relay/OutboxRepository.lambda$acknowledge$7;dev/reliablemessaging/outbox/relay/OutboxRepository.updateSent;org/springframework/jdbc/core/JdbcTemplate.update;org/springframework/jdbc/core/JdbcTemplate.update;org/springframework/jdbc/core/JdbcTemplate.execute;org/springframework/jdbc/core/JdbcTemplate$$Lambda.0x00007fd0fc822b08.doInPreparedStatement;org/springframework/jdbc/core/JdbcTemplate.lambda$update$2;com/zaxxer/hikari/pool/HikariProxyPreparedStatement.executeUpdate;com/zaxxer/hikari/pool/ProxyPreparedStatement.executeUpdate;org/postgresql/jdbc/PgPreparedStatement.executeUpdate;org/postgresql/jdbc/PgPreparedStatement.executeWithFlags;org/postgresql/jdbc/PgStatement.execute;org/postgresql/jdbc/PgStatement.executeInternal;org/postgresql/core/v3/QueryExecutorImpl.execute;org/postgresql/core/v3/QueryExecutorImpl.sendQueryPreamble;org/postgresql/core/v3/QueryExecutorImpl.sendOneQuery;org/postgresql/core/v3/QueryExecutorImpl.sendSimpleQuery;org/postgresql/core/PGStream.flush;org/postgresql/util/internal/PgBufferedOutputStream.flush;org/postgresql/util/internal/PgBufferedOutputStream.flushBuffer;java/net/Socket$SocketOutputStream.write;sun/nio/ch/NioSocketImpl$2.write;sun/nio/ch/NioSocketImpl.write;sun/nio/ch/NioSocketImpl.implWrite;sun/nio/ch/NioSocketImpl.tryWrite;sun/nio/ch/SocketDispatcher.write;sun/nio/ch/SocketDispatcher.write0;Java_sun_nio_ch_SocketDispatcher_write0;__write",
+        "weight": 2
+      },
+      {
+        "stack": "[ForkJoinPool-1-worker-3 tid=259];Cont thaw return barrier;dev/reliablemessaging/outbox/relay/OutboxRelay.work;dev/reliablemessaging/outbox/metrics/OutboxMetrics.dispatch;io/micrometer/core/instrument/AbstractTimer.record;dev/reliablemessaging/outbox/relay/OutboxRelay$$Lambda.0x00007fd0fc8afba8.get;dev/reliablemessaging/outbox/relay/OutboxRelay.lambda$work$1;dev/reliablemessaging/outbox/relay/KafkaOutboxDispatcher.dispatch;org/springframework/kafka/core/KafkaTemplate.send;org/springframework/kafka/core/KafkaTemplate.observeSend;org/springframework/kafka/core/KafkaTemplate.doSend;org/springframework/kafka/core/DefaultKafkaProducerFactory$CloseSafeProducer.send;org/apache/kafka/clients/producer/KafkaProducer.send;org/apache/kafka/clients/producer/KafkaProducer.doSend;org/apache/kafka/clients/producer/internals/Sender.wakeup;org/apache/kafka/clients/NetworkClient.wakeup;org/apache/kafka/common/network/Selector.wakeup;sun/nio/ch/EPollSelectorImpl.wakeup;sun/nio/ch/EventFD.set;sun/nio/ch/EventFD.set0;Java_sun_nio_ch_EventFD_set0;__write",
+        "weight": 2
+      },
+      {
+        "stack": "[ForkJoinPool-1-worker-1 tid=61];Cont thaw return barrier;dev/reliablemessaging/outbox/relay/OutboxRelay.work;dev/reliablemessaging/outbox/metrics/OutboxMetrics.dispatch;io/micrometer/core/instrument/AbstractTimer.record;dev/reliablemessaging/outbox/relay/OutboxRelay$$Lambda.0x00007fd0fc8afba8.get;dev/reliablemessaging/outbox/relay/OutboxRelay.lambda$work$1;dev/reliablemessaging/outbox/relay/KafkaOutboxDispatcher.dispatch;org/springframework/kafka/core/KafkaTemplate.send;org/springframework/kafka/core/KafkaTemplate.observeSend;org/springframework/kafka/core/KafkaTemplate.doSend;org/springframework/kafka/core/DefaultKafkaProducerFactory$CloseSafeProducer.send;org/apache/kafka/clients/producer/KafkaProducer.send;org/apache/kafka/clients/producer/KafkaProducer.doSend;org/apache/kafka/common/serialization/Serializer.serialize;org/apache/kafka/common/serialization/StringSerializer.serialize;org/apache/kafka/common/serialization/StringSerializer.serialize;java/lang/String.getBytes;java/lang/String.encode;java/lang/String.encodeUTF8;java/lang/Object.clone;JVM_Clone;MemAllocator::allocate;MemAllocator::Allocation::notify_allocation_jfr_sampler",
+        "weight": 1
+      },
+      {
+        "stack": "[ForkJoinPool-1-worker-3 tid=259];Cont thaw return barrier;dev/reliablemessaging/outbox/relay/OutboxRelay.work;dev/reliablemessaging/outbox/metrics/OutboxMetrics.dispatch;io/micrometer/core/instrument/AbstractTimer.record;dev/reliablemessaging/outbox/relay/OutboxRelay$$Lambda.0x00007fd0fc8afba8.get;dev/reliablemessaging/outbox/relay/OutboxRelay.lambda$work$1;dev/reliablemessaging/outbox/relay/KafkaOutboxDispatcher.dispatch;org/apache/kafka/clients/producer/ProducerRecord.<init>;org/apache/kafka/clients/producer/ProducerRecord.<init>",
+        "weight": 1
+      },
+      {
+        "stack": "[ForkJoinPool-1-worker-2 tid=62];Cont thaw return barrier;dev/reliablemessaging/outbox/relay/OutboxRelay.work;dev/reliablemessaging/outbox/metrics/OutboxMetrics.dispatch;io/micrometer/core/instrument/AbstractTimer.record;dev/reliablemessaging/outbox/relay/OutboxRelay$$Lambda.0x00007fd0fc8afba8.get;dev/reliablemessaging/outbox/relay/OutboxRelay.lambda$work$1;dev/reliablemessaging/outbox/relay/KafkaOutboxDispatcher.dispatch;org/springframework/kafka/core/KafkaTemplate.send;org/springframework/kafka/core/KafkaTemplate.observeSend;org/springframework/kafka/core/KafkaTemplate.doSend;org/springframework/kafka/core/DefaultKafkaProducerFactory$CloseSafeProducer.send;org/apache/kafka/clients/producer/KafkaProducer.send;org/apache/kafka/clients/producer/KafkaProducer.doSend;org/apache/kafka/common/record/AbstractRecords.estimateSizeInBytesUpperBound;org/apache/kafka/common/record/AbstractRecords.estimateSizeInBytesUpperBound;org/apache/kafka/common/record/DefaultRecordBatch.estimateBatchSizeUpperBound;org/apache/kafka/common/record/DefaultRecord.recordSizeUpperBound;org/apache/kafka/common/record/DefaultRecord.sizeOf;org/apache/kafka/common/utils/Utils.utf8Length;java/lang/String.charAt;java/lang/StringLatin1.charAt",
+        "weight": 1
+      }
+    ],
+    "jfr_events": {
+      "jdk.ThreadPark": 77318,
+      "jdk.JavaMonitorEnter": 2202,
+      "jdk.ExecutionSample": 1911,
+      "jdk.SocketRead": 1400,
+      "jdk.SocketWrite": 290
+    },
+    "jfr_wait_threads": [
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "prometheus-metrics-scheduler-0",
+        "count": 3294
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "HikariPool-1:connection-adder",
+        "count": 2924
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "Read-Updater",
+        "count": 2838
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "VirtualThread-unparker",
+        "count": 2358
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "ForkJoinPool-1-worker-3",
+        "count": 1991
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "ForkJoinPool-1-worker-1",
+        "count": 1947
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-Poller",
+        "count": 470
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-168",
+        "count": 316
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-5",
+        "count": 314
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-57",
+        "count": 314
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-163",
+        "count": 313
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-183",
+        "count": 312
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-197",
+        "count": 312
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-32",
+        "count": 312
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-195",
+        "count": 312
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-70",
+        "count": 311
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-100",
+        "count": 311
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-67",
+        "count": 311
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-121",
+        "count": 311
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-176",
+        "count": 311
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-53",
+        "count": 311
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-20",
+        "count": 311
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-11",
+        "count": 310
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-177",
+        "count": 310
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-153",
+        "count": 310
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-199",
+        "count": 310
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-174",
+        "count": 310
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-88",
+        "count": 310
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-178",
+        "count": 310
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-82",
+        "count": 309
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-180",
+        "count": 309
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-126",
+        "count": 309
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-79",
+        "count": 309
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-83",
+        "count": 309
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-188",
+        "count": 309
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-192",
+        "count": 309
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-92",
+        "count": 308
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-35",
+        "count": 308
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-194",
+        "count": 308
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-34",
+        "count": 308
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-160",
+        "count": 308
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-200",
+        "count": 308
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-99",
+        "count": 307
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-150",
+        "count": 307
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-147",
+        "count": 307
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-85",
+        "count": 307
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-68",
+        "count": 307
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-169",
+        "count": 307
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-77",
+        "count": 307
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-128",
+        "count": 307
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-42",
+        "count": 307
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-23",
+        "count": 307
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-3",
+        "count": 307
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-198",
+        "count": 307
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-107",
+        "count": 307
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-117",
+        "count": 307
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-18",
+        "count": 307
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-93",
+        "count": 306
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-111",
+        "count": 306
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-28",
+        "count": 306
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-131",
+        "count": 306
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-84",
+        "count": 306
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-8",
+        "count": 306
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-81",
+        "count": 306
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-7",
+        "count": 306
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-38",
+        "count": 306
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-139",
+        "count": 306
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-109",
+        "count": 306
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-172",
+        "count": 306
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-171",
+        "count": 306
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-12",
+        "count": 306
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-14",
+        "count": 306
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-62",
+        "count": 306
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-86",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-125",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-69",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-115",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-16",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-164",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-59",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-94",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-191",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-64",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-155",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-15",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-132",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-151",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-134",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-148",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-162",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-27",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-60",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-39",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-118",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-140",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-156",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-185",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-98",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-25",
+        "count": 305
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-113",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-76",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-65",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-196",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-135",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-17",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-33",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-145",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-170",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-78",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-136",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-103",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-10",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-114",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-141",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-181",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-6",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-50",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-143",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-97",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-142",
+        "count": 304
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-55",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-130",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-9",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-49",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-47",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-4",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-21",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-71",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-1",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-184",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-89",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-187",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-75",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-95",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-175",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-96",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-90",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-101",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-44",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-91",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-80",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-186",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-48",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-36",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-108",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-129",
+        "count": 303
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-157",
+        "count": 302
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-122",
+        "count": 302
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-144",
+        "count": 302
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-56",
+        "count": 302
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-152",
+        "count": 302
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-189",
+        "count": 302
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-72",
+        "count": 302
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-190",
+        "count": 302
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-46",
+        "count": 302
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-161",
+        "count": 302
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-138",
+        "count": 302
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-66",
+        "count": 302
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-22",
+        "count": 302
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-159",
+        "count": 302
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-58",
+        "count": 302
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-105",
+        "count": 302
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-19",
+        "count": 302
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-182",
+        "count": 301
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-26",
+        "count": 301
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-43",
+        "count": 301
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-45",
+        "count": 301
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-37",
+        "count": 301
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-13",
+        "count": 301
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-30",
+        "count": 301
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-154",
+        "count": 301
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-116",
+        "count": 301
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-127",
+        "count": 301
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-74",
+        "count": 301
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-158",
+        "count": 301
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-29",
+        "count": 301
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-112",
+        "count": 301
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-149",
+        "count": 301
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-123",
+        "count": 300
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-179",
+        "count": 300
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-120",
+        "count": 300
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-106",
+        "count": 300
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-52",
+        "count": 300
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-104",
+        "count": 300
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-137",
+        "count": 300
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-102",
+        "count": 300
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-167",
+        "count": 300
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-119",
+        "count": 300
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-73",
+        "count": 300
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-124",
+        "count": 300
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-40",
+        "count": 300
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-61",
+        "count": 300
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-41",
+        "count": 299
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-166",
+        "count": 299
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-173",
+        "count": 299
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-165",
+        "count": 299
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-110",
+        "count": 299
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-63",
+        "count": 299
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-31",
+        "count": 299
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-2",
+        "count": 298
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-24",
+        "count": 298
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-133",
+        "count": 298
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-51",
+        "count": 298
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-146",
+        "count": 298
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-54",
+        "count": 298
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-87",
+        "count": 297
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-193",
+        "count": 297
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "Catalina-utility-2",
+        "count": 288
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "Catalina-utility-1",
+        "count": 286
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "kafka-producer-network-thread | producer-1",
+        "count": 178
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "ForkJoinPool-1-worker-2",
+        "count": 165
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "BatchLogRecordProcessor_WorkerThread-1",
+        "count": 119
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "BatchSpanProcessor_WorkerThread-1",
+        "count": 115
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "outbox-relay-1",
+        "count": 91
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "outbox-relay-2",
+        "count": 72
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "outbox-metrics",
+        "count": 25
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "HikariPool-1:housekeeper",
+        "count": 16
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-10",
+        "count": 14
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-107",
+        "count": 14
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-37",
+        "count": 14
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-193",
+        "count": 13
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-19",
+        "count": 13
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-134",
+        "count": 12
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-129",
+        "count": 12
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-62",
+        "count": 12
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-67",
+        "count": 12
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-4",
+        "count": 12
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-17",
+        "count": 12
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-100",
+        "count": 12
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-153",
+        "count": 12
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-7",
+        "count": 12
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-184",
+        "count": 11
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-69",
+        "count": 11
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-132",
+        "count": 11
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-175",
+        "count": 11
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-88",
+        "count": 11
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-29",
+        "count": 11
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-50",
+        "count": 11
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-117",
+        "count": 11
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-112",
+        "count": 11
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "outbox-reaper",
+        "count": 11
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-56",
+        "count": 10
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-145",
+        "count": 10
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-42",
+        "count": 10
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-199",
+        "count": 10
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-158",
+        "count": 10
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-121",
+        "count": 10
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-108",
+        "count": 10
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-173",
+        "count": 10
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-1",
+        "count": 10
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-49",
+        "count": 10
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-53",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-35",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-58",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-105",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-125",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-9",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-47",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-83",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-54",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-148",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-195",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-90",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-151",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-59",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-12",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-180",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-142",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-126",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-89",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-95",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-155",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-197",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-114",
+        "count": 9
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-99",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-185",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-163",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-194",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-74",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-36",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-127",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-143",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-72",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-39",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-24",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-133",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-51",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-186",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-85",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-103",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-144",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-61",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-111",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-98",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-178",
+        "count": 8
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-94",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-106",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-198",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-119",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-176",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-18",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-110",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-182",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-26",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-25",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-57",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-188",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-154",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-87",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-66",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-118",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-63",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-130",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-179",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-92",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-40",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-93",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-160",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-65",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-6",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-75",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-48",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-172",
+        "count": 7
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-15",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-168",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-30",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-101",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-174",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-80",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-16",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-13",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-123",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-165",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-115",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-27",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-73",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-64",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-164",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-128",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-149",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-46",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-113",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-43",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-141",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-161",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-70",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-162",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-76",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-120",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-152",
+        "count": 6
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-84",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-169",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-71",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-190",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-192",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-156",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-28",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-86",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-131",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-104",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-2",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-22",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-177",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-21",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-122",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-157",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-109",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-79",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-60",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-102",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-82",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-8",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-31",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-183",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-139",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-81",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-33",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-187",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-45",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-32",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-200",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-124",
+        "count": 5
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-Poller",
+        "count": 5
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-3",
+        "count": 5
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-5",
+        "count": 5
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-6",
+        "count": 5
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-7",
+        "count": 5
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-8",
+        "count": 5
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-9",
+        "count": 5
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-10",
+        "count": 5
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-4",
+        "count": 5
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-1",
+        "count": 5
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-2",
+        "count": 5
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-135",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-77",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-138",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-146",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-147",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-34",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-170",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-196",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-11",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-159",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-44",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-171",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-191",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-68",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-55",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-116",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-167",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-140",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-78",
+        "count": 4
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-91",
+        "count": 3
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-137",
+        "count": 3
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-5",
+        "count": 3
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-181",
+        "count": 3
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-20",
+        "count": 3
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-14",
+        "count": 3
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-166",
+        "count": 3
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-96",
+        "count": 3
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-41",
+        "count": 3
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-189",
+        "count": 3
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-150",
+        "count": 3
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "Common-Cleaner",
+        "count": 3
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-23",
+        "count": 2
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-52",
+        "count": 2
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-38",
+        "count": 2
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-136",
+        "count": 2
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-3",
+        "count": 2
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-97",
+        "count": 2
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "JFR Periodic Tasks",
+        "count": 1
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8091-Poller",
+        "count": 1
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "kafka-producer-network-thread | producer-1",
+        "count": 1
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "Cleaner-0",
+        "count": 1
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "outbox-cleanup",
+        "count": 1
+      }
+    ],
+    "jfr_wait_seconds": [
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "Catalina-utility-2",
+        "seconds": 237.95522652000008
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "Catalina-utility-1",
+        "seconds": 237.94743914700018
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "prometheus-metrics-scheduler-0",
+        "seconds": 119.31078216299969
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "VirtualThread-unparker",
+        "seconds": 119.27344457600019
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "BatchLogRecordProcessor_WorkerThread-1",
+        "seconds": 119.07296383499995
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "Read-Updater",
+        "seconds": 118.43772142099989
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-196",
+        "seconds": 118.235839127
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-197",
+        "seconds": 117.88451248899996
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-59",
+        "seconds": 117.80809885700003
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-26",
+        "seconds": 117.79237452499999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-120",
+        "seconds": 117.7644766360001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-28",
+        "seconds": 117.72502180599999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-163",
+        "seconds": 117.72221424100003
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-131",
+        "seconds": 117.69285245600008
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-137",
+        "seconds": 117.69023349799991
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-77",
+        "seconds": 117.68830666900001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-191",
+        "seconds": 117.67393095800003
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-47",
+        "seconds": 117.66502410900004
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-113",
+        "seconds": 117.63259804299996
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-144",
+        "seconds": 117.60374314699997
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-68",
+        "seconds": 117.59029870399999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-132",
+        "seconds": 117.59004740099996
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-55",
+        "seconds": 117.58891712599998
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-82",
+        "seconds": 117.55846071500002
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-169",
+        "seconds": 117.55839705899989
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-70",
+        "seconds": 117.55192989799995
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-190",
+        "seconds": 117.5412638
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-79",
+        "seconds": 117.53728108799999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-43",
+        "seconds": 117.52728129399998
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-72",
+        "seconds": 117.51801573400003
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-16",
+        "seconds": 117.517545466
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-5",
+        "seconds": 117.51539882800002
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-92",
+        "seconds": 117.50744210699992
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-8",
+        "seconds": 117.49917838900004
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-154",
+        "seconds": 117.49237991099999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-60",
+        "seconds": 117.49085589099987
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-189",
+        "seconds": 117.48446265700001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-13",
+        "seconds": 117.484300764
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-123",
+        "seconds": 117.47628773800005
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-170",
+        "seconds": 117.44873025099999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-76",
+        "seconds": 117.44639113100007
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-96",
+        "seconds": 117.41963840599998
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-41",
+        "seconds": 117.41408269799996
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-99",
+        "seconds": 117.39967819299999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-152",
+        "seconds": 117.39291123300012
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-119",
+        "seconds": 117.38480503899999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-67",
+        "seconds": 117.36275910500002
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-122",
+        "seconds": 117.36018057000003
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-91",
+        "seconds": 117.35989423500003
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-145",
+        "seconds": 117.35817916899998
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-118",
+        "seconds": 117.35108524800003
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-38",
+        "seconds": 117.34623014099992
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-49",
+        "seconds": 117.346212435
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-86",
+        "seconds": 117.34352127099996
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-179",
+        "seconds": 117.33331701100006
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-65",
+        "seconds": 117.32880586699999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-71",
+        "seconds": 117.3244690119999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-15",
+        "seconds": 117.31530914199999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-187",
+        "seconds": 117.31474698999995
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-83",
+        "seconds": 117.31166646400001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-174",
+        "seconds": 117.30220857700009
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-111",
+        "seconds": 117.29709011999995
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-9",
+        "seconds": 117.28728301300005
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-106",
+        "seconds": 117.28583408700004
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-177",
+        "seconds": 117.285184454
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-141",
+        "seconds": 117.25542352899994
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-156",
+        "seconds": 117.248845028
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-184",
+        "seconds": 117.24525136399997
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-162",
+        "seconds": 117.24171534200002
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-64",
+        "seconds": 117.232162874
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-18",
+        "seconds": 117.21004971600006
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-110",
+        "seconds": 117.18808480199995
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-167",
+        "seconds": 117.18372336199998
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-150",
+        "seconds": 117.18353154399998
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-164",
+        "seconds": 117.179750666
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-3",
+        "seconds": 117.17333972399994
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-121",
+        "seconds": 117.16011456099996
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-27",
+        "seconds": 117.15624966099993
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-155",
+        "seconds": 117.15154258300002
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-56",
+        "seconds": 117.14706364600002
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-159",
+        "seconds": 117.12566840099991
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-39",
+        "seconds": 117.12478063899988
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-166",
+        "seconds": 117.12308434099995
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-45",
+        "seconds": 117.11173316099999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-135",
+        "seconds": 117.10050330800001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-30",
+        "seconds": 117.08898497799996
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-84",
+        "seconds": 117.08601305199996
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-136",
+        "seconds": 117.0842942859999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-78",
+        "seconds": 117.082241032
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-4",
+        "seconds": 117.07668284000005
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-81",
+        "seconds": 117.06154627100001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-116",
+        "seconds": 117.05399628400009
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-180",
+        "seconds": 117.0525281189999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-11",
+        "seconds": 117.05237271000006
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-94",
+        "seconds": 117.05062959899999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-21",
+        "seconds": 117.04405338800001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-36",
+        "seconds": 117.04321712899997
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-115",
+        "seconds": 117.04294281199994
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-75",
+        "seconds": 117.028612789
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-57",
+        "seconds": 117.02486913999998
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-31",
+        "seconds": 117.02433824700007
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-102",
+        "seconds": 117.01714641599999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-35",
+        "seconds": 117.01277455599987
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-20",
+        "seconds": 117.010616022
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-109",
+        "seconds": 117.01007757400004
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-200",
+        "seconds": 116.99913776699992
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-182",
+        "seconds": 116.99589621499997
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-148",
+        "seconds": 116.97916392099991
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-147",
+        "seconds": 116.97870374600001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-139",
+        "seconds": 116.96913709000002
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-126",
+        "seconds": 116.95900630400006
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-100",
+        "seconds": 116.95220738199995
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-104",
+        "seconds": 116.95051842199994
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-34",
+        "seconds": 116.94867784000004
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-2",
+        "seconds": 116.93464467399993
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-98",
+        "seconds": 116.93227250199998
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-48",
+        "seconds": 116.91185248300008
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-1",
+        "seconds": 116.91064829399993
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-173",
+        "seconds": 116.90748361299998
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-161",
+        "seconds": 116.90560068299993
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-32",
+        "seconds": 116.90355613499995
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-23",
+        "seconds": 116.8958317519999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-114",
+        "seconds": 116.89074609199993
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-130",
+        "seconds": 116.85366566499994
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-46",
+        "seconds": 116.85109015199998
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-175",
+        "seconds": 116.84657294499993
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-168",
+        "seconds": 116.84623222599991
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-176",
+        "seconds": 116.843604835
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-61",
+        "seconds": 116.83194559000003
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-85",
+        "seconds": 116.82319555700005
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-7",
+        "seconds": 116.81347336100002
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-101",
+        "seconds": 116.80414681599997
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-157",
+        "seconds": 116.80167556700003
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-17",
+        "seconds": 116.79117174600006
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-90",
+        "seconds": 116.79109703200004
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-103",
+        "seconds": 116.78928995399997
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-93",
+        "seconds": 116.78167667000004
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-97",
+        "seconds": 116.77302947100003
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-140",
+        "seconds": 116.77157042699994
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-80",
+        "seconds": 116.7584362910001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-153",
+        "seconds": 116.74816098000002
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-134",
+        "seconds": 116.745647412
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-52",
+        "seconds": 116.73988828800006
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-125",
+        "seconds": 116.73796635199999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-127",
+        "seconds": 116.73742806100003
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-22",
+        "seconds": 116.73534083700007
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-66",
+        "seconds": 116.72611762199996
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-73",
+        "seconds": 116.71130022900003
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-172",
+        "seconds": 116.673681065
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-165",
+        "seconds": 116.672240891
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-124",
+        "seconds": 116.65293279699982
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-142",
+        "seconds": 116.64359357900003
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-44",
+        "seconds": 116.63936602499997
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-53",
+        "seconds": 116.63088386900006
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-10",
+        "seconds": 116.61216950100003
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-171",
+        "seconds": 116.611072143
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-195",
+        "seconds": 116.60248966499995
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-51",
+        "seconds": 116.60243614300006
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-69",
+        "seconds": 116.60131095700001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-151",
+        "seconds": 116.56154061200003
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-192",
+        "seconds": 116.5588590220001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-87",
+        "seconds": 116.55822614799993
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-188",
+        "seconds": 116.55191423199996
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-138",
+        "seconds": 116.54477160299997
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-133",
+        "seconds": 116.54147222499992
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-198",
+        "seconds": 116.5409266910001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-181",
+        "seconds": 116.53997046500004
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-24",
+        "seconds": 116.53486995899998
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-88",
+        "seconds": 116.52378266400001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-128",
+        "seconds": 116.50026057500001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-33",
+        "seconds": 116.4981324390001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-108",
+        "seconds": 116.49177967799999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-143",
+        "seconds": 116.489855014
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-6",
+        "seconds": 116.48378251599993
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-149",
+        "seconds": 116.47083926499997
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-58",
+        "seconds": 116.46510920100009
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-105",
+        "seconds": 116.433365277
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-193",
+        "seconds": 116.42325670599996
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "BatchSpanProcessor_WorkerThread-1",
+        "seconds": 116.41920106500001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-14",
+        "seconds": 116.40149565100008
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-194",
+        "seconds": 116.38060178199999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-107",
+        "seconds": 116.35853924200006
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-54",
+        "seconds": 116.33789850499993
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-186",
+        "seconds": 116.317286104
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-29",
+        "seconds": 116.30670594599998
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-19",
+        "seconds": 116.30377516599998
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-63",
+        "seconds": 116.29486802899997
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-95",
+        "seconds": 116.28646334800004
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-40",
+        "seconds": 116.24605722200005
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-199",
+        "seconds": 116.24240992500003
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-183",
+        "seconds": 116.23872807100005
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-50",
+        "seconds": 116.227895806
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-185",
+        "seconds": 116.22634711200001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-12",
+        "seconds": 116.19307879499999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-74",
+        "seconds": 116.17948630000008
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-178",
+        "seconds": 116.152443207
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-146",
+        "seconds": 116.14671698500003
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-37",
+        "seconds": 116.114191788
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-160",
+        "seconds": 116.10446418
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-112",
+        "seconds": 116.091684972
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-25",
+        "seconds": 116.04785726199995
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-89",
+        "seconds": 116.00319009399992
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-42",
+        "seconds": 115.97006634700001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-62",
+        "seconds": 115.90261220399994
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "outbox-metrics",
+        "seconds": 115.881379415
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-117",
+        "seconds": 115.86722847200001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-158",
+        "seconds": 115.783763365
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-exec-129",
+        "seconds": 115.70286244399998
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "ForkJoinPool-1-worker-3",
+        "seconds": 111.04548557899987
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "outbox-reaper",
+        "seconds": 110.00436508100002
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "HikariPool-1:housekeeper",
+        "seconds": 109.408685972
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "ForkJoinPool-1-worker-1",
+        "seconds": 102.02133009300002
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-2",
+        "seconds": 99.907277223
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-7",
+        "seconds": 99.874576084
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-1",
+        "seconds": 99.85252999400001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-10",
+        "seconds": 99.727259737
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-9",
+        "seconds": 99.69927439700001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-8",
+        "seconds": 99.629984296
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-4",
+        "seconds": 99.18777271199998
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-5",
+        "seconds": 99.08817614700001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-6",
+        "seconds": 98.98717526499999
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8091-exec-3",
+        "seconds": 98.66108704300001
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "Common-Cleaner",
+        "seconds": 88.433150355
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "HikariPool-1:connection-adder",
+        "seconds": 79.62407439400002
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "ForkJoinPool-1-worker-2",
+        "seconds": 65.627668712
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "outbox-cleanup",
+        "seconds": 60.000259685
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "Cleaner-0",
+        "seconds": 60.000081768
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-Poller",
+        "seconds": 1.8771310469999996
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "kafka-producer-network-thread | producer-1",
+        "seconds": 1.5580377969999992
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "outbox-relay-1",
+        "seconds": 0.6325785640000005
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "outbox-relay-2",
+        "seconds": 0.547223856
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-125",
+        "seconds": 0.474401694
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-37",
+        "seconds": 0.42915130700000004
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-100",
+        "seconds": 0.388117341
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-184",
+        "seconds": 0.387989111
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-153",
+        "seconds": 0.331816162
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-53",
+        "seconds": 0.305846609
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-66",
+        "seconds": 0.304119946
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-4",
+        "seconds": 0.299962852
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-148",
+        "seconds": 0.286029219
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "JFR Periodic Tasks",
+        "seconds": 0.284338294
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-130",
+        "seconds": 0.280561777
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-76",
+        "seconds": 0.269628274
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-143",
+        "seconds": 0.266880262
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-10",
+        "seconds": 0.26668878
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-88",
+        "seconds": 0.26382928
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-185",
+        "seconds": 0.262345624
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-99",
+        "seconds": 0.261590176
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-186",
+        "seconds": 0.260595756
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-193",
+        "seconds": 0.253174065
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-69",
+        "seconds": 0.252247104
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-80",
+        "seconds": 0.250575691
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-182",
+        "seconds": 0.25043662299999997
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-131",
+        "seconds": 0.248407731
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-160",
+        "seconds": 0.24412394999999998
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-40",
+        "seconds": 0.244114936
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-7",
+        "seconds": 0.236735647
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-51",
+        "seconds": 0.228521639
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-63",
+        "seconds": 0.225859448
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-192",
+        "seconds": 0.223762283
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-145",
+        "seconds": 0.223443173
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-107",
+        "seconds": 0.22247283399999998
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-17",
+        "seconds": 0.222453517
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-175",
+        "seconds": 0.21799969600000002
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-187",
+        "seconds": 0.216847652
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-158",
+        "seconds": 0.21414636599999998
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-146",
+        "seconds": 0.21218862700000002
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-42",
+        "seconds": 0.211118084
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-134",
+        "seconds": 0.203128848
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-129",
+        "seconds": 0.20259544899999998
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-126",
+        "seconds": 0.199185462
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-180",
+        "seconds": 0.19877904400000002
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-54",
+        "seconds": 0.196602879
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-43",
+        "seconds": 0.19544806999999997
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-112",
+        "seconds": 0.190398977
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-106",
+        "seconds": 0.18285568900000002
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-104",
+        "seconds": 0.181177105
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-178",
+        "seconds": 0.180548135
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-94",
+        "seconds": 0.17973713800000002
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-132",
+        "seconds": 0.178650077
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-83",
+        "seconds": 0.176124166
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-103",
+        "seconds": 0.17558586499999998
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-22",
+        "seconds": 0.17550248000000002
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-138",
+        "seconds": 0.175087667
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-95",
+        "seconds": 0.174568531
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-62",
+        "seconds": 0.17094326
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-105",
+        "seconds": 0.170501631
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-30",
+        "seconds": 0.16986038
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-81",
+        "seconds": 0.167545464
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-195",
+        "seconds": 0.167466079
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-115",
+        "seconds": 0.16186640400000002
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-85",
+        "seconds": 0.161335093
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-102",
+        "seconds": 0.159112712
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-122",
+        "seconds": 0.157838697
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-177",
+        "seconds": 0.157335465
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-87",
+        "seconds": 0.15469803799999998
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-50",
+        "seconds": 0.15241191399999998
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-90",
+        "seconds": 0.15106456599999998
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-142",
+        "seconds": 0.147747888
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-127",
+        "seconds": 0.14760233099999998
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-173",
+        "seconds": 0.14442866
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-174",
+        "seconds": 0.144302274
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-144",
+        "seconds": 0.143786271
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-65",
+        "seconds": 0.14207721700000003
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-117",
+        "seconds": 0.138815442
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-32",
+        "seconds": 0.137692199
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-168",
+        "seconds": 0.137670479
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-46",
+        "seconds": 0.13574481100000002
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-19",
+        "seconds": 0.132823898
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-150",
+        "seconds": 0.132722206
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-164",
+        "seconds": 0.13130250400000001
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-121",
+        "seconds": 0.12954454899999998
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-137",
+        "seconds": 0.12739088999999998
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-163",
+        "seconds": 0.127390289
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-155",
+        "seconds": 0.127226082
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-58",
+        "seconds": 0.125516607
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-199",
+        "seconds": 0.124999187
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-12",
+        "seconds": 0.12420625900000001
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-25",
+        "seconds": 0.12217745299999999
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-111",
+        "seconds": 0.122099045
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-15",
+        "seconds": 0.121382052
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-108",
+        "seconds": 0.121036559
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-70",
+        "seconds": 0.11888579900000001
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-141",
+        "seconds": 0.114744503
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-1",
+        "seconds": 0.113223981
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-147",
+        "seconds": 0.112941411
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-67",
+        "seconds": 0.112679493
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-128",
+        "seconds": 0.112506986
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-48",
+        "seconds": 0.110617442
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-72",
+        "seconds": 0.108932263
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-49",
+        "seconds": 0.107535575
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-113",
+        "seconds": 0.10752564799999999
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-24",
+        "seconds": 0.10718709900000001
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-18",
+        "seconds": 0.106933455
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-6",
+        "seconds": 0.10558471000000001
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-89",
+        "seconds": 0.10515799500000002
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-152",
+        "seconds": 0.103984423
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-45",
+        "seconds": 0.10337218799999999
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-29",
+        "seconds": 0.10269217299999998
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-119",
+        "seconds": 0.10163412200000001
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-74",
+        "seconds": 0.100533906
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-140",
+        "seconds": 0.100076607
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "http-nio-8081-Poller",
+        "seconds": 0.099984066
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-93",
+        "seconds": 0.099378271
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-28",
+        "seconds": 0.09784944400000001
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-57",
+        "seconds": 0.09675037500000001
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-169",
+        "seconds": 0.095393314
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-26",
+        "seconds": 0.095152963
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-78",
+        "seconds": 0.094260383
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-39",
+        "seconds": 0.09379578300000001
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-151",
+        "seconds": 0.093558354
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-123",
+        "seconds": 0.09154492700000001
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-2",
+        "seconds": 0.091507536
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-154",
+        "seconds": 0.090988651
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-170",
+        "seconds": 0.090817217
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-71",
+        "seconds": 0.087970912
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-16",
+        "seconds": 0.08782183499999999
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-176",
+        "seconds": 0.086948461
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-198",
+        "seconds": 0.086608038
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-35",
+        "seconds": 0.08417491600000002
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-124",
+        "seconds": 0.084025809
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-47",
+        "seconds": 0.08344659099999999
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-101",
+        "seconds": 0.08341527499999998
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-179",
+        "seconds": 0.08136394400000001
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-190",
+        "seconds": 0.080651048
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-64",
+        "seconds": 0.080621949
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-68",
+        "seconds": 0.076961608
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-197",
+        "seconds": 0.076473528
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-191",
+        "seconds": 0.076276654
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-9",
+        "seconds": 0.07609547700000001
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-149",
+        "seconds": 0.075692997
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-162",
+        "seconds": 0.07563133600000001
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-91",
+        "seconds": 0.075341531
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-14",
+        "seconds": 0.075096695
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-114",
+        "seconds": 0.074364106
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-56",
+        "seconds": 0.071791142
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-161",
+        "seconds": 0.071592244
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-133",
+        "seconds": 0.07105949200000002
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-59",
+        "seconds": 0.0681074
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-13",
+        "seconds": 0.067428109
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-92",
+        "seconds": 0.066601868
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-36",
+        "seconds": 0.057720569
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-31",
+        "seconds": 0.056755727000000006
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-118",
+        "seconds": 0.056012905
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-82",
+        "seconds": 0.055607987
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-98",
+        "seconds": 0.055461347
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-188",
+        "seconds": 0.05498033199999999
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-75",
+        "seconds": 0.054922682
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-79",
+        "seconds": 0.053983471000000005
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-120",
+        "seconds": 0.053552962999999995
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-61",
+        "seconds": 0.052547675999999995
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-86",
+        "seconds": 0.052212335000000006
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-60",
+        "seconds": 0.05049457399999999
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-73",
+        "seconds": 0.05049168700000001
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-41",
+        "seconds": 0.049978817
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-172",
+        "seconds": 0.049507824000000006
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-109",
+        "seconds": 0.048245761
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-183",
+        "seconds": 0.047628670000000005
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-200",
+        "seconds": 0.046918391000000004
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-33",
+        "seconds": 0.046839899
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-21",
+        "seconds": 0.04681492300000001
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-97",
+        "seconds": 0.04671682
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-194",
+        "seconds": 0.045251188
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-157",
+        "seconds": 0.045022405
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-96",
+        "seconds": 0.044467731
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-171",
+        "seconds": 0.042832115000000004
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-156",
+        "seconds": 0.042776948
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-110",
+        "seconds": 0.042303068
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-11",
+        "seconds": 0.042030058
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-27",
+        "seconds": 0.037775902
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-55",
+        "seconds": 0.03697427
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-181",
+        "seconds": 0.036557378
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-5",
+        "seconds": 0.035020043
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-23",
+        "seconds": 0.034796781
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-44",
+        "seconds": 0.033058185000000004
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-8",
+        "seconds": 0.031122911000000003
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-77",
+        "seconds": 0.030109025999999997
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-116",
+        "seconds": 0.029514044
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-84",
+        "seconds": 0.027859122
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-34",
+        "seconds": 0.023263364
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-196",
+        "seconds": 0.023240184
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-165",
+        "seconds": 0.021008775
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-159",
+        "seconds": 0.020810126999999998
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-139",
+        "seconds": 0.02022409
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-38",
+        "seconds": 0.019753388
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-52",
+        "seconds": 0.018670666
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-135",
+        "seconds": 0.018422079
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-167",
+        "seconds": 0.016629589
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-166",
+        "seconds": 0.015560462
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-189",
+        "seconds": 0.014196986
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-20",
+        "seconds": 0.013494002
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-3",
+        "seconds": 0.011747671000000001
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8081-exec-136",
+        "seconds": 0.004679628
+      },
+      {
+        "event": "jdk.ThreadPark",
+        "thread": "kafka-producer-network-thread | producer-1",
+        "seconds": 0.002730266
+      },
+      {
+        "event": "jdk.JavaMonitorEnter",
+        "thread": "http-nio-8091-Poller",
+        "seconds": 0.0016368
+      }
+    ],
+    "jfr_wait_top_frames": {
+      "jdk/internal/misc/Unsafe.park": 77318,
+      "java/util/concurrent/locks/LockSupport.parkNanos": 69878,
+      "java/util/concurrent/locks/AbstractQueuedSynchronizer$ConditionObject.awaitNanos": 63061,
+      "java/util/concurrent/LinkedBlockingQueue.poll": 56896,
+      "org/apache/tomcat/util/threads/TaskQueue.poll": 53972,
+      "java/util/concurrent/ScheduledThreadPoolExecutor$DelayedWorkQueue.take": 11860,
+      "java/util/concurrent/LinkedTransferQueue$DualNode.await": 9652,
+      "java/util/concurrent/LinkedTransferQueue.xfer": 9652,
+      "java/util/concurrent/SynchronousQueue.xfer": 6814,
+      "java/util/concurrent/locks/LockSupport.park": 4804,
+      "java/util/concurrent/ForkJoinPool.awaitWork": 4098,
+      "java/util/concurrent/ForkJoinPool.runWorker": 4098,
+      "java/util/concurrent/ForkJoinWorkerThread.run": 4098,
+      "java/util/concurrent/ThreadPoolExecutor.getTask": 2924,
+      "java/util/concurrent/LinkedTransferQueue.take": 2838,
+      "java/util/concurrent/locks/LockSupport.parkUntil": 2636,
+      "sun/security/provider/NativePRNG$RandomIO.implNextBytes": 1087,
+      "sun/security/provider/NativePRNG.engineNextBytes": 1087,
+      "java/security/SecureRandom.nextBytes": 1087,
+      "java/util/UUID.randomUUID": 1087,
+      "sun/security/provider/SecureRandom.engineNextBytes": 978,
+      "sun/nio/ch/EPollSelectorImpl.clearInterrupt": 474,
+      "sun/nio/ch/EPollSelectorImpl.processEvents": 474,
+      "sun/nio/ch/EPollSelectorImpl.doSelect": 474,
+      "sun/nio/ch/SelectorImpl.lockAndDoSelect": 474,
+      "sun/nio/ch/SelectorImpl.select": 474,
+      "java/util/concurrent/locks/AbstractQueuedSynchronizer$ConditionNode.block": 397,
+      "java/util/concurrent/ForkJoinPool.unmanagedBlock": 397,
+      "java/util/concurrent/ForkJoinPool.managedBlock": 397,
+      "java/util/concurrent/ArrayBlockingQueue.poll": 234
+    }
+  },
+  "profiler_output": "",
+  "attribution_note": "async-profiler CPU/wall stacks may stop at virtual continuation barriers; relay shares only cover attributable stacks. JFR is used for pinning.",
+  "wall_seconds": 121.27494835853577,
+  "monotonic_seconds": 121.27494909999996
+}

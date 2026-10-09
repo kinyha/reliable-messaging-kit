@@ -1,0 +1,11 @@
+{
+  "source": "20261009T214435Z-baseline-profile-fixed-alloc-r2.collapsed",
+  "source_sha256": "59ec5554045ab1be69faed55f5deb1d8e658f48ce12ed6a0d15e0dc3ca9c2209",
+  "output": "20261009T214435Z-baseline-profile-fixed-alloc-r2-relay.html",
+  "output_sha256": "06b264e47e1d135f12b8629f3bdc2788e3296f175b6021718d0ba0b03aab2d5b",
+  "captured_weight": 282066406,
+  "unit": "estimated bytes",
+  "filter": "Only attributable relay stacks; exclude Thread.sleep/JVM_Sleep idle poll, as in profile.py",
+  "converter": "async-profiler 4.5 jfrconv (copied unchanged from the measured image)",
+  "converter_sha256": "2f07e6ed94d5f3c5a885132eaa18c3be9447280701d215c1fbf188d46e397166"
+}

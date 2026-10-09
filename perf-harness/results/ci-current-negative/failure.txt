@@ -1,0 +1,16 @@
+perf-gate	Short open-model load and p99/identity checks	﻿2026-10-09T22:21:04.0275535Z ##[group]Run perf-harness/scripts/run-ci.sh
+perf-gate	Short open-model load and p99/identity checks	2026-10-09T22:21:04.0275917Z ^[[36;1mperf-harness/scripts/run-ci.sh^[[0m
+perf-gate	Short open-model load and p99/identity checks	2026-10-09T22:21:04.0339844Z shell: /usr/bin/bash -e {0}
+perf-gate	Short open-model load and p99/identity checks	2026-10-09T22:21:04.0340126Z env:
+perf-gate	Short open-model load and p99/identity checks	2026-10-09T22:21:04.0340464Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+perf-gate	Short open-model load and p99/identity checks	2026-10-09T22:21:04.0341025Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+perf-gate	Short open-model load and p99/identity checks	2026-10-09T22:21:04.0341442Z ##[endgroup]
+perf-gate	Short open-model load and p99/identity checks	2026-10-09T22:24:31.1705161Z 20261009T222144Z-20261009T222104Z-ci-r1: HTTP p99=4.62ms e2e p99=3912.338777280948ms rps=100.0 pending_peak=63.0
+perf-gate	Short open-model load and p99/identity checks	2026-10-09T22:24:32.1338795Z PASS: HTTP p99: 4.616335 <= 100
+perf-gate	Short open-model load and p99/identity checks	2026-10-09T22:24:32.1340756Z FAIL: e2e p99: 3912.338777280948 <= 1500
+perf-gate	Short open-model load and p99/identity checks	2026-10-09T22:24:32.1343125Z PASS: HTTP error rate: 0.0 <= 0.01
+perf-gate	Short open-model load and p99/identity checks	2026-10-09T22:24:32.1343596Z PASS: dropped iterations: 0 <= 0
+perf-gate	Short open-model load and p99/identity checks	2026-10-09T22:24:32.1343993Z PASS: pending after drain: 0 <= 0
+perf-gate	Short open-model load and p99/identity checks	2026-10-09T22:24:32.1344377Z PASS: missing payments: 0 <= 0
+perf-gate	Short open-model load and p99/identity checks	2026-10-09T22:24:32.1344758Z PASS: duplicate payments: 0 <= 0
+perf-gate	Short open-model load and p99/identity checks	2026-10-09T22:24:32.1389874Z ##[error]Process completed with exit code 1.

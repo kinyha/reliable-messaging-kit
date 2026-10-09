@@ -57,7 +57,9 @@ Pinning оценивается отдельными полными JFR captures,
 и `-Djdk.tracePinnedThreads=full`. Async-profiler CPU/wall может обрывать virtual стеки на
 continuation barrier; его атрибутированные доли не являются полной долей времени виртуального
 воркера ([ограничение профилировщика](https://github.com/async-profiler/async-profiler/discussions/1745)).
-Конкретные JFR события и кадры приводятся в отчёте профилирования после завершения captures.
+Три полных JFR наблюдали0 событий VirtualThreadPinned >=1ms. В первом CPU окне и втором
+alloc окне были dropped k6 iterations; эта profiling кампания не принята как устойчивые500rps
+performance-данные. Кадры и оговорки — в [отчёте профилирования](profiling.md).
 
 ## H3: все 12 сочетаний на 300 orders/s
 

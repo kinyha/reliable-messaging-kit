@@ -1,0 +1,43 @@
+[
+  {
+    "recording": "20261009T215443Z-gha-virtual-profile-fixed-cpu-r1.jfr.gz",
+    "pinned": [],
+    "relay_monitor_top_stacks": [
+      [
+        "org/apache/kafka/clients/producer/internals/RecordAccumulator.append \u2192 org/apache/kafka/clients/producer/KafkaProducer.doSend \u2192 org/apache/kafka/clients/producer/KafkaProducer.send \u2192 org/springframework/kafka/core/DefaultKafkaProducerFactory$CloseSafeProducer.send \u2192 org/springframework/kafka/core/KafkaTemplate.doSend",
+        91
+      ],
+      [
+        "org/apache/kafka/clients/producer/internals/TransactionManager.maybeAddPartition \u2192 org/apache/kafka/clients/producer/KafkaProducer.doSend \u2192 org/apache/kafka/clients/producer/KafkaProducer.send \u2192 org/springframework/kafka/core/DefaultKafkaProducerFactory$CloseSafeProducer.send \u2192 org/springframework/kafka/core/KafkaTemplate.doSend",
+        54
+      ],
+      [
+        "org/apache/kafka/clients/producer/internals/ProducerMetadata.add \u2192 org/apache/kafka/clients/producer/KafkaProducer.waitOnMetadata \u2192 org/apache/kafka/clients/producer/KafkaProducer.doSend \u2192 org/apache/kafka/clients/producer/KafkaProducer.send \u2192 org/springframework/kafka/core/DefaultKafkaProducerFactory$CloseSafeProducer.send",
+        15
+      ],
+      [
+        "sun/security/provider/SecureRandom.engineNextBytes \u2192 sun/security/provider/NativePRNG$RandomIO.implNextBytes \u2192 sun/security/provider/NativePRNG.engineNextBytes \u2192 java/security/SecureRandom.nextBytes \u2192 java/util/UUID.randomUUID",
+        1
+      ],
+      [
+        "sun/nio/ch/EPollSelectorImpl.wakeup \u2192 org/apache/kafka/common/network/Selector.wakeup \u2192 org/apache/kafka/clients/NetworkClient.wakeup \u2192 org/apache/kafka/clients/producer/internals/Sender.wakeup \u2192 org/apache/kafka/clients/producer/KafkaProducer.doSend",
+        1
+      ]
+    ]
+  },
+  {
+    "recording": "20261009T215443Z-gha-virtual-profile-fixed-cpu-r2.jfr.gz",
+    "pinned": [],
+    "relay_monitor_top_stacks": [
+      [
+        "org/apache/kafka/clients/producer/internals/RecordAccumulator.append \u2192 org/apache/kafka/clients/producer/KafkaProducer.doSend \u2192 org/apache/kafka/clients/producer/KafkaProducer.send \u2192 org/springframework/kafka/core/DefaultKafkaProducerFactory$CloseSafeProducer.send \u2192 org/springframework/kafka/core/KafkaTemplate.doSend",
+        1
+      ]
+    ]
+  },
+  {
+    "recording": "20261009T215443Z-gha-virtual-profile-fixed-cpu-r3.jfr.gz",
+    "pinned": [],
+    "relay_monitor_top_stacks": []
+  }
+]

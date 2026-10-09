@@ -1,0 +1,26 @@
+{
+  "created_at": "2026-10-09T21:55:50.667788+00:00",
+  "commit": "8091865c5eb8c6fa71d05b211299f73055e4dfb4",
+  "args": {
+    "rps": 500,
+    "duration": 120,
+    "runs": 3,
+    "virtual": true,
+    "name": "gha-virtual-profile-fixed"
+  },
+  "warmup_seconds": 60,
+  "image_ids": "[{\"ID\":\"sha256:ebe58770941fad8ae444fcfc5c0a777735b9cd8afd844a682c3654f27e77ce93\",\"ContainerName\":\"rmk-perf-kafka-1\",\"Repository\":\"apache/kafka\",\"Tag\":\"4.3.0\",\"Platform\":\"linux/amd64\",\"Size\":433921955,\"LastTagTime\":\"0001-01-01T00:00:00Z\"},{\"ID\":\"sha256:81bd698b4594e751a3269e4dcd3e03a4a0ec0daf7b72e7aa1abd43cce9887542\",\"ContainerName\":\"rmk-perf-payment-postgres-1\",\"Repository\":\"postgres\",\"Tag\":\"16.15-alpine\",\"Platform\":\"linux/amd64\",\"Size\":294292520,\"LastTagTime\":\"0001-01-01T00:00:00Z\"},{\"ID\":\"sha256:a3bc50fcb50fb1409287c32773d8fe799f6cad5511c4ba3e2e851784e7a05026\",\"ContainerName\":\"rmk-perf-prometheus-1\",\"Repository\":\"prom/prometheus\",\"Tag\":\"v3.5.0\",\"Platform\":\"linux/amd64\",\"Size\":313019686,\"LastTagTime\":\"0001-01-01T00:00:00Z\"},{\"ID\":\"sha256:51f49e6edbdeb93c6db1a821231a0b7eae774a32c400775eaf51fc7d6910898b\",\"ContainerName\":\"rmk-perf-payment-service-1\",\"Repository\":\"rmk-payment\",\"Tag\":\"stage-2\",\"Platform\":\"linux/amd64\",\"Size\":500180130,\"LastTagTime\":\"2026-10-09T21:53:46.535457627Z\"},{\"ID\":\"sha256:9f944d573047a35c47c7a738b6c8bee111abd1774eb715d3e7f0d3bae5c62597\",\"ContainerName\":\"rmk-perf-order-service-1\",\"Repository\":\"rmk-order\",\"Tag\":\"stage-2\",\"Platform\":\"linux/amd64\",\"Size\":502565901,\"LastTagTime\":\"2026-10-09T21:53:52.022046605Z\"},{\"ID\":\"sha256:81bd698b4594e751a3269e4dcd3e03a4a0ec0daf7b72e7aa1abd43cce9887542\",\"ContainerName\":\"rmk-perf-order-postgres-1\",\"Repository\":\"postgres\",\"Tag\":\"16.15-alpine\",\"Platform\":\"linux/amd64\",\"Size\":294292520,\"LastTagTime\":\"0001-01-01T00:00:00Z\"},{\"ID\":\"sha256:3edf5d14625b9aa8ad71d5dd084da1f8a0eb46ee749457549ae91d29d96546aa\",\"ContainerName\":\"rmk-perf-toxiproxy-1\",\"Repository\":\"ghcr.io/shopify/toxiproxy\",\"Tag\":\"2.12.0\",\"Platform\":\"linux/amd64\",\"Size\":18747696,\"LastTagTime\":\"0001-01-01T00:00:00Z\"}]\n\n",
+  "script_sha256": "b655e218fb371cd83216747f1459b798b8c4521f0423ad174976b52311bfdfa7",
+  "status": "complete",
+  "profiles": [
+    "20261009T215443Z-gha-virtual-profile-fixed-cpu-r1",
+    "20261009T215443Z-gha-virtual-profile-fixed-cpu-r2",
+    "20261009T215443Z-gha-virtual-profile-fixed-cpu-r3",
+    "20261009T215443Z-gha-virtual-profile-fixed-alloc-r1",
+    "20261009T215443Z-gha-virtual-profile-fixed-alloc-r2",
+    "20261009T215443Z-gha-virtual-profile-fixed-alloc-r3",
+    "20261009T215443Z-gha-virtual-profile-fixed-wall-r1",
+    "20261009T215443Z-gha-virtual-profile-fixed-wall-r2",
+    "20261009T215443Z-gha-virtual-profile-fixed-wall-r3"
+  ]
+}

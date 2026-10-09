@@ -1,0 +1,11 @@
+{
+  "source": "20261009T214435Z-baseline-profile-fixed-wall-r2.collapsed",
+  "source_sha256": "9b24bc1246a6ef8ea22de8087b031cbae732dccd83c1df745ae02a9ce41ebd46",
+  "output": "20261009T214435Z-baseline-profile-fixed-wall-r2-relay.html",
+  "output_sha256": "745a930df3959140af0644e353452b840904a0f9fcbe1b46bfa47293c0778411",
+  "captured_weight": 188,
+  "unit": "samples",
+  "filter": "Only attributable relay stacks; exclude Thread.sleep/JVM_Sleep idle poll, as in profile.py",
+  "converter": "async-profiler 4.5 jfrconv (copied unchanged from the measured image)",
+  "converter_sha256": "2f07e6ed94d5f3c5a885132eaa18c3be9447280701d215c1fbf188d46e397166"
+}

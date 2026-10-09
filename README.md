@@ -8,7 +8,9 @@ Spring Boot стартер для **Transactional Outbox** и **Idempotent Consu
 
 Этап 1 реализован: публикатор, claim/send/ack, аренды и fencing, повторы с джиттером, DEAD,
 метрики, inbox, аннотация потребителя и демонстрационные сервисы. Проверки и реальные результаты:
-[`docs/demo-1-results.md`](docs/demo-1-results.md). Этап 2 остаётся отдельной работой в ветке `stage-2`.
+[`docs/demo-1-results.md`](docs/demo-1-results.md). Этап 2 ведётся в отдельной ветке `stage-2`: perf harness, virtual threads под флагом,
+Toxiproxy, CI-гейт и одна оптимизация чтения пустых headers. [Текущий итог](docs/perf/final-report.md)
+разделяет завершённые проверки и ещё не подтверждённые performance-критерии.
 
 ## Быстрый старт демо
 

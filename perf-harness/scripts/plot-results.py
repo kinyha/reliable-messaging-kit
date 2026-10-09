@@ -41,8 +41,6 @@ def baseline():
                 yerr=[[p[1][1][row][0] for p in points] for row in [0,1]],marker='o',capsize=4,label=campaign)
             ax.set(xlabel='Requested orders / second',ylabel='HTTP p99 (ms)' if key=='http_p99_ms' else 'End-to-end p99 (ms)',ylim=(0,None))
             ax.grid(alpha=.2)
-    axes[0].axhline(100,color='crimson',linestyle='--',alpha=.6,label='CI limit')
-    axes[1].axhline(1500,color='crimson',linestyle='--',alpha=.6,label='Design target')
     for ax in axes:ax.legend()
     fig.suptitle('Baseline: median and min/max of three 180 s runs after 60 s warmup')
     fig.tight_layout();save(fig,'baseline')
