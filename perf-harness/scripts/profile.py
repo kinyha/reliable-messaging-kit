@@ -41,7 +41,8 @@ def main():
                         f'duration={args.duration}s',f'filename=/results/{prefix}.jfr','jdk.VirtualThreadPinned#enabled=true',
                         'jdk.VirtualThreadPinned#threshold=1ms','jdk.JavaMonitorEnter#threshold=1ms','jdk.ThreadPark#threshold=1ms')
                 profile_log=compose('exec','-T','order-service','/opt/async-profiler/bin/asprof',*options,'1')
-                compose('exec','-T','order-service','/opt/async-profiler/bin/asprof','dump','-t','--dot','-o','collapsed',
+                dump_options=['dump','-t','--dot','-o','collapsed']+(['--total'] if event=='alloc' else [])
+                compose('exec','-T','order-service','/opt/async-profiler/bin/asprof',*dump_options,
                         '-f',f'/results/{prefix}.collapsed','1')
                 if load.wait()!=0: raise RuntimeError('load process failed during profile')
                 wait_drain();stats=analyze_collapsed(RESULTS/f'{prefix}.collapsed')

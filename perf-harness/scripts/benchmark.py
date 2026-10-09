@@ -108,6 +108,13 @@ def configure(config):
     # Only project-owned transient data is reset; stage 1 volumes are independent.
     sql('order-postgres','truncate orders,outbox_message,inbox_message restart identity')
     sql('payment-postgres','truncate payments,delivery_log,outbox_message,inbox_message restart identity')
+    for topic in ['orders.v1','orders.v1.DLT']:
+        compose('exec','-T','kafka','/opt/kafka/bin/kafka-topics.sh','--bootstrap-server','localhost:29092','--delete','--topic',topic,'--if-exists')
+        deadline=time.monotonic()+30
+        while topic in compose('exec','-T','kafka','/opt/kafka/bin/kafka-topics.sh','--bootstrap-server','localhost:29092','--list').splitlines():
+            if time.monotonic()>deadline: raise RuntimeError('topic deletion did not complete')
+            time.sleep(1)
+        compose('exec','-T','kafka','/opt/kafka/bin/kafka-topics.sh','--bootstrap-server','localhost:29092','--create','--topic',topic,'--partitions','6','--replication-factor','1')
     compose('up','-d','--force-recreate','order-service','payment-service',env=env)
     health()
     if config.get('RELAY_ENABLED','true')=='true':
@@ -118,50 +125,56 @@ def configure(config):
 
 def run_case(prefix,rps,seconds,relay,soak=False,strict=False):
     before_o=metrics(18091); before_p=metrics(18092); before_db=db_snapshot()
-    container_ids=compose('ps','-q','order-service','payment-service','order-postgres','kafka').split()
+    container_ids=compose('ps','-q','order-service','payment-service','order-postgres','payment-postgres','kafka').split()
     start=time.time(); process=k6(prefix,rps,seconds,strict)
-    samples=[]; cpu=[]
-    while process.poll() is None:
-        m=metrics(18091); p=metrics(18092)
-        sample=dict(elapsed=time.time()-start,pending=total(m,'outbox_messages_pending'),in_flight=total(m,'outbox_messages_in_flight'),
-                    dead=total(m,'outbox_messages_dead'),processed=total(p,'demo_e2e_latency_seconds_count'),
-                    hikari_active=total(m,'hikaricp_connections_active'))
-        sample.update(db_snapshot())
-        samples.append(sample)
-        stats=command(['docker','stats','--no-stream','--format','{{json .}}']+container_ids)
-        cpu.extend([dict(elapsed=sample['elapsed'],**json.loads(line)) for line in stats.splitlines() if line.strip()])
-        time.sleep(8 if not soak else 30)
-    end=time.time(); exit_code=process.wait()
-    if not (RESULTS/f'{prefix}.json').exists(): raise RuntimeError(f'k6 failed: {prefix}; exit={exit_code}')
-    measured_o=metrics(18091); measured_p=metrics(18092); measured_db=db_snapshot()
-    pending=wait_drain(relay=relay)
-    after_p=metrics(18092)
-    raw=json.loads((RESULTS/f'{prefix}.json').read_text())['metrics']
-    latency=raw['order_http_latency']['values']
-    counters=lambda n:raw.get(n,{}).get('values',{}).get('count',0)
-    committed=counters('orders_committed'); failed=counters('orders_failed')
-    stats=dict(http_p50_ms=latency.get('p(50)'),http_p95_ms=latency.get('p(95)'),http_p99_ms=latency.get('p(99)'),
-               e2e_p50_ms=quantile(before_p,after_p,'demo_e2e_latency_seconds_bucket',.50),
-               e2e_p95_ms=quantile(before_p,after_p,'demo_e2e_latency_seconds_bucket',.95),
-               e2e_p99_ms=quantile(before_p,after_p,'demo_e2e_latency_seconds_bucket',.99),
-               requested_rps=rps,duration_seconds=seconds,wall_seconds=end-start,committed=committed,http_failed=failed,
-               http_error_rate=failed/(failed+committed) if committed+failed else 1,dropped_iterations=counters('dropped_iterations'),
-               committed_rps=committed/seconds,
-               relay_sent_rps=(total(measured_o,'outbox_relay_published_total',result='sent')-total(before_o,'outbox_relay_published_total',result='sent'))/seconds,
-               db_calls_per_second=(measured_db['calls']-before_db['calls'])/seconds,
-               relay_calls_per_second=(measured_db['relay_calls']-before_db['relay_calls'])/seconds,
-               hikari_mean_usage_ms=1000*(total(measured_o,'hikaricp_connections_usage_seconds_sum')-total(before_o,'hikaricp_connections_usage_seconds_sum'))/max(1,total(measured_o,'hikaricp_connections_usage_seconds_count')-total(before_o,'hikaricp_connections_usage_seconds_count')),
-               max_pending=max((s['pending'] for s in samples),default=0),pending_after_drain=pending,k6_exit=exit_code,
-               hikari_leases_per_second=(total(measured_o,'hikaricp_connections_usage_seconds_count')-total(before_o,'hikaricp_connections_usage_seconds_count'))/seconds,
-               hikari_little_law_occupancy=(total(measured_o,'hikaricp_connections_usage_seconds_sum')-total(before_o,'hikaricp_connections_usage_seconds_sum'))/seconds,
-               hikari_active_mean=statistics.mean(s['hikari_active'] for s in samples) if samples else None)
-    stats.update(reconcile(relay))
-    stats['cpu_percent_mean']={name:statistics.mean(float(s['CPUPerc'].rstrip('%')) for s in cpu if s.get('Name')==name) for name in {s.get('Name') for s in cpu}}
-    doc=dict(run_id=prefix,started_at=datetime.fromtimestamp(start,timezone.utc).isoformat(),finished_at=datetime.fromtimestamp(end,timezone.utc).isoformat(),
-             statistics=stats,samples=samples,cpu_samples=cpu)
-    (RESULTS/f'{prefix}.measurement.json').write_text(json.dumps(doc,indent=2)+'\n')
-    print(f'{prefix}: HTTP p99={stats["http_p99_ms"]:.2f}ms e2e p99={stats["e2e_p99_ms"]}ms rps={stats["committed_rps"]:.1f} pending_peak={stats["max_pending"]}',flush=True)
-    return doc
+    try:
+        samples=[]; cpu=[]; previous_p=before_p
+        while process.poll() is None:
+            m=metrics(18091); p=metrics(18092)
+            sample=dict(elapsed=time.time()-start,pending=total(m,'outbox_messages_pending'),in_flight=total(m,'outbox_messages_in_flight'),
+                        dead=total(m,'outbox_messages_dead'),processed=total(p,'demo_e2e_latency_seconds_count'),
+                        hikari_active=total(m,'hikaricp_connections_active'))
+            sample['e2e_window_p99_ms']=quantile(previous_p,p,'demo_e2e_latency_seconds_bucket',.99);previous_p=p
+            sample.update(db_snapshot())
+            samples.append(sample)
+            stats=command(['docker','stats','--no-stream','--format','{{json .}}']+container_ids)
+            cpu.extend([dict(elapsed=sample['elapsed'],**json.loads(line)) for line in stats.splitlines() if line.strip()])
+            time.sleep(8 if not soak else 30)
+        end=time.time(); exit_code=process.wait()
+        if not (RESULTS/f'{prefix}.json').exists(): raise RuntimeError(f'k6 failed: {prefix}; exit={exit_code}')
+        measured_o=metrics(18091); measured_p=metrics(18092); measured_db=db_snapshot()
+        pending=wait_drain(relay=relay)
+        after_p=metrics(18092)
+        raw=json.loads((RESULTS/f'{prefix}.json').read_text())['metrics']
+        latency=raw['order_http_latency']['values']
+        counters=lambda n:raw.get(n,{}).get('values',{}).get('count',0)
+        committed=counters('orders_committed'); failed=counters('orders_failed')
+        stats=dict(http_p50_ms=latency.get('p(50)'),http_p95_ms=latency.get('p(95)'),http_p99_ms=latency.get('p(99)'),
+                   e2e_p50_ms=quantile(before_p,after_p,'demo_e2e_latency_seconds_bucket',.50),
+                   e2e_p95_ms=quantile(before_p,after_p,'demo_e2e_latency_seconds_bucket',.95),
+                   e2e_p99_ms=quantile(before_p,after_p,'demo_e2e_latency_seconds_bucket',.99),
+                   requested_rps=rps,duration_seconds=seconds,wall_seconds=end-start,committed=committed,http_failed=failed,
+                   http_error_rate=failed/(failed+committed) if committed+failed else 1,dropped_iterations=counters('dropped_iterations'),
+                   committed_rps=committed/seconds,
+                   relay_sent_rps=(total(measured_o,'outbox_relay_published_total',result='sent')-total(before_o,'outbox_relay_published_total',result='sent'))/seconds,
+                   db_calls_per_second=(measured_db['calls']-before_db['calls'])/seconds,
+                   relay_calls_per_second=(measured_db['relay_calls']-before_db['relay_calls'])/seconds,
+                   hikari_mean_usage_ms=1000*(total(measured_o,'hikaricp_connections_usage_seconds_sum')-total(before_o,'hikaricp_connections_usage_seconds_sum'))/max(1,total(measured_o,'hikaricp_connections_usage_seconds_count')-total(before_o,'hikaricp_connections_usage_seconds_count')),
+                   max_pending=max((s['pending'] for s in samples),default=0),pending_after_drain=pending,k6_exit=exit_code,
+                   hikari_leases_per_second=(total(measured_o,'hikaricp_connections_usage_seconds_count')-total(before_o,'hikaricp_connections_usage_seconds_count'))/seconds,
+                   hikari_little_law_occupancy=(total(measured_o,'hikaricp_connections_usage_seconds_sum')-total(before_o,'hikaricp_connections_usage_seconds_sum'))/seconds,
+                   hikari_active_mean=statistics.mean(s['hikari_active'] for s in samples) if samples else None)
+        stats.update(reconcile(relay))
+        stats['cpu_percent_mean']={name:statistics.mean(float(s['CPUPerc'].rstrip('%')) for s in cpu if s.get('Name')==name) for name in {s.get('Name') for s in cpu}}
+        doc=dict(run_id=prefix,started_at=datetime.fromtimestamp(start,timezone.utc).isoformat(),finished_at=datetime.fromtimestamp(end,timezone.utc).isoformat(),
+                 statistics=stats,samples=samples,cpu_samples=cpu)
+        (RESULTS/f'{prefix}.measurement.json').write_text(json.dumps(doc,indent=2)+'\n')
+        print(f'{prefix}: HTTP p99={stats["http_p99_ms"]:.2f}ms e2e p99={stats["e2e_p99_ms"]}ms rps={stats["committed_rps"]:.1f} pending_peak={stats["max_pending"]}',flush=True)
+        return doc
+    finally:
+        if process.poll() is None:
+            subprocess.run(['docker','rm','-f','rmk-perf-load-'+prefix],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+            process.wait(timeout=30)
 
 def init():
     compose('up','-d','--wait','order-postgres','payment-postgres','kafka','toxiproxy','prometheus')

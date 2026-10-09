@@ -16,7 +16,8 @@ public final class PaymentListeners {
         public Idempotent(JdbcTemplate jdbc, MeterRegistry registry) {
             this.jdbc=jdbc;
             latency=Timer.builder("demo.e2e.latency").description("Event occurrence to committed payment")
-                    .publishPercentileHistogram().serviceLevelObjectives(Duration.ofMillis(50),Duration.ofMillis(100),
+                    .publishPercentileHistogram().maximumExpectedValue(Duration.ofMinutes(30))
+                    .serviceLevelObjectives(Duration.ofMillis(50),Duration.ofMillis(100),
                             Duration.ofMillis(200),Duration.ofMillis(500),Duration.ofSeconds(1),Duration.ofMillis(1500),
                             Duration.ofSeconds(3),Duration.ofSeconds(10),Duration.ofSeconds(30),Duration.ofMinutes(1))
                     .register(registry);
