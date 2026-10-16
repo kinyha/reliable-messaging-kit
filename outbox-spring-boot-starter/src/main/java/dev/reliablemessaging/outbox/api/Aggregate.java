@@ -3,7 +3,7 @@ package dev.reliablemessaging.outbox.api;
 /**
  * Identifies the domain aggregate that produced an event.
  */
-public record Aggregate(String type, String id) {
+public record Aggregate(String type, String id) { //rename
     public Aggregate {
         type = requireText(type, "type");
         id = requireText(id, "id");

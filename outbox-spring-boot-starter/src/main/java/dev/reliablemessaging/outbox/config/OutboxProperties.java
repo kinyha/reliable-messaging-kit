@@ -19,7 +19,8 @@ public record OutboxProperties(
 
     public record Relay(
         @DefaultValue("true") boolean enabled, @DefaultValue("2") int workers,
-        @DefaultValue("128") int batchSize, @DefaultValue("200ms") Duration pollInterval,
+        @DefaultValue("128") int batchSize,
+        @DefaultValue("200ms") Duration pollInterval,
         @DefaultValue("30s") Duration leaseDuration, @DefaultValue("10s") Duration sendTimeout,
         @DefaultValue("10s") Duration reaperInterval, @DefaultValue("12") int maxAttempts,
         @DefaultValue("1s") Duration backoffBase, @DefaultValue("5m") Duration backoffMax) {

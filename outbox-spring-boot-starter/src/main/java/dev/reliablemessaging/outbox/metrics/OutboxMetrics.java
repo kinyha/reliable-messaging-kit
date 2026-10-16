@@ -14,6 +14,7 @@ public final class OutboxMetrics extends BackgroundTask {
     private final AtomicReference<Snapshot> snapshot = new AtomicReference<>(new Snapshot(0, 0, 0, 0));
     private final MeterRegistry registry;
     private final JdbcTemplate jdbc;
+
     public OutboxMetrics(JdbcTemplate jdbc, MeterRegistry registry, Duration interval) {
         super("outbox-metrics", interval);
         this.jdbc = jdbc;

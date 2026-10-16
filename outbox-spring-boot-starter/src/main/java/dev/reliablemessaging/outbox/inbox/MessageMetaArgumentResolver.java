@@ -1,16 +1,26 @@
 package dev.reliablemessaging.outbox.inbox;
 
-import dev.reliablemessaging.outbox.api.*;
+import dev.reliablemessaging.outbox.api.MessageHeaders;
+import dev.reliablemessaging.outbox.api.MessageMeta;
 import org.springframework.core.MethodParameter;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.invocation.HandlerMethodArgumentResolver;
-import org.springframework.kafka.support.KafkaHeaders;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.UUID;
 
 public final class MessageMetaArgumentResolver implements HandlerMethodArgumentResolver {
+    private static Number number(Object value) {
+        return value instanceof Number n ? n : -1L;
+    }
+
+    private static String text(Object value) {
+        return value instanceof byte[] bytes ? new String(bytes, StandardCharsets.UTF_8) : String.valueOf(value);
+    }
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.getParameterType() == MessageMeta.class;
@@ -27,13 +37,5 @@ public final class MessageMetaArgumentResolver implements HandlerMethodArgumentR
             time == null ? null : Instant.parse(time), headers.get(KafkaHeaders.RECEIVED_TOPIC),
             number(message.getHeaders().get(KafkaHeaders.RECEIVED_PARTITION)).intValue(),
             number(message.getHeaders().get(KafkaHeaders.OFFSET)).longValue(), headers);
-    }
-
-    private static Number number(Object value) {
-        return value instanceof Number n ? n : -1L;
-    }
-
-    private static String text(Object value) {
-        return value instanceof byte[] bytes ? new String(bytes, StandardCharsets.UTF_8) : String.valueOf(value);
     }
 }

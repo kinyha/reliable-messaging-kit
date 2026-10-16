@@ -58,7 +58,7 @@ public final class OutboxRelay implements SmartLifecycle {
                     var results = metrics.dispatch(() -> dispatcher.dispatch(batch));
                     metrics.acknowledged(repository.acknowledge(batch, results, token, settings.maxAttempts(), backoff));
                 }
-                if (batch.size() < settings.batchSize()) pause();
+                if (batch.size() < settings.batchSize()) pause(); //батчи
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
                 break;
