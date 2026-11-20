@@ -13,7 +13,7 @@
 
 | Источник | Зачем |
 |---|---|
-| [`docs/design.html`](design.html) § 3–8 | Протокол, схема, ADR, API. Это спецификация. Если план и design расходятся — прав design, кроме пунктов из раздела 1 ниже. |
+| [`docs/design.html`](../design.html) § 3–8 | Протокол, схема, ADR, API. Это спецификация. Если план и design расходятся — прав design, кроме пунктов из раздела 1 ниже. |
 | [`docs/plan.md`](plan.md), недели 2–4 | Что считается «ядром недели» и критерием закрытия. |
 | `outbox-spring-boot-starter/src/**` | Уже готовые `OutboxMessage`, `Aggregate`, `OutboxProperties`, миграция `V1`. Не переписывать без причины. |
 | `demo-stand/docker-compose.yml` | Окружение: Postgres для заказов на `5433`, для платежей на `5434`, Kafka на `9092`. |

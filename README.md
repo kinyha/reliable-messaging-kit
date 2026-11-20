@@ -8,7 +8,7 @@ Spring Boot стартер для **Transactional Outbox** и **Idempotent Consu
 
 Этап 1 реализован: публикатор, claim/send/ack, аренды и fencing, повторы с джиттером, DEAD,
 метрики, inbox, аннотация потребителя и демонстрационные сервисы. Проверки и реальные результаты:
-[`docs/demo-1-results.md`](docs/demo-1-results.md). Этап 2 остаётся отдельной работой в ветке `stage-2`.
+[`docs/demo-1-results.md`](docs/demo-1-results.md). Этап 2 — в ветке `stage-2`, итог в `docs/perf/final-report.md` этой ветки.
 
 ## Быстрый старт демо
 
@@ -198,25 +198,17 @@ scripts/repeat-tests.sh 10
 
 ## Документы
 
-- [`docs/design.html`](docs/design.html) — архитектурный дизайн-документ: постановка задачи,
-  модель данных, 5 ADR, жизненный цикл сообщения, публичный API, план обоих этапов,
-  текст для карточки IVP.
-  Опубликовано: <https://claude.ai/code/artifact/cf25043d-221e-45f1-8d40-50544cdd6f8d>
-- [`docs/plan.md`](docs/plan.md) — понедельный план на 8 недель: записи для лога по дням
-  (40 ч/неделю), ядро каждой недели, критерии закрытия, правки спеки по итогам ревью, stretch goals.
-  **Рабочий формат** — отсюда копируется в задачу PM.
-- [`docs/plan.html`](docs/plan.html) — тот же план, оформленный для чтения и показа.
-  Опубликовано: <https://claude.ai/code/artifact/f04be4c7-0fc8-47b0-b1ee-3bc6176a0087>
-
-- [`docs/implementation-plan.md`](docs/implementation-plan.md) — задание для агента-исполнителя:
-  задачи T2.0–T4.5 от текущего каркаса до демо этапа 1, с SQL, тестами и критериями приёмки.
-- [`docs/implementation-plan-stage-2.md`](docs/implementation-plan-stage-2.md) — то же для этапа 2,
-  делается в отдельной ветке `stage-2` после тега `stage-1-demo`.
 - [`docs/guide.html`](docs/guide.html) — учебник по проекту: Kafka, PostgreSQL, outbox/inbox,
-  устройство стартера, этапы.
-
-> Две версии плана держатся синхронно вручную. При правках менять обе — `plan.md` первым
-> как источник истины, `plan.html` следом (и переопубликовывать по URL выше).
+  путь одного события через стартер. **С него начинать.**
+- [`docs/design.html`](docs/design.html) — архитектурный дизайн-документ (v1.2): постановка задачи,
+  модель данных, ADR, жизненный цикл сообщения, публичный API.
+  Опубликовано: <https://claude.ai/code/artifact/cf25043d-221e-45f1-8d40-50544cdd6f8d>
+- [`docs/demo-1-runbook.md`](docs/demo-1-runbook.md) — показ демо этапа 1 на 15 минут;
+  [`docs/demo-1-results.md`](docs/demo-1-results.md) — проверенные результаты сценариев сбоя.
+- [`docs/implementation-notes.md`](docs/implementation-notes.md) — где реализация отошла от
+  дизайна и плана и почему (D1–D8).
+- [`docs/archive/`](docs/archive/) — исходные планы (8-недельная сетка, задания для агента на
+  этапы 1 и 2). Работа по ним завершена, хранятся для истории.
 
 ### Что в репозитории, а что нет
 
@@ -244,6 +236,6 @@ scripts/repeat-tests.sh 10
 - `demo-stand/`: два приложения, PostgreSQL, Kafka, Prometheus, Grafana, Jaeger, сценарии и сверка.
 - `docs/demo-1-runbook.md`: показ на 15 минут; `docs/demo-1-results.md`: проверенные результаты.
 - `scripts/repeat-tests.sh`: повторная проверка стартера.
-- `perf-harness/` появится на этапе 2.
+- `perf-harness/` — в ветке `stage-2`.
 
 Java 21 · Spring Boot 3.5 · PostgreSQL 16 · Kafka · Flyway · Micrometer · Testcontainers · k6 · OpenTelemetry
